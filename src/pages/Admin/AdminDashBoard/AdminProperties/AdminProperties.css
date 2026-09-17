@@ -7,7 +7,17 @@
 .admin-properties__header{
     width: 100%;
 
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+
     margin-bottom: 24px;
+}
+
+
+.admin-properties__header > div{
+    min-width: 0;
 }
 
 
@@ -27,6 +37,68 @@
     line-height: 1.5;
 }
 
+
+/*
+    Add Property Button
+*/
+
+.admin-properties__add{
+    min-height: 44px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+
+    padding: 0 16px;
+
+    border: 0;
+    border-radius: 10px;
+
+    background: #222222;
+
+    color: #ffffff;
+
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition:
+        transform 150ms ease,
+        opacity 150ms ease;
+}
+
+
+.admin-properties__add span{
+    font-size: 20px;
+    font-weight: 400;
+    line-height: 1;
+}
+
+
+.admin-properties__add:hover{
+    opacity: 0.9;
+}
+
+
+.admin-properties__add:active{
+    transform: scale(0.97);
+}
+
+
+.admin-properties__add:focus-visible{
+    outline: 3px solid #222222;
+    outline-offset: 3px;
+}
+
+
+/*
+    Loading / Error / Empty
+*/
 
 .admin-properties__loading,
 .admin-properties__error,
@@ -68,6 +140,10 @@
 }
 
 
+/*
+    Property Grid
+*/
+
 .admin-properties__grid{
     width: 100%;
 
@@ -76,6 +152,10 @@
     gap: 16px;
 }
 
+
+/*
+    Property Card
+*/
 
 .admin-properties__card{
     width: 100%;
@@ -100,11 +180,18 @@
 }
 
 
+.admin-properties__card-header > div{
+    min-width: 0;
+}
+
+
 .admin-properties__card-header h3{
     margin: 0;
 
     font-size: 18px;
     line-height: 1.3;
+
+    overflow-wrap: break-word;
 }
 
 
@@ -115,6 +202,8 @@
 
     font-size: 13px;
     line-height: 1.4;
+
+    overflow-wrap: break-word;
 }
 
 
@@ -127,11 +216,17 @@
 
     background: #eeeeee;
 
+    color: #222222;
+
     font-size: 12px;
     font-weight: 600;
     text-transform: capitalize;
 }
 
+
+/*
+    Property Details
+*/
 
 .admin-properties__details{
     display: grid;
@@ -158,6 +253,10 @@
 }
 
 
+/*
+    Property Price
+*/
+
 .admin-properties__price{
     padding-top: 16px;
 
@@ -166,6 +265,8 @@
 
 
 .admin-properties__price strong{
+    color: #222222;
+
     font-size: 18px;
 }
 
@@ -179,10 +280,114 @@
 }
 
 
+/*
+    Narrow Mobile
+    300px - 359px
+*/
+
+@media (max-width: 359px){
+
+    .admin-properties__header{
+        align-items: center;
+        gap: 10px;
+    }
+
+
+    .admin-properties__header h2{
+        font-size: 20px;
+    }
+
+
+    .admin-properties__header p{
+        font-size: 13px;
+    }
+
+
+    .admin-properties__add{
+        min-height: 42px;
+
+        padding: 0 10px;
+
+        font-size: 12px;
+    }
+
+
+    .admin-properties__add span{
+        font-size: 18px;
+    }
+
+
+    .admin-properties__card{
+        padding: 16px;
+
+        border-radius: 14px;
+    }
+
+
+    .admin-properties__card-header{
+        gap: 8px;
+    }
+
+
+    .admin-properties__status{
+        padding: 5px 8px;
+
+        font-size: 11px;
+    }
+
+
+    .admin-properties__details{
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+}
+
+
+/*
+    Mobile
+    360px - 767px
+*/
+
+@media (min-width: 360px) and (max-width: 767px){
+
+    .admin-properties__header{
+        align-items: center;
+    }
+
+
+    .admin-properties__add{
+        padding: 0 12px;
+
+        font-size: 13px;
+    }
+
+}
+
+
+/*
+    Tablet
+    768px - 1199px
+*/
+
 @media (min-width: 768px) and (max-width: 1199px){
 
+    .admin-properties__header{
+        margin-bottom: 28px;
+    }
+
+
+    .admin-properties__add{
+        min-height: 46px;
+
+        padding: 0 18px;
+    }
+
+
     .admin-properties__grid{
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+
+        gap: 18px;
     }
 
 
@@ -193,21 +398,53 @@
 }
 
 
+/*
+    Desktop / Laptop
+    1200px+
+*/
+
 @media (min-width: 1200px){
+
+    .admin-properties__header{
+        margin-bottom: 30px;
+    }
+
 
     .admin-properties__header h2{
         font-size: 24px;
     }
 
 
+    .admin-properties__add{
+        min-height: 46px;
+
+        padding: 0 20px;
+    }
+
+
     .admin-properties__grid{
-        grid-template-columns: repeat(2, minmax(0, 1fr));
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+
         gap: 20px;
     }
 
 
     .admin-properties__card{
         padding: 22px;
+    }
+
+}
+
+
+/*
+    Reduced Motion
+*/
+
+@media (prefers-reduced-motion: reduce){
+
+    .admin-properties__add{
+        transition: none;
     }
 
 }

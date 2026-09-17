@@ -1,7 +1,7 @@
 import React from "react";
 
 import AppContext from "../../../../contexts/AppContext/AppContext";
-
+import CreateProperty from "./CreateProperty/CreateProperty";
 import "./AdminProperties.css";
 
 
@@ -9,7 +9,28 @@ export default class AdminProperties extends React.Component{
 
     static contextType = AppContext;
 
+        state = {
+        showCreateProperty: false
+    };
 
+
+    openCreateProperty = ()=>{
+
+        this.setState({
+            showCreateProperty: true
+        });
+
+    };
+
+
+    closeCreateProperty = ()=>{
+
+        this.setState({
+            showCreateProperty: false
+        });
+
+    };
+    
     componentDidMount(){
 
         const {
@@ -203,7 +224,6 @@ export default class AdminProperties extends React.Component{
             <section className="admin-properties">
 
                 <header className="admin-properties__header">
-
                     <div>
 
                         <h2>
@@ -216,6 +236,18 @@ export default class AdminProperties extends React.Component{
 
                     </div>
 
+
+                    <button
+                        className="admin-properties__add"
+                        type="button"
+                        onClick={this.openCreateProperty}
+                    >
+                        <span aria-hidden="true">
+                            +
+                        </span>
+
+                        Add property
+                    </button>
                 </header>
 
 
@@ -241,6 +273,12 @@ export default class AdminProperties extends React.Component{
                             : this.renderProperties()
                 }
 
+                {
+                    this.state.showCreateProperty &&
+                    <CreateProperty
+                        handleClose={this.closeCreateProperty}
+                    />
+                }
             </section>
         );
 
