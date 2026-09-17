@@ -1,7 +1,9 @@
 import React from "react";
 
 import AppContext from "../../../../contexts/AppContext/AppContext";
+
 import CreateProperty from "./CreateProperty/CreateProperty";
+
 import "./AdminProperties.css";
 
 
@@ -9,7 +11,8 @@ export default class AdminProperties extends React.Component{
 
     static contextType = AppContext;
 
-        state = {
+
+    state = {
         showCreateProperty: false
     };
 
@@ -28,29 +31,6 @@ export default class AdminProperties extends React.Component{
         this.setState({
             showCreateProperty: false
         });
-
-    };
-    
-    componentDidMount(){
-
-        const {
-            propertyContext
-        } = this.context;
-
-
-        if(!propertyContext.propertyIds.length){
-
-            propertyContext.getProperties()
-                .catch( error => {
-
-                    console.error(
-                        "Unable to load properties:",
-                        error
-                    );
-
-                });
-
-        };
 
     };
 
@@ -93,7 +73,8 @@ export default class AdminProperties extends React.Component{
                 {
                     propertyIds.map( propertyId => {
 
-                        const property = properties[propertyId];
+                        const property =
+                            properties[propertyId];
 
 
                         if(!property){
@@ -118,6 +99,7 @@ export default class AdminProperties extends React.Component{
                                         </h3>
 
                                         <p className="admin-properties__location">
+
                                             {
                                                 [
                                                     property.city,
@@ -127,6 +109,7 @@ export default class AdminProperties extends React.Component{
                                                     .filter(Boolean)
                                                     .join(", ")
                                             }
+
                                         </p>
 
                                     </div>
@@ -150,8 +133,10 @@ export default class AdminProperties extends React.Component{
                                         </strong>
 
                                         {" "}
+
                                         {property.max_guests}
                                     </p>
+
 
                                     <p>
                                         <strong>
@@ -159,8 +144,10 @@ export default class AdminProperties extends React.Component{
                                         </strong>
 
                                         {" "}
+
                                         {property.bedrooms}
                                     </p>
+
 
                                     <p>
                                         <strong>
@@ -168,8 +155,10 @@ export default class AdminProperties extends React.Component{
                                         </strong>
 
                                         {" "}
+
                                         {property.beds}
                                     </p>
+
 
                                     <p>
                                         <strong>
@@ -177,6 +166,7 @@ export default class AdminProperties extends React.Component{
                                         </strong>
 
                                         {" "}
+
                                         {property.bathrooms}
                                     </p>
 
@@ -224,6 +214,7 @@ export default class AdminProperties extends React.Component{
             <section className="admin-properties">
 
                 <header className="admin-properties__header">
+
                     <div>
 
                         <h2>
@@ -242,12 +233,15 @@ export default class AdminProperties extends React.Component{
                         type="button"
                         onClick={this.openCreateProperty}
                     >
+
                         <span aria-hidden="true">
                             +
                         </span>
 
                         Add property
+
                     </button>
+
                 </header>
 
 
@@ -273,12 +267,16 @@ export default class AdminProperties extends React.Component{
                             : this.renderProperties()
                 }
 
+
                 {
                     this.state.showCreateProperty &&
                     <CreateProperty
-                        handleClose={this.closeCreateProperty}
+                        handleClose={
+                            this.closeCreateProperty
+                        }
                     />
                 }
+
             </section>
         );
 

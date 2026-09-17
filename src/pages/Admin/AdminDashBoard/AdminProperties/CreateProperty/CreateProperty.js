@@ -21,8 +21,6 @@ export default class CreateProperty extends React.Component{
         state: "",
         postal_code: "",
         country: "USA",
-        latitude: "",
-        longitude: "",
         max_guests: 1,
         bedrooms: 1,
         beds: 1,
@@ -32,11 +30,12 @@ export default class CreateProperty extends React.Component{
         minimum_nights: 1,
         base_price: "",
         cleaning_fee: 0,
-        currency: "USD",
         instant_booking: false,
         cancellation_policy: "",
         house_rules: "",
         status: "active",
+
+        selectedAmenityIds: [],
 
         isSubmitting: false,
         error: "",
@@ -81,6 +80,42 @@ export default class CreateProperty extends React.Component{
             name,
             slug,
             error: ""
+        });
+
+    };
+
+
+    handleAmenityChange = (event)=>{
+
+        const {
+            value,
+            checked
+        } = event.target;
+
+
+        this.setState( previousState => {
+
+            const selectedAmenityIds =
+                checked
+                    ? previousState.selectedAmenityIds.includes(
+                        value
+                    )
+                        ? previousState.selectedAmenityIds
+                        : [
+                            ...previousState.selectedAmenityIds,
+                            value
+                        ]
+                    : previousState.selectedAmenityIds.filter(
+                        amenityId =>
+                            amenityId !== value
+                    );
+
+
+            return {
+                selectedAmenityIds,
+                error: ""
+            };
+
         });
 
     };
@@ -131,15 +166,23 @@ export default class CreateProperty extends React.Component{
 
 
         const {
-            propertyContext
+            propertyContext,
+            amenityContext
         } = this.context;
 
 
         const newProperty = {
-            name: this.state.name.trim(),
-            slug: this.state.slug.trim(),
-            description: this.state.description.trim(),
-            property_type: this.state.property_type.trim(),
+            name:
+                this.state.name.trim(),
+
+            slug:
+                this.state.slug.trim(),
+
+            description:
+                this.state.description.trim(),
+
+            property_type:
+                this.state.property_type.trim(),
 
             address_line_1:
                 this.state.address_line_1.trim() || null,
@@ -147,7 +190,8 @@ export default class CreateProperty extends React.Component{
             address_line_2:
                 this.state.address_line_2.trim() || null,
 
-            city: this.state.city.trim(),
+            city:
+                this.state.city.trim(),
 
             state:
                 this.state.state.trim() || null,
@@ -155,15 +199,12 @@ export default class CreateProperty extends React.Component{
             postal_code:
                 this.state.postal_code.trim() || null,
 
-            country: this.state.country.trim(),
+            country:
+                this.state.country.trim(),
 
-            latitude: this.state.latitude === ""
-                ? null
-                : Number(this.state.latitude),
+            latitude: null,
 
-            longitude: this.state.longitude === ""
-                ? null
-                : Number(this.state.longitude),
+            longitude: null,
 
             max_guests:
                 Number(this.state.max_guests),
@@ -192,10 +233,7 @@ export default class CreateProperty extends React.Component{
             cleaning_fee:
                 Number(this.state.cleaning_fee),
 
-            currency:
-                this.state.currency
-                    .trim()
-                    .toUpperCase(),
+            currency: "USD",
 
             instant_booking:
                 this.state.instant_booking,
@@ -221,6 +259,32 @@ export default class CreateProperty extends React.Component{
         propertyContext.createProperty(newProperty)
             .then( property => {
 
+                const amenityRequests =
+                    this.state.selectedAmenityIds.map(
+                        amenityId => {
+
+                            return amenityContext
+                                .addAmenityToProperty(
+                                    property.id,
+                                    amenityId
+                                );
+
+                        }
+                    );
+
+
+                return Promise.all(
+                    amenityRequests
+                )
+                    .then(()=>{
+
+                        return property;
+
+                    });
+
+            })
+            .then( property => {
+
                 this.setState({
                     name: "",
                     slug: "",
@@ -232,8 +296,6 @@ export default class CreateProperty extends React.Component{
                     state: "",
                     postal_code: "",
                     country: "USA",
-                    latitude: "",
-                    longitude: "",
                     max_guests: 1,
                     bedrooms: 1,
                     beds: 1,
@@ -243,14 +305,16 @@ export default class CreateProperty extends React.Component{
                     minimum_nights: 1,
                     base_price: "",
                     cleaning_fee: 0,
-                    currency: "USD",
                     instant_booking: false,
                     cancellation_policy: "",
                     house_rules: "",
                     status: "active",
 
+                    selectedAmenityIds: [],
+
                     isSubmitting: false,
                     error: "",
+
                     success:
                         `${property.name} was created successfully.`
                 });
@@ -267,13 +331,90 @@ export default class CreateProperty extends React.Component{
 
                 this.setState({
                     isSubmitting: false,
+
                     error:
                         error.error ||
                         "Unable to create property",
+
                     success: ""
                 });
 
             });
+
+    };
+
+
+    renderAmenities(){
+
+        const {
+            amenityContext
+        } = this.context;
+
+
+        const {
+            amenities,
+            amenityIds
+        } = amenityContext;
+
+
+        if(!amenityIds.length){
+
+            return (
+                <p className="create-property__no-amenities">
+                    No amenities have been created yet.
+                </p>
+            );
+
+        };
+
+
+        return amenityIds.map(
+            amenityId => {
+
+                const amenity = amenities[amenityId];
+
+                if(!amenity){
+
+                    return null;
+
+                };
+
+
+                const isSelected =
+                    this.state.selectedAmenityIds.includes(
+                        amenity.id
+                    );
+
+
+                return (
+                    <label
+                        className="create-property__amenity"
+                        key={amenity.id}
+                    >
+
+                        <input
+                            type="checkbox"
+                            value={amenity.id}
+                            checked={isSelected}
+                            onChange={
+                                this.handleAmenityChange
+                            }
+                        />
+
+
+                        <span className="create-property__amenity-content">
+
+                            <strong>
+                                {amenity.name}
+                            </strong>
+
+                        </span>
+
+                    </label>
+                );
+
+            }
+        );
 
     };
 
@@ -407,23 +548,6 @@ export default class CreateProperty extends React.Component{
                                             value={this.state.name}
                                             onChange={this.handleNameChange}
                                             autoFocus
-                                            required
-                                        />
-
-                                    </label>
-
-
-                                    <label className="create-property__field">
-
-                                        <span>
-                                            Slug
-                                        </span>
-
-                                        <input
-                                            type="text"
-                                            name="slug"
-                                            value={this.state.slug}
-                                            onChange={this.handleChange}
                                             required
                                         />
 
@@ -583,40 +707,6 @@ export default class CreateProperty extends React.Component{
 
                                     </label>
 
-
-                                    <label className="create-property__field">
-
-                                        <span>
-                                            Latitude
-                                        </span>
-
-                                        <input
-                                            type="number"
-                                            name="latitude"
-                                            value={this.state.latitude}
-                                            onChange={this.handleChange}
-                                            step="0.0000001"
-                                        />
-
-                                    </label>
-
-
-                                    <label className="create-property__field">
-
-                                        <span>
-                                            Longitude
-                                        </span>
-
-                                        <input
-                                            type="number"
-                                            name="longitude"
-                                            value={this.state.longitude}
-                                            onChange={this.handleChange}
-                                            step="0.0000001"
-                                        />
-
-                                    </label>
-
                                 </div>
 
                             </div>
@@ -710,6 +800,30 @@ export default class CreateProperty extends React.Component{
                                         />
 
                                     </label>
+
+                                </div>
+
+                            </div>
+
+
+                            <div className="create-property__section">
+
+                                <div className="create-property__section-heading">
+
+                                    <h4>
+                                        Amenities
+                                    </h4>
+
+                                    <p>
+                                        Select the amenities available at this property.
+                                    </p>
+
+                                </div>
+
+
+                                <div className="create-property__amenities">
+
+                                    {this.renderAmenities()}
 
                                 </div>
 
@@ -838,24 +952,6 @@ export default class CreateProperty extends React.Component{
                                             onChange={this.handleChange}
                                             min="0"
                                             step="0.01"
-                                        />
-
-                                    </label>
-
-
-                                    <label className="create-property__field">
-
-                                        <span>
-                                            Currency
-                                        </span>
-
-                                        <input
-                                            type="text"
-                                            name="currency"
-                                            value={this.state.currency}
-                                            onChange={this.handleChange}
-                                            maxLength="3"
-                                            required
                                         />
 
                                     </label>
@@ -1000,4 +1096,5 @@ export default class CreateProperty extends React.Component{
         );
 
     };
+
 };

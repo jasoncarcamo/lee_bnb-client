@@ -3,12 +3,18 @@ import React from "react";
 import {
     AuthContextProvider
 } from "../AuthContext";
-import {
-    AppContextProvider
-} from "../AppContext/AppContext";
+
 import PropertyContext, {
     PropertyContextProvider
 } from "../AppContext/PropertyContext";
+
+import AmenityContext, {
+    AmenityContextProvider
+} from "../AmenityContext";
+
+import {
+    AppContextProvider
+} from "../AppContext/AppContext";
 
 
 export default class ContextContainer extends React.Component{
@@ -20,19 +26,38 @@ export default class ContextContainer extends React.Component{
 
                 <PropertyContextProvider>
 
-                    <PropertyContext.Consumer>
+                    <AmenityContextProvider>
 
-                        { propertyContext => (
+                        <PropertyContext.Consumer>
 
-                            <AppContextProvider
-                                propertyContext={propertyContext}
-                            >
-                                {this.props.children}
-                            </AppContextProvider>
+                            { propertyContext => (
 
-                        )}
+                                <AmenityContext.Consumer>
 
-                    </PropertyContext.Consumer>
+                                    { amenityContext => (
+
+                                        <AppContextProvider
+                                            propertyContext={
+                                                propertyContext
+                                            }
+                                            amenityContext={
+                                                amenityContext
+                                            }
+                                        >
+
+                                            {this.props.children}
+
+                                        </AppContextProvider>
+
+                                    )}
+
+                                </AmenityContext.Consumer>
+
+                            )}
+
+                        </PropertyContext.Consumer>
+
+                    </AmenityContextProvider>
 
                 </PropertyContextProvider>
 
@@ -40,4 +65,5 @@ export default class ContextContainer extends React.Component{
         );
 
     };
+
 };
