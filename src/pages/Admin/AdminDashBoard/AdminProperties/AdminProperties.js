@@ -1,9 +1,8 @@
 import React from "react";
 
 import AppContext from "../../../../contexts/AppContext/AppContext";
-
 import CreateProperty from "./CreateProperty/CreateProperty";
-
+import EditProperty from "./EditProperty/EditProperty";
 import "./AdminProperties.css";
 
 
@@ -13,7 +12,28 @@ export default class AdminProperties extends React.Component{
 
 
     state = {
-        showCreateProperty: false
+        showCreateProperty: false,
+        selectedPropertyId: null
+    };
+    
+    openEditProperty = (propertyId)=>{
+        console.log(
+        "Selected property:",
+        propertyId
+    );
+        this.setState({
+            selectedPropertyId: propertyId
+        });
+
+    };
+
+
+    closeEditProperty = ()=>{
+
+        this.setState({
+            selectedPropertyId: null
+        });
+
     };
 
     formatTime = (time)=>{
@@ -184,6 +204,31 @@ export default class AdminProperties extends React.Component{
                             <article
                                 className="admin-properties__card"
                                 key={property.id}
+                                role="button"
+                                tabIndex={propertyId}
+                                onClick={
+                                    ()=>this.openEditProperty(
+                                        property.id
+                                    )
+                                }
+                                onKeyDown={
+                                    event => {
+
+                                        if(
+                                            event.key === "Enter" ||
+                                            event.key === " "
+                                        ){
+
+                                            event.preventDefault();
+
+                                            this.openEditProperty(
+                                                property.id
+                                            );
+
+                                        };
+
+                                    }
+                                }
                             >
 
                                 <div className="admin-properties__card-header">
@@ -496,7 +541,18 @@ export default class AdminProperties extends React.Component{
                         }
                     />
                 }
-
+                
+                {
+                    this.state.selectedPropertyId &&
+                    <EditProperty
+                        propertyId={
+                            this.state.selectedPropertyId
+                        }
+                        handleClose={
+                            this.closeEditProperty
+                        }
+                    />
+                }
             </section>
         );
 

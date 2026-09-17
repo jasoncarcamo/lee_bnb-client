@@ -1,0 +1,738 @@
+.edit-property__overlay{
+    position: fixed;
+    inset: 0;
+
+    z-index: 1000;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 10px;
+
+    background: rgba(0, 0, 0, 0.55);
+}
+
+
+.edit-property{
+    width: 100%;
+    max-width: 900px;
+    max-height: 94vh;
+
+    display: flex;
+    flex-direction: column;
+
+    overflow: hidden;
+
+    border-radius: 18px;
+
+    background: #ffffff;
+
+    box-shadow:
+        0 20px 60px rgba(0, 0, 0, 0.25);
+}
+
+
+.edit-property__header{
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 16px;
+
+    padding: 18px;
+
+    border-bottom: 1px solid #eeeeee;
+
+    background: #ffffff;
+}
+
+
+.edit-property__header > div{
+    min-width: 0;
+}
+
+
+.edit-property__header h3{
+    margin: 0;
+
+    color: #222222;
+
+    font-size: 21px;
+    line-height: 1.3;
+}
+
+
+.edit-property__header p{
+    margin: 6px 0 0;
+
+    color: #717171;
+
+    font-size: 14px;
+    line-height: 1.4;
+
+    overflow-wrap: break-word;
+}
+
+
+.edit-property__close{
+    width: 42px;
+    height: 42px;
+
+    flex-shrink: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 0;
+
+    border: 0;
+    border-radius: 50%;
+
+    background: #f7f7f7;
+
+    color: #222222;
+
+    font-family: inherit;
+    font-size: 25px;
+    line-height: 1;
+
+    cursor: pointer;
+
+    transition:
+        background 150ms ease,
+        transform 150ms ease;
+}
+
+
+.edit-property__close:hover{
+    background: #eeeeee;
+}
+
+
+.edit-property__close:active{
+    transform: scale(0.96);
+}
+
+
+.edit-property__close:focus-visible{
+    outline: 3px solid #222222;
+    outline-offset: 2px;
+}
+
+
+.edit-property__close:disabled{
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+
+/*
+    Messages
+*/
+
+.edit-property__success,
+.edit-property__error{
+    flex-shrink: 0;
+
+    margin: 16px 18px 0;
+
+    padding: 12px 14px;
+
+    border-radius: 10px;
+}
+
+
+.edit-property__success{
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+
+    border: 1px solid #b7dfc2;
+
+    background: #f0faf3;
+
+    color: #176b2c;
+}
+
+
+.edit-property__success-icon{
+    flex-shrink: 0;
+
+    font-weight: 700;
+}
+
+
+.edit-property__success strong{
+    display: block;
+}
+
+
+.edit-property__success p{
+    margin: 3px 0 0;
+
+    line-height: 1.4;
+}
+
+
+.edit-property__error{
+    border: 1px solid #c13515;
+
+    background: #fff7f5;
+
+    color: #c13515;
+
+    line-height: 1.4;
+}
+
+
+/*
+    Form
+*/
+
+.edit-property__form{
+    min-height: 0;
+
+    overflow-y: auto;
+}
+
+
+.edit-property__form fieldset{
+    min-width: 0;
+
+    margin: 0;
+    padding: 0;
+
+    border: 0;
+}
+
+
+.edit-property__section{
+    padding: 22px 18px;
+
+    border-bottom: 1px solid #eeeeee;
+}
+
+
+.edit-property__section-heading{
+    margin-bottom: 18px;
+}
+
+
+.edit-property__section-heading h4{
+    margin: 0;
+
+    color: #222222;
+
+    font-size: 17px;
+}
+
+
+.edit-property__section-heading p{
+    margin: 5px 0 0;
+
+    color: #717171;
+
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+
+/*
+    Grid
+*/
+
+.edit-property__grid{
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 16px;
+}
+
+
+.edit-property__field{
+    min-width: 0;
+
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+
+.edit-property__field > span{
+    color: #222222;
+
+    font-size: 13px;
+    font-weight: 600;
+}
+
+
+.edit-property__field input,
+.edit-property__field textarea,
+.edit-property__field select{
+    width: 100%;
+    min-width: 0;
+
+    padding: 11px 12px;
+
+    border: 1px solid #b0b0b0;
+    border-radius: 9px;
+
+    background: #ffffff;
+
+    color: #222222;
+
+    font-family: inherit;
+
+    outline: none;
+
+    transition:
+        border-color 150ms ease,
+        box-shadow 150ms ease;
+}
+
+
+.edit-property__field input{
+    min-height: 44px;
+}
+
+
+.edit-property__field textarea{
+    resize: vertical;
+
+    line-height: 1.5;
+}
+
+
+.edit-property__field select{
+    min-height: 44px;
+
+    cursor: pointer;
+}
+
+
+.edit-property__field input:focus,
+.edit-property__field textarea:focus,
+.edit-property__field select:focus{
+    border-color: #222222;
+
+    box-shadow:
+        0 0 0 2px rgba(34, 34, 34, 0.12);
+}
+
+
+/*
+    Amenities
+*/
+
+.edit-property__amenities{
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 10px;
+}
+
+
+.edit-property__amenity{
+    position: relative;
+
+    min-width: 0;
+
+    display: flex;
+    align-items: center;
+
+    padding: 12px;
+
+    border: 1px solid #dddddd;
+    border-radius: 10px;
+
+    background: #ffffff;
+
+    cursor: pointer;
+
+    transition:
+        border-color 150ms ease,
+        background 150ms ease;
+}
+
+
+.edit-property__amenity:hover{
+    border-color: #b0b0b0;
+}
+
+
+.edit-property__amenity:has(input:checked){
+    border-color: #222222;
+
+    background: #f7f7f7;
+}
+
+
+.edit-property__amenity input{
+    width: 18px;
+    height: 18px;
+
+    flex-shrink: 0;
+
+    margin: 0 10px 0 0;
+
+    accent-color: #222222;
+}
+
+
+.edit-property__amenity-content{
+    min-width: 0;
+}
+
+
+.edit-property__amenity-content strong{
+    color: #222222;
+
+    font-weight: 600;
+
+    overflow-wrap: break-word;
+}
+
+
+.edit-property__no-amenities{
+    margin: 0;
+
+    color: #717171;
+
+    line-height: 1.5;
+}
+
+
+/*
+    Checkbox
+*/
+
+.edit-property__checkbox{
+    min-height: 44px;
+
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    align-self: end;
+
+    cursor: pointer;
+}
+
+
+.edit-property__checkbox input{
+    width: 18px;
+    height: 18px;
+
+    flex-shrink: 0;
+
+    margin: 0;
+
+    accent-color: #222222;
+}
+
+
+.edit-property__checkbox span{
+    color: #222222;
+
+    font-weight: 600;
+}
+
+
+/*
+    Actions
+*/
+
+.edit-property__actions{
+    position: sticky;
+    bottom: 0;
+
+    z-index: 2;
+
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 10px;
+
+    padding: 16px 18px;
+
+    background: #ffffff;
+
+    border-top: 1px solid #eeeeee;
+}
+
+
+.edit-property__cancel,
+.edit-property__submit{
+    min-height: 44px;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+
+    padding: 0 16px;
+
+    border-radius: 10px;
+
+    font-family: inherit;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition:
+        transform 150ms ease,
+        opacity 150ms ease,
+        background 150ms ease;
+}
+
+
+.edit-property__cancel{
+    border: 1px solid #dddddd;
+
+    background: #ffffff;
+
+    color: #222222;
+}
+
+
+.edit-property__cancel:hover{
+    background: #f7f7f7;
+}
+
+
+.edit-property__submit{
+    border: 0;
+
+    background: #222222;
+
+    color: #ffffff;
+}
+
+
+.edit-property__submit:hover{
+    opacity: 0.9;
+}
+
+
+.edit-property__cancel:active,
+.edit-property__submit:active{
+    transform: scale(0.98);
+}
+
+
+.edit-property__cancel:focus-visible,
+.edit-property__submit:focus-visible{
+    outline: 3px solid #222222;
+    outline-offset: 2px;
+}
+
+
+.edit-property__cancel:disabled,
+.edit-property__submit:disabled{
+    cursor: not-allowed;
+
+    opacity: 0.55;
+}
+
+
+/*
+    Spinner
+*/
+
+.edit-property__spinner{
+    width: 16px;
+    height: 16px;
+
+    display: inline-block;
+
+    border: 2px solid rgba(255, 255, 255, 0.45);
+    border-top-color: #ffffff;
+    border-radius: 50%;
+
+    animation:
+        edit-property-spin 700ms linear infinite;
+}
+
+
+@keyframes edit-property-spin{
+
+    to{
+        transform: rotate(360deg);
+    }
+
+}
+
+
+/*
+    Narrow Mobile
+    300px - 359px
+*/
+
+@media (max-width: 359px){
+
+    .edit-property__overlay{
+        padding: 6px;
+    }
+
+
+    .edit-property{
+        max-height: 97vh;
+
+        border-radius: 14px;
+    }
+
+
+    .edit-property__header{
+        padding: 15px;
+    }
+
+
+    .edit-property__section{
+        padding:
+            20px
+            15px;
+    }
+
+
+    .edit-property__actions{
+        padding: 14px 15px;
+    }
+
+
+    .edit-property__cancel,
+    .edit-property__submit{
+        flex: 1;
+
+        padding: 0 10px;
+    }
+
+}
+
+
+/*
+    Tablet
+    768px - 1199px
+*/
+
+@media (min-width: 768px) and (max-width: 1199px){
+
+    .edit-property__overlay{
+        padding: 24px;
+    }
+
+
+    .edit-property__header{
+        padding: 22px 24px;
+    }
+
+
+    .edit-property__section{
+        padding: 26px 24px;
+    }
+
+
+    .edit-property__grid{
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+    }
+
+
+    .edit-property__field--full{
+        grid-column: 1 / -1;
+    }
+
+
+    .edit-property__grid--numbers{
+        grid-template-columns:
+            repeat(4, minmax(0, 1fr));
+    }
+
+
+    .edit-property__amenities{
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+    }
+
+
+    .edit-property__actions{
+        padding: 16px 24px;
+    }
+
+}
+
+
+/*
+    Desktop / Laptop
+    1200px+
+*/
+
+@media (min-width: 1200px){
+
+    .edit-property__overlay{
+        padding: 28px;
+    }
+
+
+    .edit-property__header{
+        padding: 24px 28px;
+    }
+
+
+    .edit-property__section{
+        padding: 28px;
+    }
+
+
+    .edit-property__grid{
+        grid-template-columns:
+            repeat(2, minmax(0, 1fr));
+    }
+
+
+    .edit-property__field--full{
+        grid-column: 1 / -1;
+    }
+
+
+    .edit-property__grid--numbers{
+        grid-template-columns:
+            repeat(4, minmax(0, 1fr));
+    }
+
+
+    .edit-property__amenities{
+        grid-template-columns:
+            repeat(3, minmax(0, 1fr));
+    }
+
+
+    .edit-property__actions{
+        padding: 18px 28px;
+    }
+
+}
+
+
+/*
+    Reduced Motion
+*/
+
+@media (prefers-reduced-motion: reduce){
+
+    .edit-property__close,
+    .edit-property__field input,
+    .edit-property__field textarea,
+    .edit-property__field select,
+    .edit-property__amenity,
+    .edit-property__cancel,
+    .edit-property__submit{
+        transition: none;
+    }
+
+
+    .edit-property__spinner{
+        animation: none;
+    }
+
+}
