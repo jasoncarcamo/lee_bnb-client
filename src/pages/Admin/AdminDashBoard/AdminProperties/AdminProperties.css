@@ -1,0 +1,213 @@
+.admin-properties{
+    width: 100%;
+    min-width: 0;
+}
+
+
+.admin-properties__header{
+    width: 100%;
+
+    margin-bottom: 24px;
+}
+
+
+.admin-properties__header h2{
+    margin: 0;
+
+    font-size: 22px;
+}
+
+
+.admin-properties__header p{
+    margin: 8px 0 0;
+
+    color: #717171;
+
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+
+.admin-properties__loading,
+.admin-properties__error,
+.admin-properties__empty{
+    width: 100%;
+
+    padding: 32px 20px;
+
+    border: 1px solid #dddddd;
+    border-radius: 14px;
+
+    text-align: center;
+}
+
+
+.admin-properties__loading{
+    color: #717171;
+}
+
+
+.admin-properties__error{
+    border-color: #c13515;
+
+    color: #c13515;
+}
+
+
+.admin-properties__empty h3{
+    margin: 0;
+
+    font-size: 18px;
+}
+
+
+.admin-properties__empty p{
+    margin: 8px 0 0;
+
+    color: #717171;
+}
+
+
+.admin-properties__grid{
+    width: 100%;
+
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 16px;
+}
+
+
+.admin-properties__card{
+    width: 100%;
+    min-width: 0;
+
+    padding: 18px;
+
+    border: 1px solid #dddddd;
+    border-radius: 16px;
+
+    background: #ffffff;
+}
+
+
+.admin-properties__card-header{
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+
+    margin-bottom: 18px;
+}
+
+
+.admin-properties__card-header h3{
+    margin: 0;
+
+    font-size: 18px;
+    line-height: 1.3;
+}
+
+
+.admin-properties__location{
+    margin: 6px 0 0;
+
+    color: #717171;
+
+    font-size: 13px;
+    line-height: 1.4;
+}
+
+
+.admin-properties__status{
+    flex-shrink: 0;
+
+    padding: 6px 10px;
+
+    border-radius: 20px;
+
+    background: #eeeeee;
+
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: capitalize;
+}
+
+
+.admin-properties__details{
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+
+    margin-bottom: 20px;
+}
+
+
+.admin-properties__details p{
+    margin: 0;
+
+    color: #717171;
+
+    font-size: 13px;
+}
+
+
+.admin-properties__details strong{
+    color: #222222;
+
+    font-weight: 600;
+}
+
+
+.admin-properties__price{
+    padding-top: 16px;
+
+    border-top: 1px solid #eeeeee;
+}
+
+
+.admin-properties__price strong{
+    font-size: 18px;
+}
+
+
+.admin-properties__price span{
+    margin-left: 4px;
+
+    color: #717171;
+
+    font-size: 13px;
+}
+
+
+@media (min-width: 768px) and (max-width: 1199px){
+
+    .admin-properties__grid{
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+
+    .admin-properties__card{
+        padding: 20px;
+    }
+
+}
+
+
+@media (min-width: 1200px){
+
+    .admin-properties__header h2{
+        font-size: 24px;
+    }
+
+
+    .admin-properties__grid{
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 20px;
+    }
+
+
+    .admin-properties__card{
+        padding: 22px;
+    }
+
+}

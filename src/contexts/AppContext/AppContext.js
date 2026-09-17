@@ -10,8 +10,8 @@ export default AppContext;
 export class AppContextProvider extends React.Component{
     render(){
 
-        const value = {
-
+         const value = {
+            propertyContext: this.props.propertyContext
         };
 
         return (

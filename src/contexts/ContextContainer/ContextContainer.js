@@ -6,6 +6,9 @@ import {
 import {
     AppContextProvider
 } from "../AppContext/AppContext";
+import PropertyContext, {
+    PropertyContextProvider
+} from "../AppContext/PropertyContext";
 
 
 export default class ContextContainer extends React.Component{
@@ -15,9 +18,23 @@ export default class ContextContainer extends React.Component{
         return (
             <AuthContextProvider>
 
-                <AppContextProvider>
-                    {this.props.children}
-                </AppContextProvider>
+                <PropertyContextProvider>
+
+                    <PropertyContext.Consumer>
+
+                        { propertyContext => (
+
+                            <AppContextProvider
+                                propertyContext={propertyContext}
+                            >
+                                {this.props.children}
+                            </AppContextProvider>
+
+                        )}
+
+                    </PropertyContext.Consumer>
+
+                </PropertyContextProvider>
 
             </AuthContextProvider>
         );
