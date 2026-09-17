@@ -1,17 +1,18 @@
 import React from "react";
 
-import AuthRequest from "../../../services/AuthServices";
+import AuthContext from "../../../contexts/AuthContext";
 import AdminTokenService from "../../../storage/TokenService";
 import "./AdminLogin.css";
 
 
 export default class AdminLogin extends React.Component{
 
+    static contextType = AuthContext;
     state = {
         email: "",
         password: "",
         error: "",
-        isSubmitting: false
+        isSubmitting: false,
     };
 
 
@@ -53,7 +54,7 @@ export default class AdminLogin extends React.Component{
             error: ""
         });
 
-        AuthRequest.logInAdmin(admin)
+        this.context.logInAdmin(admin)
             .then( response => {
 
                 AdminTokenService.setToken(

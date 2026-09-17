@@ -1,12 +1,16 @@
 import React from "react";
+import {Navigate} from "react-router-dom";
 
-import AuthRequest from "../../services/AuthServices";
-import AdminTokenService from "../../storage/TokenService";
+import AuthContext from "../../../contexts/AuthContext";
+import AdminTokenService from "../../../storage/TokenService";
+import AuthRequest from "../../../services/AuthServices";
 
 import "./AdminRegister.css";
 
 
 export default class AdminRegister extends React.Component{
+    
+    static contextType = AuthContext;
 
     state = {
         first_name: "",
@@ -16,7 +20,18 @@ export default class AdminRegister extends React.Component{
         confirmPassword: "",
         error: "",
         success: "",
-        isSubmitting: false
+        isSubmitting: false,
+        redirectToAdmin: false
+    };
+    
+    componentDidMount(){
+
+        if(AdminTokenService.hasToken()){
+
+            this.setState({
+                redirectToAdmin: true
+            });
+        }
     };
 
 
@@ -83,12 +98,7 @@ export default class AdminRegister extends React.Component{
         });
 
 
-        AuthRequest.registerAdmin(newAdmin)
-            .then( response => {
-
-                return AuthRequest.logInAdmin(admin);
-
-            })
+        this.context.registerAdmin(newAdmin)
             .then( response => {
 
                 AdminTokenService.setToken(
@@ -104,7 +114,8 @@ export default class AdminRegister extends React.Component{
                     confirmPassword: "",
                     error: "",
                     success: "Admin account created successfully",
-                    isSubmitting: false
+                    isSubmitting: false,
+                    redirectToAdmin: true
                 });
 
             })
@@ -131,8 +142,20 @@ export default class AdminRegister extends React.Component{
             confirmPassword,
             error,
             success,
-            isSubmitting
+            isSubmitting,
+            redirectToAdmin
         } = this.state;
+        
+        if(redirectToAdmin){
+
+            return (
+                <Navigate
+                    to="/admin"
+                    replace
+                />
+            );
+
+        };
 
 
         return (

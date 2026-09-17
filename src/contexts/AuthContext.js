@@ -57,6 +57,11 @@ export class AuthContextProvider extends React.Component{
 
         return AuthRequest.registerAdmin(newAdmin)
             .then( response => {
+                console.log(response)
+                this.setState({
+                    admin: response.admin,
+                    isAuthenticated: true
+                });
 
                 return this.logInAdmin(admin);
 

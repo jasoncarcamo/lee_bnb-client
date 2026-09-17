@@ -7,7 +7,7 @@ import {
 } from "react-router-dom";
 
 import Admin from "./pages/Admin/Admin";
-import AdminRegister from "./pages/AdminRegister/AdminRegister";
+import AdminRegister from "./pages/Admin/AdminRegister/AdminRegister";
 import Guest from "./pages/Guest/Guest";
 
 import "./App.css";
