@@ -1,7 +1,7 @@
 import React from "react";
 
 import AuthRequest from "../../../services/AuthServices";
-
+import AdminTokenService from "../../../storage/TokenService";
 import "./AdminLogin.css";
 
 
@@ -53,17 +53,12 @@ export default class AdminLogin extends React.Component{
             error: ""
         });
 
-console.log(admin)
-
         AuthRequest.logInAdmin(admin)
             .then( response => {
 
-                console.log(
-                    "Admin login successful",
-                    response
+                AdminTokenService.setToken(
+                    response.token
                 );
-
-
                 this.setState({
                     isSubmitting: false
                 });

@@ -7,6 +7,7 @@ import {
 } from "react-router-dom";
 
 import Admin from "./pages/Admin/Admin";
+import AdminRegister from "./pages/AdminRegister/AdminRegister";
 import Guest from "./pages/Guest/Guest";
 
 import "./App.css";
@@ -39,6 +40,12 @@ export default class App extends React.Component{
                 <Route
                     path="/admin"
                     element={<Admin/>}
+                />
+
+
+                <Route
+                    path="/admin/register"
+                    element={<AdminRegister/>}
                 />
 
 
