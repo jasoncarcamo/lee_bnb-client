@@ -13,7 +13,7 @@ export default class AdminProperties extends React.Component{
 
     state = {
         showCreateProperty: false,
-        selectedPropertyId: null
+        selectedPropertyId: null,
     };
     
     openEditProperty = (propertyId)=>{

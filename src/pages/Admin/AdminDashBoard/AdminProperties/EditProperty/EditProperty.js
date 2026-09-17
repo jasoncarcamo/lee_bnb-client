@@ -34,13 +34,14 @@ export default class EditProperty extends React.Component{
         cancellation_policy: "",
         house_rules: "",
         status: "active",
-
         selectedAmenityIds: [],
         originalAmenityIds: [],
-
         isSubmitting: false,
         error: "",
-        success: ""
+        success: "",
+        showDeleteConfirmation: false,
+        isDeleting: false,
+        deleteError: ""
     };
 
 
@@ -269,7 +270,10 @@ export default class EditProperty extends React.Component{
 
     handleClose = ()=>{
 
-        if(this.state.isSubmitting){
+        if(
+            this.state.isSubmitting ||
+            this.state.isDeleting
+        ){
 
             return;
 
@@ -635,6 +639,108 @@ export default class EditProperty extends React.Component{
 
             }
         );
+
+    };
+    
+    openDeleteConfirmation = ()=>{
+
+        this.setState({
+            showDeleteConfirmation: true,
+            deleteError: ""
+        });
+
+    };
+
+
+    closeDeleteConfirmation = ()=>{
+
+        if(this.state.isDeleting){
+
+            return;
+
+        };
+
+
+        this.setState({
+            showDeleteConfirmation: false,
+            deleteError: ""
+        });
+
+    };
+
+
+    handleDeleteProperty = ()=>{
+
+        if(this.state.isDeleting){
+
+            return;
+
+        };
+
+
+        const {
+            propertyContext
+        } = this.context;
+
+
+        const propertyId =
+            this.props.propertyId;
+
+
+        const property =
+            propertyContext.properties[
+                propertyId
+            ];
+
+
+        if(!property){
+
+            this.setState({
+                deleteError:
+                    "Unable to find this property."
+            });
+
+            return;
+
+        };
+
+
+        this.setState({
+            isDeleting: true,
+            deleteError: ""
+        });
+
+
+        propertyContext
+            .deleteProperty(
+                propertyId
+            )
+            .then(()=>{
+
+                this.setState({
+                    isDeleting: false,
+                    showDeleteConfirmation: false
+                });
+
+
+                if(this.props.handleClose){
+
+                    this.props.handleClose();
+
+                };
+
+            })
+            .catch( error => {
+
+                this.setState({
+                    isDeleting: false,
+
+                    deleteError:
+                        error.error ||
+                        "Unable to delete property."
+                });
+
+            });
 
     };
 
@@ -1373,6 +1479,94 @@ export default class EditProperty extends React.Component{
                                     </label>
 
                                 </div>
+
+                            </div>
+                            
+                            
+                            {/*Delete propeerty section*/ }
+                            <div className="edit-property__danger">
+
+                                {
+                                    !this.state.showDeleteConfirmation &&
+                                    <button
+                                        className="edit-property__delete"
+                                        type="button"
+                                        onClick={
+                                            this.openDeleteConfirmation
+                                        }
+                                    >
+                                        Delete property
+                                    </button>
+                                }
+
+
+                                {
+                                    this.state.showDeleteConfirmation &&
+                                    <div className="edit-property__delete-confirmation">
+
+                                        <div>
+
+                                            <strong>
+                                                Are you sure?
+                                            </strong>
+
+                                            <p>
+                                                This action cannot be undone.
+                                            </p>
+
+                                        </div>
+
+
+                                        {
+                                            this.state.deleteError &&
+                                            <p
+                                                className="edit-property__delete-error"
+                                                role="alert"
+                                            >
+                                                {this.state.deleteError}
+                                            </p>
+                                        }
+
+
+                                        <div className="edit-property__delete-actions">
+
+                                            <button
+                                                type="button"
+                                                className="edit-property__delete-cancel"
+                                                onClick={
+                                                    this.closeDeleteConfirmation
+                                                }
+                                                disabled={
+                                                    this.state.isDeleting
+                                                }
+                                            >
+                                                Keep property
+                                            </button>
+
+
+                                            <button
+                                                type="button"
+                                                className="edit-property__delete-confirm"
+                                                onClick={
+                                                    this.handleDeleteProperty
+                                                }
+                                                disabled={
+                                                    this.state.isDeleting
+                                                }
+                                            >
+
+                                                {
+                                                    this.state.isDeleting
+                                                        ? "Deleting..."
+                                                        : "Yes, delete property"
+                                                }
+
+                                            </button>
+
+                                        </div>
+
+                                    </div>
+                                }
 
                             </div>
 

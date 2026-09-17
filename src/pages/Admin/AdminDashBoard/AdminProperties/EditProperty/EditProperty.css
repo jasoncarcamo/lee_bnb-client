@@ -438,6 +438,163 @@
     font-weight: 600;
 }
 
+/*
+    Danger Zone
+*/
+
+.edit-property__danger{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+
+    padding: 22px 18px;
+
+    border-bottom: 1px solid #eeeeee;
+
+    background: #fffafa;
+}
+
+
+.edit-property__danger h4{
+    margin: 0;
+
+    color: #c13515;
+
+    font-size: 17px;
+}
+
+
+.edit-property__danger p{
+    margin: 5px 0 0;
+
+    color: #717171;
+
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+
+.edit-property__delete{
+    min-height: 42px;
+
+    padding: 0 14px;
+
+    border: 1px solid #c13515;
+    border-radius: 9px;
+
+    background: #ffffff;
+
+    color: #c13515;
+
+    font-family: inherit;
+    font-weight: 700;
+
+    cursor: pointer;
+}
+
+
+.edit-property__delete:hover{
+    background: #fff2ef;
+}
+
+
+.edit-property__delete-confirmation{
+    width: 100%;
+
+    padding: 14px;
+
+    border: 1px solid #c13515;
+    border-radius: 10px;
+
+    background: #ffffff;
+}
+
+
+.edit-property__delete-confirmation strong{
+    color: #c13515;
+}
+
+
+.edit-property__delete-confirmation p{
+    margin: 4px 0 0;
+}
+
+
+.edit-property__delete-error{
+    color: #c13515 !important;
+
+    font-weight: 600;
+}
+
+
+.edit-property__delete-actions{
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+
+    margin-top: 14px;
+}
+
+
+.edit-property__delete-cancel,
+.edit-property__delete-confirm{
+    min-height: 42px;
+
+    padding: 0 14px;
+
+    border-radius: 9px;
+
+    font-family: inherit;
+    font-weight: 700;
+
+    cursor: pointer;
+}
+
+
+.edit-property__delete-cancel{
+    border: 1px solid #dddddd;
+
+    background: #ffffff;
+
+    color: #222222;
+}
+
+
+.edit-property__delete-confirm{
+    border: 1px solid #c13515;
+
+    background: #c13515;
+
+    color: #ffffff;
+}
+
+
+.edit-property__delete-cancel:hover{
+    background: #f7f7f7;
+}
+
+
+.edit-property__delete-confirm:hover{
+    opacity: 0.9;
+}
+
+
+.edit-property__delete-cancel:focus-visible,
+.edit-property__delete-confirm:focus-visible,
+.edit-property__delete:focus-visible{
+    outline: 3px solid #222222;
+    outline-offset: 2px;
+}
+
+
+.edit-property__delete-cancel:disabled,
+.edit-property__delete-confirm:disabled{
+    cursor: not-allowed;
+
+    opacity: 0.55;
+}
+
 
 /*
     Actions
@@ -459,6 +616,16 @@
     background: #ffffff;
 
     border-top: 1px solid #eeeeee;
+}
+
+.edit-property__danger{
+    padding: 28px;
+}
+
+
+.edit-property__delete-actions{
+    flex-direction: row;
+    justify-content: flex-end;
 }
 
 
@@ -657,6 +824,16 @@
 
     .edit-property__actions{
         padding: 16px 24px;
+    }
+    
+    .edit-property__danger{
+        padding: 26px 24px;
+    }
+
+
+    .edit-property__delete-actions{
+        flex-direction: row;
+        justify-content: flex-end;
     }
 
 }
