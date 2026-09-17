@@ -1,0 +1,158 @@
+.admin-tabs{
+    width: 100%;
+    min-width: 0;
+
+    display: flex;
+    gap: 8px;
+
+    padding: 4px 0 10px;
+
+    overflow-x: auto;
+    overflow-y: hidden;
+
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: thin;
+}
+
+
+.admin-tabs__button{
+    min-height: 44px;
+
+    flex: 0 0 auto;
+
+    padding: 0 16px;
+
+    border: 1px solid #dddddd;
+    border-radius: 22px;
+
+    background: #ffffff;
+
+    color: #222222;
+
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 600;
+    white-space: nowrap;
+
+    cursor: pointer;
+
+    transition:
+        background 150ms ease,
+        color 150ms ease,
+        border-color 150ms ease,
+        transform 150ms ease;
+}
+
+
+.admin-tabs__button:hover{
+    border-color: #717171;
+}
+
+
+.admin-tabs__button:active{
+    transform: scale(0.97);
+}
+
+
+.admin-tabs__button:focus-visible{
+    outline: 3px solid #222222;
+    outline-offset: 2px;
+}
+
+
+.admin-tabs__button--active{
+    border-color: #222222;
+
+    background: #222222;
+
+    color: #ffffff;
+}
+
+
+/*
+    Tablet
+    768px - 1199px
+*/
+
+@media (min-width: 768px) and (max-width: 1199px){
+
+    .admin-tabs{
+        gap: 10px;
+
+        padding-bottom: 12px;
+    }
+
+
+    .admin-tabs__button{
+        min-height: 46px;
+
+        padding: 0 18px;
+    }
+
+}
+
+
+/*
+    Desktop / Laptop
+    1200px+
+*/
+
+@media (min-width: 1200px){
+
+    .admin-tabs{
+        flex-direction: column;
+        gap: 6px;
+
+        padding: 0;
+
+        overflow: visible;
+    }
+
+
+    .admin-tabs__button{
+        width: 100%;
+        min-height: 46px;
+
+        justify-content: flex-start;
+
+        padding: 0 16px;
+
+        border-color: transparent;
+        border-radius: 10px;
+
+        text-align: left;
+    }
+
+
+    .admin-tabs__button:hover{
+        border-color: transparent;
+
+        background: #eeeeee;
+    }
+
+
+    .admin-tabs__button--active{
+        border-color: #222222;
+
+        background: #222222;
+
+        color: #ffffff;
+    }
+
+
+    .admin-tabs__button--active:hover{
+        border-color: #222222;
+
+        background: #222222;
+    }
+
+}
+
+
+@media (prefers-reduced-motion: reduce){
+
+    .admin-tabs__button{
+        transition: none;
+    }
+
+}

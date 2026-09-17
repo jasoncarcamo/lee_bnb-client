@@ -101,6 +101,22 @@
 }
 
 
+.admin-dashboard__layout{
+    width: 100%;
+    min-width: 0;
+
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+
+.admin-dashboard__navigation{
+    width: 100%;
+    min-width: 0;
+}
+
+
 .admin-dashboard__content{
     width: 100%;
     min-width: 0;
@@ -193,6 +209,11 @@
     }
 
 
+    .admin-dashboard__layout{
+        gap: 16px;
+    }
+
+
     .admin-dashboard__content{
         min-height: 450px;
 
@@ -219,6 +240,20 @@
 
     .admin-dashboard__heading h1{
         font-size: 34px;
+    }
+
+
+    .admin-dashboard__layout{
+        display: grid;
+        grid-template-columns: 220px minmax(0, 1fr);
+        align-items: start;
+        gap: 24px;
+    }
+
+
+    .admin-dashboard__navigation{
+        position: sticky;
+        top: 24px;
     }
 
 
