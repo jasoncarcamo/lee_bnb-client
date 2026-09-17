@@ -176,12 +176,23 @@
     justify-content: space-between;
     gap: 12px;
 
-    margin-bottom: 18px;
+    margin-bottom: 14px;
 }
 
 
 .admin-properties__card-header > div{
     min-width: 0;
+}
+
+
+.admin-properties__type{
+    margin-bottom: 5px;
+
+    color: #717171;
+
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: capitalize;
 }
 
 
@@ -200,7 +211,6 @@
 
     color: #717171;
 
-    font-size: 13px;
     line-height: 1.4;
 
     overflow-wrap: break-word;
@@ -218,9 +228,30 @@
 
     color: #222222;
 
-    font-size: 12px;
     font-weight: 600;
     text-transform: capitalize;
+}
+
+
+/*
+    Description
+*/
+
+.admin-properties__description{
+    display: -webkit-box;
+
+    margin: 0 0 18px;
+
+    color: #484848;
+
+    line-height: 1.5;
+
+    overflow: hidden;
+
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+
+    overflow-wrap: break-word;
 }
 
 
@@ -230,7 +261,8 @@
 
 .admin-properties__details{
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns:
+        repeat(2, minmax(0, 1fr));
     gap: 10px;
 
     margin-bottom: 20px;
@@ -241,8 +273,6 @@
     margin: 0;
 
     color: #717171;
-
-    font-size: 13px;
 }
 
 
@@ -254,13 +284,124 @@
 
 
 /*
+    Property Information
+*/
+
+.admin-properties__info{
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 18px;
+
+    margin-bottom: 20px;
+}
+
+
+.admin-properties__amenities-section,
+.admin-properties__stay-section{
+    min-width: 0;
+}
+
+
+.admin-properties__amenities-section h4,
+.admin-properties__stay-section h4{
+    margin: 0 0 10px;
+
+    color: #222222;
+
+    font-weight: 700;
+}
+
+
+/*
+    Amenities
+*/
+
+.admin-properties__amenities{
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: 6px;
+}
+
+
+.admin-properties__amenity{
+    display: inline-flex;
+    align-items: center;
+
+    min-height: 28px;
+
+    padding: 5px 9px;
+
+    border: 1px solid #dddddd;
+    border-radius: 20px;
+
+    background: #f7f7f7;
+
+    color: #484848;
+
+    line-height: 1.2;
+}
+
+
+.admin-properties__no-amenities{
+    margin: 0;
+
+    color: #717171;
+}
+
+
+/*
+    Stay Details
+*/
+
+.admin-properties__stay{
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+}
+
+
+.admin-properties__stay > div{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+
+.admin-properties__stay span{
+    color: #717171;
+}
+
+
+.admin-properties__stay strong{
+    color: #222222;
+
+    font-weight: 600;
+
+    text-align: right;
+    white-space: nowrap;
+}
+
+
+/*
     Property Price
 */
 
 .admin-properties__price{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+
     padding-top: 16px;
 
     border-top: 1px solid #eeeeee;
+}
+
+
+.admin-properties__price > div{
+    min-width: 0;
 }
 
 
@@ -277,6 +418,22 @@
     color: #717171;
 
     font-size: 13px;
+}
+
+
+.admin-properties__instant{
+    flex-shrink: 0;
+
+    padding: 5px 9px;
+
+    border-radius: 20px;
+
+    background: #f7f7f7;
+
+    color: #222222;
+
+    font-size: 12px;
+    font-weight: 600;
 }
 
 
@@ -337,7 +494,19 @@
 
 
     .admin-properties__details{
-        grid-template-columns: minmax(0, 1fr);
+        grid-template-columns:
+            minmax(0, 1fr);
+    }
+
+
+    .admin-properties__price{
+        align-items: flex-start;
+        flex-direction: column;
+    }
+
+
+    .admin-properties__instant{
+        align-self: flex-start;
     }
 
 }
@@ -395,6 +564,15 @@
         padding: 20px;
     }
 
+
+    .admin-properties__info{
+        grid-template-columns:
+            minmax(0, 1fr)
+            minmax(150px, 0.75fr);
+
+        gap: 20px;
+    }
+
 }
 
 
@@ -432,6 +610,15 @@
 
     .admin-properties__card{
         padding: 22px;
+    }
+
+
+    .admin-properties__info{
+        grid-template-columns:
+            minmax(0, 1fr)
+            minmax(160px, 0.7fr);
+
+        gap: 24px;
     }
 
 }

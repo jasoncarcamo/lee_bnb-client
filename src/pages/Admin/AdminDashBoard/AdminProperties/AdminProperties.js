@@ -16,6 +16,37 @@ export default class AdminProperties extends React.Component{
         showCreateProperty: false
     };
 
+    formatTime = (time)=>{
+
+    if(!time){
+
+        return "";
+    };
+
+
+    const [
+        hourValue,
+        minute
+    ] = time.split(":");
+
+
+    const hour =
+        Number(hourValue);
+
+
+    const period =
+        hour >= 12
+            ? "PM"
+            : "AM";
+
+
+    const formattedHour =
+        hour % 12 || 12;
+
+
+    return `${formattedHour}:${minute} ${period}`;
+
+};
 
     openCreateProperty = ()=>{
 
@@ -31,6 +62,71 @@ export default class AdminProperties extends React.Component{
         this.setState({
             showCreateProperty: false
         });
+
+    };
+
+
+    renderAmenities(propertyId){
+
+        const {
+            amenityContext
+        } = this.context;
+
+
+        const {
+            amenities,
+            amenitiesByPropertyId
+        } = amenityContext;
+
+
+        const propertyAmenityIds =
+            amenitiesByPropertyId[propertyId] || [];
+
+
+        if(!propertyAmenityIds.length){
+
+            return (
+                <p className="admin-properties__no-amenities">
+                    No amenities assigned
+                </p>
+            );
+
+        };
+
+
+        return (
+            <div className="admin-properties__amenities">
+
+                {
+                    propertyAmenityIds.map(
+                        amenityId => {
+
+                            const amenity =
+                                amenities[amenityId];
+
+
+                            if(!amenity){
+
+                                return null;
+
+                            };
+
+
+                            return (
+                                <span
+                                    className="admin-properties__amenity"
+                                    key={amenity.id}
+                                >
+                                    {amenity.name}
+                                </span>
+                            );
+
+                        }
+                    )
+                }
+
+            </div>
+        );
 
     };
 
@@ -94,9 +190,15 @@ export default class AdminProperties extends React.Component{
 
                                     <div>
 
+                                        <div className="admin-properties__type">
+                                            {property.property_type}
+                                        </div>
+
+
                                         <h3>
                                             {property.name}
                                         </h3>
+
 
                                         <p className="admin-properties__location">
 
@@ -125,63 +227,181 @@ export default class AdminProperties extends React.Component{
                                 </div>
 
 
+                                {
+                                    property.description &&
+                                    <p className="admin-properties__description">
+                                        {property.description}
+                                    </p>
+                                }
+
+
                                 <div className="admin-properties__details">
 
                                     <p>
+
                                         <strong>
-                                            Guests:
+                                            {property.max_guests}
                                         </strong>
-
                                         {" "}
+                                        <span>
+                                            Guests
+                                        </span>
 
-                                        {property.max_guests}
                                     </p>
 
 
                                     <p>
+
                                         <strong>
-                                            Bedrooms:
+                                            {property.bedrooms}
                                         </strong>
-
                                         {" "}
+                                        <span>
+                                            Bedrooms
+                                        </span>
 
-                                        {property.bedrooms}
                                     </p>
 
 
                                     <p>
+
                                         <strong>
-                                            Beds:
+                                            {property.beds}
                                         </strong>
-
                                         {" "}
+                                        <span>
+                                            Beds
+                                        </span>
 
-                                        {property.beds}
                                     </p>
 
 
                                     <p>
+
                                         <strong>
-                                            Bathrooms:
+                                            {property.bathrooms}
                                         </strong>
-
                                         {" "}
+                                        <span>
+                                            Bathrooms
+                                        </span>
 
-                                        {property.bathrooms}
                                     </p>
 
                                 </div>
 
 
+                                <div className="admin-properties__info">
+
+                                    <div className="admin-properties__amenities-section">
+
+                                        <h4>
+                                            Amenities
+                                        </h4>
+
+                                        {
+                                            this.renderAmenities(
+                                                property.id
+                                            )
+                                        }
+
+                                    </div>
+
+
+                                    <div className="admin-properties__stay-section">
+
+                                        <h4>
+                                            Stay details
+                                        </h4>
+
+
+                                        <div className="admin-properties__stay">
+
+                                            <div>
+
+                                                <span>
+                                                    Check-in
+                                                </span>
+
+                                                <strong>
+                                                    {
+                                                        this.formatTime(
+                                                            property.check_in_time
+                                                        )
+                                                    }
+                                                </strong>
+
+                                            </div>
+
+
+                                            <div>
+
+                                                <span>
+                                                    Check-out
+                                                </span>
+
+                                                <strong>
+                                                    {
+                                                        this.formatTime(
+                                                            property.check_out_time
+                                                        )
+                                                    }
+                                                </strong>
+
+                                            </div>
+
+
+                                            <div>
+
+                                                <span>
+                                                    Minimum stay
+                                                </span>
+
+                                                <strong>
+
+                                                    {property.minimum_nights}
+
+                                                    {" "}
+
+                                                    {
+                                                        Number(
+                                                            property.minimum_nights
+                                                        ) === 1
+                                                            ? "night"
+                                                            : "nights"
+                                                    }
+
+                                                </strong>
+
+                                            </div>
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+
                                 <div className="admin-properties__price">
 
-                                    <strong>
-                                        ${property.base_price}
-                                    </strong>
+                                    <div>
 
-                                    <span>
-                                        / night
-                                    </span>
+                                        <strong>
+                                            ${property.base_price}
+                                        </strong>
+
+                                        <span>
+                                            / night
+                                        </span>
+
+                                    </div>
+
+
+                                    {
+                                        property.instant_booking &&
+                                        <span className="admin-properties__instant">
+                                            Instant booking
+                                        </span>
+                                    }
 
                                 </div>
 
@@ -281,4 +501,5 @@ export default class AdminProperties extends React.Component{
         );
 
     };
+
 };
