@@ -42,22 +42,49 @@ export default class EditProperty extends React.Component{
         showDeleteConfirmation: false,
         isDeleting: false,
         deleteError: "",
-        activeView: "details"
+        activeView: "details",
+        isLoadingAmenities: true,
+        amenitiesError: "",
     };
 
 
     componentDidMount(){
 
-        this.setPropertyState();
+        const { amenityContext } = this.context;
+
+        amenityContext
+            .getAmenitiesByPropertyId(this.props.propertyId)
+            .then( amenityIds => {
+
+                this.setPropertyState(amenityIds);
+
+                this.setState({
+                    isLoadingAmenities: false,
+                    amenitiesError: ""
+                });
+
+            })
+            .catch( error => {
+
+                this.setPropertyState([]);
+
+                this.setState({
+                    isLoadingAmenities: false,
+
+                    amenitiesError:
+                        error.error ||
+                        "Unable to load this property's amenities."
+                });
+
+            });
 
     };
 
 
-    setPropertyState = ()=>{
+    setPropertyState = (amenityIds)=>{
 
         const {
             propertyContext,
-            amenityContext
         } = this.context;
 
 
@@ -72,13 +99,6 @@ export default class EditProperty extends React.Component{
             return;
 
         };
-
-
-        const amenityIds =
-            amenityContext
-                .amenitiesByPropertyId[
-                    property.id
-                ] || [];
 
 
         this.setState({
@@ -564,81 +584,159 @@ export default class EditProperty extends React.Component{
 
     };
 
+    renderAssignedAmenities(){
 
-    renderAmenities(){
+        const { amenities } =
+            this.context.amenityContext;
 
-        const {
-            amenityContext
-        } = this.context;
+        const { selectedAmenityIds } =
+            this.state;
 
-
-        const {
-            amenities,
-            amenityIds
-        } = amenityContext;
-
-
-        if(!amenityIds.length){
+        if(!selectedAmenityIds.length){
 
             return (
                 <p className="edit-property__no-amenities">
-                    No amenities have been created yet.
+                    No amenities assigned to this property.
                 </p>
             );
 
         };
 
+        return selectedAmenityIds.map( amenityId => {
 
-        return amenityIds.map(
-            amenityId => {
+            const amenity = amenities[amenityId];
 
-                const amenity =
-                    amenities[amenityId];
+            if(!amenity){
 
+                return null;
 
-                if(!amenity){
+            };
 
-                    return null;
+            return (
+                <div
+                    className="edit-property__assigned-amenity edit-property__amenity-chip"
+                    key={amenityId}
+                >
 
-                };
+                    <span>{amenity.name}</span>
 
-
-                const isSelected =
-                    this.state
-                        .selectedAmenityIds
-                        .includes(
-                            amenity.id
-                        );
-
-
-                return (
-                    <label
-                        className="edit-property__amenity"
-                        key={amenity.id}
+                    <button
+                        type="button"
+                        onClick={
+                            ()=>this.handleRemoveAmenity(amenityId)
+                        }
+                        aria-label={`Remove ${amenity.name}`}
+                        className="edit-property__amenity-remove"
                     >
+                        Remove
+                    </button>
 
-                        <input
-                            type="checkbox"
-                            value={amenity.id}
-                            checked={isSelected}
-                            onChange={
-                                this.handleAmenityChange
-                            }
-                        />
+                </div>
+            );
+
+        });
+
+    };
+    
+    handleAddAmenity = (amenityId)=>{
+
+        this.setState( previousState => ({
+
+            selectedAmenityIds:
+                previousState.selectedAmenityIds.includes(
+                    amenityId
+                )
+                    ? previousState.selectedAmenityIds
+                    : [
+                        ...previousState.selectedAmenityIds,
+                        amenityId
+                    ]
+
+        }));
+
+    };
+
+    renderAmenities = ()=>{
+
+        const {
+            amenities,
+            amenityIds
+        } = this.context.amenityContext;
+
+        const {
+            selectedAmenityIds,
+            isSubmitting
+        } = this.state;
+
+        const assignedAmenities = selectedAmenityIds
+            .map( id => amenities[id] )
+            .filter(Boolean)
+            .sort(
+                (a, b) => a.name.localeCompare(b.name)
+            );
+
+        const availableAmenities = amenityIds
+            .filter(
+                id => !selectedAmenityIds.includes(id)
+            )
+            .map( id => amenities[id] )
+            .filter(Boolean)
+            .sort(
+                (a, b) => a.name.localeCompare(b.name)
+            );
+
+        return (
+            <div className="edit-property__amenity-manager">
 
 
-                        <span className="edit-property__amenity-content">
+                <div className="edit-property__amenity-group">
 
-                            <strong>
-                                {amenity.name}
-                            </strong>
+                    <h5>Available Amenities</h5>
 
-                        </span>
+                    <p>
+                        Add amenities to this property.
+                    </p>
 
-                    </label>
-                );
+                    <div className="edit-property__amenity-list">
 
-            }
+                        {
+                            availableAmenities.length
+                                ? availableAmenities.map(
+                                    amenity => (
+
+                                        <button
+                                            key={amenity.id}
+                                            type="button"
+                                            className="edit-property__amenity-add"
+                                            onClick={
+                                                () => this.handleAddAmenity(
+                                                    amenity.id
+                                                )
+                                            }
+                                            disabled={isSubmitting}
+                                        >
+                                            <span aria-hidden="true">
+                                                +
+                                            </span>
+
+                                            {amenity.name}
+
+                                        </button>
+
+                                    )
+                                )
+                                : (
+                                    <p className="edit-property__no-amenities">
+                                        No additional amenities available.
+                                    </p>
+                                )
+                        }
+
+                    </div>
+
+                </div>
+
+            </div>
         );
 
     };
@@ -762,6 +860,21 @@ export default class EditProperty extends React.Component{
             error: "",
             success: ""
         });
+
+    };
+    
+    handleRemoveAmenity = (amenityId)=>{
+
+        this.setState( previousState => ({
+
+            selectedAmenityIds:
+                previousState.selectedAmenityIds.filter(
+                    id => id !== amenityId
+                ),
+
+            error: ""
+
+        }));
 
     };
 
@@ -1279,18 +1392,45 @@ export default class EditProperty extends React.Component{
                                         Amenities
                                     </h4>
 
-                                    <p>
-                                        Select the amenities available at this property.
-                                    </p>
-
                                 </div>
 
 
-                                <div className="edit-property__amenities">
+                                {
+                                    this.state.isLoadingAmenities
+                                        ? (
+                                            <p>Loading property amenities...</p>
+                                        )
+                                        : (
+                                            <>
+                                                {
+                                                    this.state.amenitiesError &&
+                                                    <p
+                                                        className="edit-property__error"
+                                                        role="alert"
+                                                    >
+                                                        {this.state.amenitiesError}
+                                                    </p>
+                                                }
 
-                                    {this.renderAmenities()}
+                                                {
+                                                    !this.state.amenitiesError &&
+                                                    <>
+                                                        <div className="edit-property__assigned-amenities">
 
-                                </div>
+                                                            {this.renderAssignedAmenities()}
+
+                                                        </div>
+
+                                                        <div className="edit-property__amenities">
+
+                                                            {this.renderAmenities()}
+
+                                                        </div>
+                                                    </>
+                                                }
+                                            </>
+                                        )
+                                }
 
                             </div>
 
@@ -1663,7 +1803,11 @@ export default class EditProperty extends React.Component{
                                 <button
                                     className="edit-property__submit"
                                     type="submit"
-                                    disabled={isSubmitting}
+                                    disabled={
+                                        isSubmitting ||
+                                        this.state.isLoadingAmenities ||
+                                        Boolean(this.state.amenitiesError)
+                                    }
                                 >
 
                                     {

@@ -35,13 +35,13 @@ export default class CreateProperty extends React.Component{
         cancellation_policy: "",
         house_rules: "",
         status: "active",
-        selectedAmenityIds: [],
+        amenityInput: "",
+        amenities: [],  
         isSubmitting: false,
         error: "",
         success: "",
         activeView: "details",
         createdProperty: null,
-        activeView: "details",
         blockedDates: [],
     };
 
@@ -113,34 +113,89 @@ export default class CreateProperty extends React.Component{
     };
 
 
-    handleAmenityChange = (event)=>{
+    handleAmenityInputChange = (event)=>{
 
-        const {
-            value,
-            checked
-        } = event.target;
+        this.setState({
+            amenityInput: event.target.value,
+            error: ""
+        });
+
+    };
+
+
+    handleAddAmenity = ()=>{
+
+        if(this.state.isSubmitting){
+
+            return;
+
+        };
+
+
+        const name = this.state.amenityInput.trim();
+
+
+        if(!name){
+
+            return;
+
+        };
+
+
+        const alreadyAdded = this.state.amenities.some(
+            amenity => {
+
+                return amenity.toLowerCase() ===
+                    name.toLowerCase();
+
+            }
+        );
+
+
+        if(alreadyAdded){
+
+            this.setState({
+                error: `${name} has already been added.`
+            });
+
+            return;
+
+        };
 
 
         this.setState( previousState => {
 
-            const selectedAmenityIds =
-                checked
-                    ? previousState.selectedAmenityIds.includes(
-                        value
-                    )
-                        ? previousState.selectedAmenityIds
-                        : [
-                            ...previousState.selectedAmenityIds,
-                            value
-                        ]
-                    : previousState.selectedAmenityIds.filter(
-                        amenityId =>
-                            amenityId !== value
-                    );
+            return {
+                amenities: [
+                    ...previousState.amenities,
+                    name
+                ],
 
+                amenityInput: "",
+                error: ""
+            };
+
+        });
+
+    };
+
+
+    handleRemoveAmenity = (name)=>{
+
+        if(this.state.isSubmitting){
+
+            return;
+
+        };
+
+
+        this.setState( previousState => {
 
             return {
-                selectedAmenityIds,
+                amenities: previousState.amenities.filter(
+                    amenity => amenity !== name
+                ),
+
                 error: ""
             };
 
@@ -194,8 +249,7 @@ export default class CreateProperty extends React.Component{
 
 
         const {
-            propertyContext,
-            amenityContext
+            propertyContext
         } = this.context;
 
 
@@ -286,7 +340,9 @@ export default class CreateProperty extends React.Component{
 
         propertyContext.createProperty({
             ...newProperty,
-
+            amenities: [
+                ...this.state.amenities
+            ],
             blocked_dates: [
                 ...this.state.blockedDates
             ]
@@ -333,74 +389,114 @@ export default class CreateProperty extends React.Component{
 
     renderAmenities(){
 
-        const {
-            amenityContext
-        } = this.context;
+        return (
+            <div className="create-property__amenity-editor">
 
+                <div className="create-property__amenity-entry">
 
-        const {
-            amenities,
-            amenityIds
-        } = amenityContext;
-
-
-        if(!amenityIds.length){
-
-            return (
-                <p className="create-property__no-amenities">
-                    No amenities have been created yet.
-                </p>
-            );
-
-        };
-
-
-        return amenityIds.map(
-            amenityId => {
-
-                const amenity = amenities[amenityId];
-
-                if(!amenity){
-
-                    return null;
-
-                };
-
-
-                const isSelected =
-                    this.state.selectedAmenityIds.includes(
-                        amenity.id
-                    );
-
-
-                return (
                     <label
-                        className="create-property__amenity"
-                        key={amenity.id}
+                        className="create-property__field"
+                        htmlFor="create-property-amenity-input"
                     >
 
-                        <input
-                            type="checkbox"
-                            value={amenity.id}
-                            checked={isSelected}
-                            onChange={
-                                this.handleAmenityChange
-                            }
-                        />
-
-
-                        <span className="create-property__amenity-content">
-
-                            <strong>
-                                {amenity.name}
-                            </strong>
-
+                        <span>
+                            Amenity name
                         </span>
 
-                    </label>
-                );
+                        <input
+                            id="create-property-amenity-input"
+                            type="text"
+                            value={this.state.amenityInput}
+                            onChange={
+                                this.handleAmenityInputChange
+                            }
+                            placeholder="e.g. Wi-Fi"
+                            disabled={this.state.isSubmitting}
+                            onKeyDown={event=>{
 
-            }
+                                if(event.key === "Enter"){
+
+                                    event.preventDefault();
+
+                                    this.handleAddAmenity();
+
+                                };
+
+                            }}
+                        />
+
+                    </label>
+
+
+                    <button
+                        className="create-property__amenity-add"
+                        type="button"
+                        onClick={this.handleAddAmenity}
+                        disabled={
+                            this.state.isSubmitting ||
+                            !this.state.amenityInput.trim()
+                        }
+                    >
+                        Add amenity
+                    </button>
+
+                </div>
+
+
+                {
+                    this.state.amenities.length > 0
+                        ? (
+                            <ul className="create-property__amenity-list">
+
+                                {
+                                    this.state.amenities.map(
+                                        amenity => {
+
+                                            return (
+                                                <li
+                                                    className="create-property__amenity-item"
+                                                    key={amenity}
+                                                >
+
+                                                    <span>
+                                                        {amenity}
+                                                    </span>
+
+
+                                                    <button
+                                                        type="button"
+                                                        onClick={
+                                                            ()=>this.handleRemoveAmenity(
+                                                                amenity
+                                                            )
+                                                        }
+                                                        disabled={
+                                                            this.state.isSubmitting
+                                                        }
+                                                        aria-label={
+                                                            `Remove ${amenity}`
+                                                        }
+                                                    >
+                                                        ×
+                                                    </button>
+
+                                                </li>
+                                            );
+
+                                        }
+                                    )
+                                }
+
+                            </ul>
+                        )
+                        : (
+                            <p className="create-property__no-amenities">
+                                No amenities added yet.
+                            </p>
+                        )
+                }
+
+            </div>
         );
 
     };
@@ -874,7 +970,8 @@ export default class CreateProperty extends React.Component{
                                     </h4>
 
                                     <p>
-                                        Select the amenities available at this property.
+                                        Add amenities for this property.
+    They will be saved when you create the property.
                                     </p>
 
                                 </div>

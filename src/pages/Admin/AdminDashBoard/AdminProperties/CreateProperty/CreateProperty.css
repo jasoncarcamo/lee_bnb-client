@@ -681,6 +681,143 @@
 }
 
 /*
+    Staged Amenities
+*/
+
+.create-property__amenity-editor{
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+
+.create-property__amenity-entry{
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 12px;
+}
+
+
+.create-property__amenity-add{
+    min-height: 48px;
+
+    padding: 0 18px;
+
+    border: 1px solid #222222;
+    border-radius: 10px;
+
+    background: #ffffff;
+    color: #222222;
+
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 700;
+
+    cursor: pointer;
+}
+
+
+.create-property__amenity-add:hover:not(:disabled){
+    background: #f7f7f7;
+}
+
+
+.create-property__amenity-add:focus-visible{
+    outline: 3px solid #222222;
+    outline-offset: 2px;
+}
+
+
+.create-property__amenity-add:disabled{
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+
+.create-property__amenity-list{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+
+    margin: 0;
+    padding: 0;
+
+    list-style: none;
+}
+
+
+.create-property__amenity-item{
+    min-width: 0;
+
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+
+    padding: 6px 6px 6px 12px;
+
+    border: 1px solid #dddddd;
+    border-radius: 10px;
+
+    background: #f7f7f7;
+
+    color: #222222;
+
+    font-size: 14px;
+    overflow-wrap: anywhere;
+}
+
+
+.create-property__amenity-item button{
+    width: 30px;
+    height: 30px;
+
+    flex-shrink: 0;
+
+    border: 0;
+    border-radius: 7px;
+
+    background: transparent;
+    color: #222222;
+
+    font-size: 20px;
+    cursor: pointer;
+}
+
+
+.create-property__amenity-item button:hover:not(:disabled){
+    background: #e8e8e8;
+}
+
+
+.create-property__amenity-item button:focus-visible{
+    outline: 2px solid #222222;
+    outline-offset: 2px;
+}
+
+
+.create-property__amenity-item button:disabled{
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+
+.create-property__no-amenities{
+    margin: 0;
+    color: #717171;
+    font-size: 13px;
+}
+
+
+@media (min-width: 768px){
+
+    .create-property__amenity-entry{
+        grid-template-columns: minmax(0, 1fr) auto;
+        align-items: end;
+    }
+
+}
+
+/*
     Narrow Mobile
     300px - 359px
 */

@@ -235,98 +235,71 @@ export class AmenityContextProvider extends React.Component{
 
     getAmenitiesByPropertyId = (propertyId)=>{
 
-        const existingAmenityIds =
-            this.state
-                .amenitiesByPropertyId[propertyId];
-
-
-        if(existingAmenityIds){
-
-            return Promise.resolve(
-                existingAmenityIds
-            );
-
-        };
-
-
         return PropertyAmenityRequest
-            .getAmenitiesByPropertyId(
-                propertyId
-            )
+            .getAmenitiesByPropertyId(propertyId)
             .then( response => {
 
                 const propertyAmenities =
                     response.amenities || [];
 
+                const propertyAmenityIds =
+                    propertyAmenities.map(
+                        amenity => amenity.id
+                    );
 
-                const amenities = {
-                    ...this.state.amenities
-                };
+                return new Promise( resolve => {
 
+                    this.setState(
+                        previousState => {
 
-                const amenityIds = [
-                    ...this.state.amenityIds
-                ];
+                            const amenities = {
+                                ...previousState.amenities
+                            };
 
+                            const amenityIds = [
+                                ...previousState.amenityIds
+                            ];
 
-                const propertyAmenityIds = [];
+                            propertyAmenities.forEach( amenity => {
 
+                                amenities[amenity.id] = amenity;
 
-                propertyAmenities.forEach(
-                    amenity => {
+                                if(!amenityIds.includes(amenity.id)){
 
-                        amenities[amenity.id] =
-                            amenity;
+                                    amenityIds.push(amenity.id);
 
+                                };
 
-                        propertyAmenityIds.push(
-                            amenity.id
-                        );
+                            });
 
+                            return {
+                                amenities,
 
-                        if(
-                            !amenityIds.includes(
-                                amenity.id
-                            )
-                        ){
+                                amenityIds,
 
-                            amenityIds.push(
-                                amenity.id
+                                amenitiesByPropertyId: {
+                                    ...previousState.amenitiesByPropertyId,
+
+                                    [propertyId]:
+                                        propertyAmenityIds
+                                }
+                            };
+
+                        },
+                        ()=>{
+
+                            this.saveAmenities(
+                                this.state.amenities,
+                                this.state.amenityIds,
+                                this.state.amenitiesByPropertyId
                             );
 
-                        };
+                            resolve(propertyAmenityIds);
 
-                    }
-                );
+                        }
+                    );
 
-
-                const amenitiesByPropertyId = {
-                    ...this.state.amenitiesByPropertyId,
-
-                    [propertyId]:
-                        propertyAmenityIds
-                };
-
-
-                this.setState(
-                    {
-                        amenities,
-                        amenityIds,
-                        amenitiesByPropertyId
-                    },
-                    ()=>{
-
-                        this.saveAmenities(
-                            this.state.amenities,
-                            this.state.amenityIds,
-                            this.state.amenitiesByPropertyId
-                        );
-
-                    }
-                );
-
-
-                return propertyAmenityIds;
+                });
 
             });
 
