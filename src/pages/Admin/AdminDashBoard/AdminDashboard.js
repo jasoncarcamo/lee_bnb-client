@@ -46,15 +46,6 @@ export default class AdminDashboard extends React.Component{
                 return (<AdminProperties/>);
 
 
-            case "photos":
-
-                return (
-                    <h2>
-                        Photos
-                    </h2>
-                );
-
-
             case "amenities":
 
                 return (

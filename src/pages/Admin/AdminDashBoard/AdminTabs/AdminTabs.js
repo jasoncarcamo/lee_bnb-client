@@ -15,10 +15,6 @@ export default class AdminTabs extends React.Component{
             label: "Properties"
         },
         {
-            id: "photos",
-            label: "Photos"
-        },
-        {
             id: "amenities",
             label: "Amenities"
         },

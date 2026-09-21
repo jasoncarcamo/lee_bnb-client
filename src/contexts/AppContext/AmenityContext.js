@@ -1,12 +1,12 @@
 import React from "react";
 
-const AmenityRequest = require("../services/AmenityService");
+const AmenityRequest = require("../../services/AmenityService");
 
 const PropertyAmenityRequest =
-    require("../services/PropertyAmenityServices");
+    require("../../services/PropertyAmenityServices");
 
 const AmenityStorage =
-    require("../storage/AmenityStorage");
+    require("../../storage/AmenityStorage");
 
 
 const AmenityContext = React.createContext({

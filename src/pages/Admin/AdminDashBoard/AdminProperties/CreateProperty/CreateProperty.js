@@ -1,7 +1,7 @@
 import React from "react";
 
 import AppContext from "../../../../../contexts/AppContext/AppContext";
-
+import PropertyAvailability from "../PropertyAvailability/PropertyAvailability";
 import "./CreateProperty.css";
 
 
@@ -9,6 +9,7 @@ export default class CreateProperty extends React.Component{
 
     static contextType = AppContext;
 
+    formRef = React.createRef();
 
     state = {
         name: "",
@@ -34,14 +35,41 @@ export default class CreateProperty extends React.Component{
         cancellation_policy: "",
         house_rules: "",
         status: "active",
-
         selectedAmenityIds: [],
-
         isSubmitting: false,
         error: "",
-        success: ""
+        success: "",
+        activeView: "details",
+        createdProperty: null,
+        activeView: "details",
+        blockedDates: [],
     };
 
+    handleViewChange = (activeView)=>{
+
+        if(this.state.isSubmitting){
+
+            return;
+
+        };
+
+
+        this.setState({
+            activeView,
+            error: ""
+        });
+
+    };
+
+
+    handleBlockedDatesChange = (blockedDates)=>{
+
+        this.setState({
+            blockedDates,
+            error: ""
+        });
+
+    };
 
     handleChange = (event)=>{
 
@@ -256,67 +284,25 @@ export default class CreateProperty extends React.Component{
         });
 
 
-        propertyContext.createProperty(newProperty)
-            .then( property => {
+        propertyContext.createProperty({
+            ...newProperty,
 
-                const amenityRequests =
-                    this.state.selectedAmenityIds.map(
-                        amenityId => {
-
-                            return amenityContext
-                                .addAmenityToProperty(
-                                    property.id,
-                                    amenityId
-                                );
-
-                        }
-                    );
-
-
-                return Promise.all(
-                    amenityRequests
-                )
-                    .then(()=>{
-
-                        return property;
-
-                    });
-
-            })
+            blocked_dates: [
+                ...this.state.blockedDates
+            ]
+        })
             .then( property => {
 
                 this.setState({
-                    name: "",
-                    slug: "",
-                    description: "",
-                    property_type: "",
-                    address_line_1: "",
-                    address_line_2: "",
-                    city: "",
-                    state: "",
-                    postal_code: "",
-                    country: "USA",
-                    max_guests: 1,
-                    bedrooms: 1,
-                    beds: 1,
-                    bathrooms: 1,
-                    check_in_time: "15:00",
-                    check_out_time: "11:00",
-                    minimum_nights: 1,
-                    base_price: "",
-                    cleaning_fee: 0,
-                    instant_booking: false,
-                    cancellation_policy: "",
-                    house_rules: "",
-                    status: "active",
-
-                    selectedAmenityIds: [],
-
                     isSubmitting: false,
-                    error: "",
+
+                    blockedDates: [],
+                    activeView: "details",
 
                     success:
-                        `${property.name} was created successfully.`
+                        `${property.name} was created successfully.`,
+
+                    error: ""
                 });
 
 
@@ -334,6 +320,7 @@ export default class CreateProperty extends React.Component{
 
                     error:
                         error.error ||
+                        error.message ||
                         "Unable to create property",
 
                     success: ""
@@ -417,6 +404,29 @@ export default class CreateProperty extends React.Component{
         );
 
     };
+    
+    handleCreateClick = ()=>{
+
+        if(this.state.isSubmitting){
+
+            return;
+
+        };
+
+
+        this.setState({
+            activeView: "details"
+        }, ()=>{
+
+            if(this.formRef.current){
+
+                this.formRef.current.requestSubmit();
+
+            };
+
+        });
+
+    };
 
 
     render(){
@@ -467,6 +477,49 @@ export default class CreateProperty extends React.Component{
                         </button>
 
                     </header>
+                    
+                    <nav
+                        className="create-property__views"
+                        aria-label="Create property sections"
+                    >
+
+                        <button
+                            type="button"
+                            className={
+                                this.state.activeView === "details"
+                                    ? "create-property__view create-property__view--active"
+                                    : "create-property__view"
+                            }
+                            onClick={
+                                ()=>this.handleViewChange("details")
+                            }
+                            disabled={this.state.isSubmitting}
+                        >
+                            Details
+                        </button>
+
+
+                        <button
+                            type="button"
+                            className={
+                                this.state.activeView === "availability"
+                                    ? "create-property__view create-property__view--active"
+                                    : "create-property__view"
+                            }
+                            onClick={
+                                ()=>this.handleViewChange("availability")
+                            }
+                            disabled={this.state.isSubmitting}
+                        >
+                            Availability
+
+                            {
+                                this.state.blockedDates.length > 0 &&
+                                ` (${this.state.blockedDates.length})`
+                            }
+                        </button>
+
+                    </nav>
 
 
                     {
@@ -513,8 +566,14 @@ export default class CreateProperty extends React.Component{
 
 
                     <form
-                        className="create-property__form"
+                        id="create-property-form"
+                        className={
+                            this.state.activeView === "details"
+                                ? "create-property__form"
+                                : "create-property__form create-property__form--hidden"
+                        }
                         onSubmit={this.handleSubmit}
+                        ref={this.formRef}
                     >
 
                         <fieldset disabled={isSubmitting}>
@@ -1057,38 +1116,40 @@ export default class CreateProperty extends React.Component{
                                 </div>
 
                             </div>
-
-
                             <div className="create-property__actions">
 
                                 <button
                                     className="create-property__submit"
-                                    type="submit"
+                                    type="button"
+                                    onClick={this.handleCreateClick}
                                     disabled={isSubmitting}
                                 >
-
                                     {
                                         isSubmitting
-                                            ? (
-                                                <>
-                                                    <span
-                                                        className="create-property__spinner"
-                                                        aria-hidden="true"
-                                                    />
-
-                                                    Creating property...
-                                                </>
-                                            )
+                                            ? "Creating property..."
                                             : "Create property"
                                     }
-
                                 </button>
 
                             </div>
-
                         </fieldset>
 
                     </form>
+                    
+                    {
+                        this.state.activeView === "availability" &&
+                        <div className="create-property__availability">
+
+                            <PropertyAvailability
+                                mode="create"
+                                blockedDates={this.state.blockedDates}
+                                onBlockedDatesChange={
+                                    this.handleBlockedDatesChange
+                                }
+                            />
+
+                        </div>
+                    }
 
                 </section>
 

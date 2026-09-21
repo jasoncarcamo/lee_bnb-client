@@ -1,7 +1,7 @@
 import React from "react";
 
 import AppContext from "../../../../../contexts/AppContext/AppContext";
-
+import PropertyAvailability from "../PropertyAvailability/PropertyAvailability";
 import "./EditProperty.css";
 
 
@@ -41,7 +41,8 @@ export default class EditProperty extends React.Component{
         success: "",
         showDeleteConfirmation: false,
         isDeleting: false,
-        deleteError: ""
+        deleteError: "",
+        activeView: "details"
     };
 
 
@@ -744,6 +745,25 @@ export default class EditProperty extends React.Component{
 
     };
 
+    handleViewChange = (activeView)=>{
+
+        if(
+            this.state.isSubmitting ||
+            this.state.isDeleting
+        ){
+
+            return;
+
+        };
+
+
+        this.setState({
+            activeView,
+            error: "",
+            success: ""
+        });
+
+    };
 
     render(){
 
@@ -813,6 +833,60 @@ export default class EditProperty extends React.Component{
                         </button>
 
                     </header>
+                    
+                    <nav
+                        className="edit-property__views"
+                        aria-label="Property editor sections"
+                    >
+
+                        <button
+                            type="button"
+                            className={
+                                this.state.activeView === "details"
+                                    ? "edit-property__view edit-property__view--active"
+                                    : "edit-property__view"
+                            }
+                            onClick={
+                                ()=>this.handleViewChange("details")
+                            }
+                            disabled={
+                                this.state.isSubmitting ||
+                                this.state.isDeleting
+                            }
+                            aria-current={
+                                this.state.activeView === "details"
+                                    ? "page"
+                                    : undefined
+                            }
+                        >
+                            Details
+                        </button>
+
+
+                        <button
+                            type="button"
+                            className={
+                                this.state.activeView === "availability"
+                                    ? "edit-property__view edit-property__view--active"
+                                    : "edit-property__view"
+                            }
+                            onClick={
+                                ()=>this.handleViewChange("availability")
+                            }
+                            disabled={
+                                this.state.isSubmitting ||
+                                this.state.isDeleting
+                            }
+                            aria-current={
+                                this.state.activeView === "availability"
+                                    ? "page"
+                                    : undefined
+                            }
+                        >
+                            Availability
+                        </button>
+
+                    </nav>
 
 
                     {
@@ -856,8 +930,11 @@ export default class EditProperty extends React.Component{
                             {error}
                         </div>
                     }
+                    
+                    
 
-
+                    {
+                    this.state.activeView === "details" &&
                     <form
                         className="edit-property__form"
                         onSubmit={this.handleSubmit}
@@ -1611,6 +1688,19 @@ export default class EditProperty extends React.Component{
                         </fieldset>
 
                     </form>
+                    }
+
+
+                    {
+                        this.state.activeView === "availability" &&
+                        <div className="edit-property__availability">
+
+                            <PropertyAvailability
+                                propertyId={this.props.propertyId}
+                            />
+
+                        </div>
+                    }
 
                 </section>
 

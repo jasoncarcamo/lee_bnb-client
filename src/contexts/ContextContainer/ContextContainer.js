@@ -10,7 +10,7 @@ import PropertyContext, {
 
 import AmenityContext, {
     AmenityContextProvider
-} from "../AmenityContext";
+} from "../AppContext/AmenityContext";
 
 import {
     AppContextProvider

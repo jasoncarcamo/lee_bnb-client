@@ -838,6 +838,112 @@
 
 }
 
+/*
+    Editor Views
+*/
+
+.edit-property__views{
+    flex-shrink: 0;
+
+    display: flex;
+    gap: 8px;
+
+    padding: 12px 18px;
+
+    border-bottom: 1px solid #eeeeee;
+
+    background: #ffffff;
+}
+
+
+.edit-property__view{
+    min-height: 44px;
+
+    padding: 0 16px;
+
+    border: 1px solid transparent;
+    border-radius: 9px;
+
+    background: transparent;
+
+    color: #717171;
+
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 700;
+
+    cursor: pointer;
+}
+
+
+.edit-property__view:hover:not(:disabled){
+    background: #f7f7f7;
+
+    color: #222222;
+}
+
+
+.edit-property__view--active{
+    border-color: #222222;
+
+    background: #222222;
+
+    color: #ffffff;
+}
+
+
+.edit-property__view--active:hover:not(:disabled){
+    background: #222222;
+
+    color: #ffffff;
+}
+
+
+.edit-property__view:focus-visible{
+    outline: 3px solid #222222;
+    outline-offset: 2px;
+}
+
+
+.edit-property__view:disabled{
+    opacity: 0.5;
+
+    cursor: not-allowed;
+}
+
+
+/*
+    Availability View
+*/
+
+.edit-property__availability{
+    min-height: 0;
+
+    flex: 1;
+
+    overflow-y: auto;
+
+    overscroll-behavior: contain;
+}
+
+
+@media (min-width: 768px){
+
+    .edit-property__views{
+        padding: 12px 24px;
+    }
+
+}
+
+
+@media (min-width: 1200px){
+
+    .edit-property__views{
+        padding: 12px 28px;
+    }
+
+}
+
 
 /*
     Desktop / Laptop
