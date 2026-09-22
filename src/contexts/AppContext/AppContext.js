@@ -5,7 +5,9 @@ const AppContext = React.createContext({
 
     propertyContext: {},
 
-    amenityContext: {}
+    amenityContext: {},
+
+    inquiryContext: {}
 
 });
 
@@ -23,7 +25,10 @@ export class AppContextProvider extends React.Component{
                 this.props.propertyContext,
 
             amenityContext:
-                this.props.amenityContext
+                this.props.amenityContext,
+
+            inquiryContext:
+                this.props.inquiryContext
 
         };
 

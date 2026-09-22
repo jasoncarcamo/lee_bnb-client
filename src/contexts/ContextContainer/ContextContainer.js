@@ -12,6 +12,10 @@ import AmenityContext, {
     AmenityContextProvider
 } from "../AppContext/AmenityContext";
 
+import InquiryContext, {
+    InquiryContextProvider
+} from "../AppContext/InquiryContext";
+
 import {
     AppContextProvider
 } from "../AppContext/AppContext";
@@ -28,34 +32,49 @@ export default class ContextContainer extends React.Component{
 
                     <AmenityContextProvider>
 
-                        <PropertyContext.Consumer>
+                        <InquiryContextProvider>
 
-                            { propertyContext => (
+                            <PropertyContext.Consumer>
 
-                                <AmenityContext.Consumer>
+                                { propertyContext => (
 
-                                    { amenityContext => (
+                                    <AmenityContext.Consumer>
 
-                                        <AppContextProvider
-                                            propertyContext={
-                                                propertyContext
-                                            }
-                                            amenityContext={
-                                                amenityContext
-                                            }
-                                        >
+                                        { amenityContext => (
 
-                                            {this.props.children}
+                                            <InquiryContext.Consumer>
 
-                                        </AppContextProvider>
+                                                { inquiryContext => (
 
-                                    )}
+                                                    <AppContextProvider
+                                                        propertyContext={
+                                                            propertyContext
+                                                        }
+                                                        amenityContext={
+                                                            amenityContext
+                                                        }
+                                                        inquiryContext={
+                                                            inquiryContext
+                                                        }
+                                                    >
 
-                                </AmenityContext.Consumer>
+                                                        {this.props.children}
 
-                            )}
+                                                    </AppContextProvider>
 
-                        </PropertyContext.Consumer>
+                                                )}
+
+                                            </InquiryContext.Consumer>
+
+                                        )}
+
+                                    </AmenityContext.Consumer>
+
+                                )}
+
+                            </PropertyContext.Consumer>
+
+                        </InquiryContextProvider>
 
                     </AmenityContextProvider>
 

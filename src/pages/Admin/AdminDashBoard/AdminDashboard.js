@@ -3,6 +3,7 @@ import React from "react";
 import AuthContext from "../../../contexts/AuthContext";
 import AdminTabs from "./AdminTabs/AdminTabs";
 import AdminProperties from "./AdminProperties/AdminProperties";
+import AdminInquiries from "./AdminInquiries/AdminInquiries";
 import "./AdminDashboard.css";
 
 
@@ -121,9 +122,7 @@ export default class AdminDashboard extends React.Component{
             case "inquiries":
 
                 return (
-                    <h2>
-                        Inquiries
-                    </h2>
+                    <AdminInquiries/>
                 );
 
 
