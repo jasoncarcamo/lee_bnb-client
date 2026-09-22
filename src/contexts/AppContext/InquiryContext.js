@@ -33,7 +33,18 @@ export class InquiryContextProvider extends React.Component{
         error: ""
 
     };
+    
+    getReservationQuote = (request)=>{
 
+        return InquiryRequest
+            .getReservationQuote(request)
+            .then( response => {
+
+                return response.quote;
+
+            });
+
+    };
 
     normalizeInquiries = (inquiries)=>{
 
@@ -309,7 +320,8 @@ export class InquiryContextProvider extends React.Component{
 
             sendInquiry: this.sendInquiry,
 
-            deleteInquiry: this.deleteInquiry
+            deleteInquiry: this.deleteInquiry,
+            getReservationQuote: this.getReservationQuote
 
         };
 

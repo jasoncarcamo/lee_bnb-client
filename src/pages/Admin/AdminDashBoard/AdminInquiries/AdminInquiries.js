@@ -2,6 +2,7 @@
 import React from "react";
 
 import AppContext from "../../../../contexts/AppContext/AppContext";
+import InquiryStayCalendar from "./InquiryStayCalendar/InquiryStayCalendar";
 import "./AdminInquiries.css";
 
 
@@ -9,6 +10,9 @@ const EMPTY_FORM = {
     first_name: "",
     email: "",
     property_id: "",
+    check_in: "",
+    check_out: "",
+    guests_count: "",
     message: ""
 };
 
@@ -314,6 +318,13 @@ export default class AdminInquiries extends React.Component{
                 first_name: inquiry.first_name || "",
                 email: inquiry.email || "",
                 property_id: inquiry.property_id || "",
+                check_in: inquiry.check_in
+                    ? String(inquiry.check_in).slice(0, 10)
+                    : "",
+                check_out: inquiry.check_out
+                    ? String(inquiry.check_out).slice(0, 10)
+                    : "",
+                guests_count: inquiry.guests_count ?? "",
                 message: inquiry.message || ""
             },
 
@@ -351,12 +362,37 @@ export default class AdminInquiries extends React.Component{
             value
         } = event.target;
 
-
-        this.setState( previousState => ({
+        this.setState(previousState => ({
 
             form: {
                 ...previousState.form,
-                [name]: value
+
+                [name]: value,
+
+                ...(name === "property_id"
+                    ? {
+                        check_in: "",
+                        check_out: ""
+                    }
+                    : {}
+                )
+            },
+
+            error: ""
+
+        }));
+
+    };
+
+
+    handleStayChange = ({check_in, check_out})=>{
+
+        this.setState(previousState => ({
+
+            form: {
+                ...previousState.form,
+                check_in,
+                check_out
             },
 
             error: ""
@@ -385,10 +421,14 @@ export default class AdminInquiries extends React.Component{
 
 
         const payload = {
-
             first_name: form.first_name.trim(),
             email: form.email.trim(),
             property_id: form.property_id || null,
+            check_in: form.check_in || null,
+            check_out: form.check_out || null,
+            guests_count: form.guests_count === ""
+                ? null
+                : Number(form.guests_count),
             message: form.message.trim()
 
         };
@@ -407,7 +447,37 @@ export default class AdminInquiries extends React.Component{
             return;
 
         };
+        
+        if(
+            payload.check_in &&
+            payload.check_out &&
+            payload.check_out <= payload.check_in
+        ){
 
+            this.setState({
+                error: "Check-out must be after check-in."
+            });
+
+            return;
+
+        };
+
+
+        if(
+            payload.guests_count !== null &&
+            (
+                !Number.isInteger(payload.guests_count) ||
+                payload.guests_count < 1
+            )
+        ){
+
+            this.setState({
+                error: "Number of guests must be at least 1."
+            });
+
+            return;
+
+        };
 
         const {
             inquiryContext
@@ -453,7 +523,10 @@ export default class AdminInquiries extends React.Component{
                 
                 window.setTimeout(()=>{
                     this.closeForm();
-                    this.closeInquiry();
+                    
+                    this.setState({
+                        success: ""
+                    })
                 }, 1800);
 
             })
@@ -519,7 +592,10 @@ export default class AdminInquiries extends React.Component{
                 
                 window.setTimeout(()=>{
                     this.closeForm();
-                    this.closeInquiry();
+                    
+                    this.setState({
+                        success: ""
+                    })
                 }, 1800);
 
             })
@@ -789,6 +865,24 @@ export default class AdminInquiries extends React.Component{
     };
 
 
+    formatCurrency(amount, currency = "USD") {
+
+        if (amount === null || amount === undefined) {
+
+            return "—";
+
+        }
+
+        return new Intl.NumberFormat("en-US", {
+
+            style: "currency",
+
+            currency: currency || "USD"
+
+        }).format(Number(amount));
+
+    }
+
     renderInquiryDetails(){
 
         const {
@@ -823,7 +917,7 @@ export default class AdminInquiries extends React.Component{
 
         const isBusy =
             busyInquiryId === inquiry.id;
-
+        console.log(inquiry)
 
         return (
             <div className="admin-inquiries__overlay">
@@ -903,6 +997,113 @@ export default class AdminInquiries extends React.Component{
                                     }
                                 </dd>
                             </div>
+                            
+                            <div>
+
+                                <dt>Check-in</dt>
+
+                                <dd>
+                                    {
+                                        this.formatDate(inquiry.check_in)
+                                    }
+                                </dd>
+
+                            </div>
+
+
+                            <div>
+
+                                <dt>Check-out</dt>
+
+                                <dd>
+                                    {
+                                        this.formatDate(inquiry.check_out)
+                                    }
+                                </dd>
+
+                            </div>
+
+
+                            <div>
+
+                                <dt>Number of guests</dt>
+
+                                <dd>
+                                    {inquiry.guests_count ?? "—"}
+                                </dd>
+
+                            </div>
+                            
+                            {inquiry.quote && (
+                                <>
+                                    <div>
+                                        <dt>Nights</dt>
+                                        <dd>{inquiry.quote.nights}</dd>
+                                    </div>
+
+                                    <div>
+                                        <dt>Nightly subtotal</dt>
+                                        <dd>
+                                            {this.formatCurrency(
+                                                inquiry.quote.nightly_subtotal,
+                                                inquiry.quote.currency
+                                            )}
+                                        </dd>
+                                    </div>
+
+                                    <div>
+                                        <dt>Cleaning fee</dt>
+                                        <dd>
+                                            {this.formatCurrency(
+                                                inquiry.quote.cleaning_fee,
+                                                inquiry.quote.currency
+                                            )}
+                                        </dd>
+                                    </div>
+
+                                    <div>
+                                        <dt>Service fee</dt>
+                                        <dd>
+                                            {this.formatCurrency(
+                                                inquiry.quote.service_fee,
+                                                inquiry.quote.currency
+                                            )}
+                                        </dd>
+                                    </div>
+
+                                    <div>
+                                        <dt>Taxes</dt>
+                                        <dd>
+                                            {this.formatCurrency(
+                                                inquiry.quote.taxes,
+                                                inquiry.quote.currency
+                                            )}
+                                        </dd>
+                                    </div>
+
+                                    <div>
+                                        <dt>Discount</dt>
+                                        <dd>
+                                            {this.formatCurrency(
+                                                inquiry.quote.discount,
+                                                inquiry.quote.currency
+                                            )}
+                                        </dd>
+                                    </div>
+
+                                    <div>
+                                        <dt>Total price</dt>
+                                        <dd>
+                                            <strong>
+                                                {this.formatCurrency(
+                                                    inquiry.quote.total_price,
+                                                    inquiry.quote.currency
+                                                )}
+                                            </strong>
+                                        </dd>
+                                    </div>
+                                </>
+                            )}
 
                             <div>
                                 <dt>Created by</dt>
@@ -1155,6 +1356,29 @@ export default class AdminInquiries extends React.Component{
 
                             </label>
 
+                            <InquiryStayCalendar
+                                propertyId={form.property_id}
+                                checkIn={form.check_in}
+                                checkOut={form.check_out}
+                                onChange={this.handleStayChange}
+                            />
+
+
+                            <label>
+
+                                <span>Number of guests</span>
+
+                                <input
+                                    type="number"
+                                    name="guests_count"
+                                    value={form.guests_count}
+                                    onChange={this.handleFormChange}
+                                    min="1"
+                                    step="1"
+                                    inputMode="numeric"
+                                />
+
+                            </label>
 
                             <label>
 

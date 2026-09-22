@@ -15,6 +15,9 @@ import AmenityContext, {
 import InquiryContext, {
     InquiryContextProvider
 } from "../AppContext/InquiryContext";
+import PropertyAvailabilityContext, {
+    PropertyAvailabilityProvider
+} from "../AppContext/PropertyAvailabilityContext";
 
 import {
     AppContextProvider
@@ -33,46 +36,55 @@ export default class ContextContainer extends React.Component{
                     <AmenityContextProvider>
 
                         <InquiryContextProvider>
+                            
+                            <PropertyAvailabilityProvider>
 
-                            <PropertyContext.Consumer>
+                                <PropertyContext.Consumer>
 
-                                { propertyContext => (
+                                    { propertyContext => (
 
-                                    <AmenityContext.Consumer>
+                                        <AmenityContext.Consumer>
 
-                                        { amenityContext => (
+                                            { amenityContext => (
 
-                                            <InquiryContext.Consumer>
+                                                <InquiryContext.Consumer>
 
-                                                { inquiryContext => (
+                                                    { inquiryContext => (
+                                                        
+                                                        
+                                                        <PropertyAvailabilityContext.Consumer>
+                                                            {PropertyAvailabilityContext => (
+                                                                <AppContextProvider
+                                                                    propertyContext={
+                                                                        propertyContext
+                                                                    }
+                                                                    amenityContext={
+                                                                        amenityContext
+                                                                    }
+                                                                    inquiryContext={
+                                                                        inquiryContext
+                                                                    }
+                                                                >
 
-                                                    <AppContextProvider
-                                                        propertyContext={
-                                                            propertyContext
-                                                        }
-                                                        amenityContext={
-                                                            amenityContext
-                                                        }
-                                                        inquiryContext={
-                                                            inquiryContext
-                                                        }
-                                                    >
+                                                                    {this.props.children}
 
-                                                        {this.props.children}
+                                                                </AppContextProvider>
+                                                            )}
+                                                        </PropertyAvailabilityContext.Consumer>
 
-                                                    </AppContextProvider>
+                                                    )}
 
-                                                )}
+                                                </InquiryContext.Consumer>
 
-                                            </InquiryContext.Consumer>
+                                            )}
 
-                                        )}
+                                        </AmenityContext.Consumer>
 
-                                    </AmenityContext.Consumer>
+                                    )}
 
-                                )}
-
-                            </PropertyContext.Consumer>
+                                </PropertyContext.Consumer>
+                            
+                            </PropertyAvailabilityProvider>
 
                         </InquiryContextProvider>
 

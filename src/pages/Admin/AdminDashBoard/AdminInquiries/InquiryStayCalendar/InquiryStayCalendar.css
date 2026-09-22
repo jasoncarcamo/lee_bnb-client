@@ -1,0 +1,442 @@
+.inquiry-stay-calendar{
+    width: 100%;
+    min-width: 0;
+
+    padding: 22px 18px;
+
+    color: #222222;
+
+    background: #ffffff;
+}
+
+
+/* Instructions */
+
+.inquiry-stay-calendar__instructions{
+    margin: 0;
+
+    color: #717171;
+
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+
+.inquiry-stay-calendar__notice{
+    margin: 0;
+
+    padding: 22px 18px;
+
+    color: #717171;
+
+    background: #ffffff;
+
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+
+/* Month Navigation */
+
+.inquiry-stay-calendar__navigation{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+
+    margin: 24px 0 18px;
+}
+
+
+.inquiry-stay-calendar__navigation h4{
+    margin: 0;
+
+    font-size: 17px;
+    text-align: center;
+}
+
+
+.inquiry-stay-calendar__navigation button{
+    width: 44px;
+    height: 44px;
+
+    flex-shrink: 0;
+
+    padding: 0;
+
+    border: 1px solid #dddddd;
+    border-radius: 10px;
+
+    background: #ffffff;
+
+    color: #222222;
+
+    font-family: inherit;
+    font-size: 25px;
+
+    cursor: pointer;
+}
+
+
+.inquiry-stay-calendar__navigation button:hover:not(:disabled){
+    background: #f7f7f7;
+}
+
+
+.inquiry-stay-calendar__navigation button:disabled{
+    opacity: 0.45;
+
+    cursor: not-allowed;
+}
+
+
+/* Legend */
+
+.inquiry-stay-calendar__legend{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 18px;
+
+    margin-bottom: 20px;
+
+    font-size: 12px;
+}
+
+
+.inquiry-stay-calendar__legend > span{
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+
+.inquiry-stay-calendar__legend > span::before{
+    content: "";
+
+    width: 12px;
+    height: 12px;
+
+    display: inline-block;
+
+    flex-shrink: 0;
+
+    border: 1px solid #dddddd;
+    border-radius: 3px;
+
+    background: #ffffff;
+}
+
+
+.inquiry-stay-calendar__legend > span:nth-child(2)::before{
+    border-color: #c13515;
+
+    background: #fff0ed;
+}
+
+
+.inquiry-stay-calendar__legend > span:nth-child(3)::before{
+    border-color: #888888;
+
+    background: #e9e9e9;
+}
+
+
+/* Calendar Grid */
+
+.inquiry-stay-calendar__weekdays,
+.inquiry-stay-calendar__days{
+    display: grid;
+
+    grid-template-columns:
+        repeat(7, minmax(0, 1fr));
+
+    gap: 5px;
+}
+
+
+.inquiry-stay-calendar__weekdays{
+    margin-bottom: 8px;
+}
+
+
+.inquiry-stay-calendar__weekdays span{
+    min-width: 0;
+
+    color: #717171;
+
+    font-size: 11px;
+    font-weight: 700;
+    text-align: center;
+}
+
+
+/* Calendar Days */
+
+.inquiry-stay-calendar__day{
+    min-width: 0;
+    min-height: 65px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+
+    padding: 6px 2px;
+
+    border: 1px solid #dddddd;
+    border-radius: 8px;
+
+    background: #ffffff;
+
+    color: #222222;
+
+    font-family: inherit;
+
+    cursor: pointer;
+}
+
+
+.inquiry-stay-calendar__day strong{
+    font-size: 14px;
+}
+
+
+.inquiry-stay-calendar__day span{
+    max-width: 100%;
+
+    font-size: 9px;
+
+    overflow-wrap: anywhere;
+}
+
+
+/* Available */
+
+.inquiry-stay-calendar__day--available{
+    border-color: #dddddd;
+
+    background: #ffffff;
+
+    color: #222222;
+}
+
+
+.inquiry-stay-calendar__day--available:hover:not(:disabled){
+    border-color: #222222;
+
+    background: #f7f7f7;
+}
+
+
+/* Blocked */
+
+.inquiry-stay-calendar__day--blocked{
+    border-color: #c13515;
+
+    background: #fff0ed;
+
+    color: #a32910;
+}
+
+
+/* Reserved */
+
+.inquiry-stay-calendar__day--reserved{
+    border-color: #bbbbbb;
+
+    background: #e9e9e9;
+
+    color: #555555;
+}
+
+
+/* Selected Stay Range */
+
+.inquiry-stay-calendar__day--range{
+    border-color: #b9c7e9;
+
+    background: #eef2ff;
+
+    color: #273b77;
+}
+
+
+/* Check-in and Check-out */
+
+.inquiry-stay-calendar__day--check-in,
+.inquiry-stay-calendar__day--check-out{
+    border-color: #222222;
+
+    background: #222222;
+
+    color: #ffffff;
+}
+
+
+.inquiry-stay-calendar__day--check-in strong,
+.inquiry-stay-calendar__day--check-out strong{
+    color: #ffffff;
+}
+
+
+.inquiry-stay-calendar__day--check-in span,
+.inquiry-stay-calendar__day--check-out span{
+    color: #ffffff;
+}
+
+
+.inquiry-stay-calendar__day--check-in:hover:not(:disabled),
+.inquiry-stay-calendar__day--check-out:hover:not(:disabled){
+    border-color: #444444;
+
+    background: #444444;
+
+    color: #ffffff;
+}
+
+
+/* Disabled Days */
+
+.inquiry-stay-calendar__day:disabled{
+    cursor: not-allowed;
+}
+
+
+.inquiry-stay-calendar__day:disabled:not(
+    .inquiry-stay-calendar__day--check-in
+):not(
+    .inquiry-stay-calendar__day--check-out
+){
+    opacity: 0.45;
+}
+
+
+.inquiry-stay-calendar__day--check-in:disabled,
+.inquiry-stay-calendar__day--check-out:disabled{
+    opacity: 1;
+}
+
+
+/* Focus Accessibility */
+
+.inquiry-stay-calendar__day:focus-visible,
+.inquiry-stay-calendar__navigation button:focus-visible{
+    outline: 3px solid #222222;
+    outline-offset: 2px;
+}
+
+
+/* Error */
+
+.inquiry-stay-calendar__error{
+    position: fixed;
+    margin: 12px 0;
+
+    padding: 12px;
+
+    border-radius: 9px;
+
+    background: #fff0ed;
+
+    color: #a32910;
+
+    font-size: 13px;
+    line-height: 1.5;
+    z-index: 10003;
+}
+
+
+/* Loading */
+
+.inquiry-stay-calendar p[role="status"]{
+    padding: 35px 10px;
+
+    color: #717171;
+
+    font-size: 13px;
+    text-align: center;
+}
+
+
+/* Selected Dates */
+
+.inquiry-stay-calendar__selection{
+    margin: 20px 0 0;
+
+    padding: 12px;
+
+    border: 1px solid #dddddd;
+    border-radius: 9px;
+
+    background: #f7f7f7;
+
+    color: #222222;
+
+    font-size: 13px;
+    line-height: 1.5;
+
+    overflow-wrap: anywhere;
+}
+
+
+/* Note */
+
+.inquiry-stay-calendar__note{
+    margin: 16px 0 0;
+
+    color: #717171;
+
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+
+/* Tablet and Desktop */
+
+@media (min-width: 768px){
+
+    .inquiry-stay-calendar{
+        padding: 26px 24px;
+    }
+
+
+    .inquiry-stay-calendar__weekdays,
+    .inquiry-stay-calendar__days{
+        gap: 8px;
+    }
+
+
+    .inquiry-stay-calendar__day{
+        min-height: 78px;
+    }
+
+
+    .inquiry-stay-calendar__day span{
+        font-size: 11px;
+    }
+
+}
+
+
+/* Large Desktop */
+
+@media (min-width: 1200px){
+
+    .inquiry-stay-calendar{
+        padding: 28px;
+    }
+
+}
+
+
+/* Reduced Motion */
+
+@media (prefers-reduced-motion: reduce){
+
+    .inquiry-stay-calendar__day,
+    .inquiry-stay-calendar__navigation button{
+        transition: none;
+    }
+
+}

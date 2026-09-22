@@ -1,27 +1,26 @@
-
 import React from "react";
 
-import PropertyAvailabilityRequest from "../../../../../services/PropertyAvailabilityRequest";
-import ReservationRequest from "../../../../../services/ReservationServices";
+import {
+    PropertyAvailabilityContext
+} from "../../../../../contexts/AppContext/PropertyAvailabilityContext";
 
 import "./PropertyAvailability.css";
 
 
-export default class PropertyAvailability extends React.Component{
+export default class PropertyAvailability extends React.Component {
+
+    static contextType = PropertyAvailabilityContext;
+
 
     state = {
         year: new Date().getFullYear(),
         month: new Date().getMonth(),
-        availabilityByDate: {},
-        reservedDates: {},
         isLoading: false,
         savingDate: "",
         error: "",
         success: ""
     };
 
-
-    monthCache = {};
 
     requestId = 0;
 
@@ -48,11 +47,21 @@ export default class PropertyAvailability extends React.Component{
             previousProps.mode !== this.props.mode
         ){
 
-            this.monthCache = {};
+            this.requestId += 1;
+
 
             if(!this.isCreateMode()){
 
                 this.loadMonth();
+
+            }else{
+
+                this.setState({
+                    isLoading: false,
+                    savingDate: "",
+                    error: "",
+                    success: ""
+                });
 
             };
 
@@ -68,25 +77,11 @@ export default class PropertyAvailability extends React.Component{
         this.requestId += 1;
 
     };
-    
+
+
     isCreateMode = ()=>{
 
         return this.props.mode === "create";
-
-    };
-    
-    isPastDate = (date)=>{
-
-        const today = new Date();
-
-        const todayString = this.formatDate(
-            today.getFullYear(),
-            today.getMonth(),
-            today.getDate()
-        );
-
-
-        return date < todayString;
 
     };
 
@@ -102,7 +97,23 @@ export default class PropertyAvailability extends React.Component{
     };
 
 
-    getMonthRange = ()=>{
+    isPastDate = date => {
+
+        const today = new Date();
+
+        const todayString = this.formatDate(
+            today.getFullYear(),
+            today.getMonth(),
+            today.getDate()
+        );
+
+
+        return date < todayString;
+
+    };
+
+
+    getCurrentMonth = ()=>{
 
         const {
             year,
@@ -110,109 +121,14 @@ export default class PropertyAvailability extends React.Component{
         } = this.state;
 
 
-        const lastDay = new Date(
+        const key = JSON.stringify([
+            String(this.props.propertyId),
             year,
-            month + 1,
-            0
-        ).getDate();
+            month
+        ]);
 
 
-        return {
-            startDate: this.formatDate(year, month, 1),
-
-            endDate: this.formatDate(
-                year,
-                month,
-                lastDay
-            ),
-
-            nextMonthStart: this.formatDate(
-                new Date(year, month + 1, 1).getFullYear(),
-                new Date(year, month + 1, 1).getMonth(),
-                1
-            )
-        };
-
-    };
-
-
-    getCacheKey = ()=>{
-
-        return [
-            this.props.propertyId,
-            this.state.year,
-            this.state.month
-        ].join(":");
-
-    };
-
-
-    getReservedDates = (
-        reservations,
-        startDate,
-        endDate
-    )=>{
-
-        const reservedDates = {};
-
-
-        reservations.forEach( reservation => {
-
-            if(
-                reservation.status !== "pending" &&
-                reservation.status !== "confirmed"
-            ){
-
-                return;
-
-            };
-
-
-            const checkIn = reservation.check_in.slice(0, 10);
-
-            const checkOut = reservation.check_out.slice(0, 10);
-
-
-            const date = new Date(
-                `${checkIn}T12:00:00`
-            );
-
-
-            while(
-                this.formatDate(
-                    date.getFullYear(),
-                    date.getMonth(),
-                    date.getDate()
-                ) < checkOut
-            ){
-
-                const dateString = this.formatDate(
-                    date.getFullYear(),
-                    date.getMonth(),
-                    date.getDate()
-                );
-
-
-                if(
-                    dateString >= startDate &&
-                    dateString <= endDate
-                ){
-
-                    reservedDates[dateString] = true;
-
-                };
-
-
-                date.setDate(
-                    date.getDate() + 1
-                );
-
-            };
-
-        });
-
-
-        return reservedDates;
+        return this.context.monthsByKey[key] || null;
 
     };
 
@@ -223,31 +139,13 @@ export default class PropertyAvailability extends React.Component{
 
         const requestId = ++this.requestId;
 
-        const cacheKey = this.getCacheKey();
-
 
         if(!propertyId){
 
             this.setState({
                 isLoading: false,
-                error: "A property must be selected."
-            });
-
-            return;
-
-        };
-
-
-        const cachedMonth = this.monthCache[cacheKey];
-
-
-        if(cachedMonth){
-
-            this.setState({
-                ...cachedMonth,
-                isLoading: false,
                 savingDate: "",
-                error: "",
+                error: "A property must be selected.",
                 success: ""
             });
 
@@ -257,38 +155,25 @@ export default class PropertyAvailability extends React.Component{
 
 
         const {
-            startDate,
-            endDate,
-            nextMonthStart
-        } = this.getMonthRange();
+            year,
+            month
+        } = this.state;
 
 
         this.setState({
             isLoading: true,
-            availabilityByDate: {},
-            reservedDates: {},
             savingDate: "",
             error: "",
             success: ""
         });
 
 
-        Promise.all([
-            PropertyAvailabilityRequest
-                .getAvailabilityBetweenDates(
-                    propertyId,
-                    startDate,
-                    endDate
-                ),
-
-            ReservationRequest
-                .getReservationsBetweenDates(
-                    propertyId,
-                    startDate,
-                    nextMonthStart
-                )
-        ])
-            .then( responses => {
+        this.context.loadMonth(
+            propertyId,
+            year,
+            month
+        )
+            .then(() => {
 
                 if(
                     !this.componentIsMounted ||
@@ -300,52 +185,16 @@ export default class PropertyAvailability extends React.Component{
                 };
 
 
-                const availabilityResponse = responses[0];
-
-                const reservationResponse = responses[1];
-
-
-                const availabilityByDate = {};
-
-
-                availabilityResponse.availability.forEach(
-                    availability => {
-
-                        const date = availability.date.slice(0, 10);
-
-                        availabilityByDate[date] = availability;
-
-                    }
-                );
-
-
-                const reservedDates = this.getReservedDates(
-                    reservationResponse.reservations,
-                    startDate,
-                    endDate
-                );
-
-
-                const monthData = {
-                    availabilityByDate,
-                    reservedDates
-                };
-
-
-                this.monthCache[cacheKey] = monthData;
-
-
                 this.setState({
-                    ...monthData,
                     isLoading: false,
                     error: ""
                 });
 
             })
-            .catch( error => {
+            .catch(error => {
 
                 if(
-                    !this.isMounted ||
+                    !this.componentIsMounted ||
                     requestId !== this.requestId
                 ){
 
@@ -358,6 +207,7 @@ export default class PropertyAvailability extends React.Component{
                     isLoading: false,
                     error:
                         error.error ||
+                        error.message ||
                         "Unable to load availability."
                 });
 
@@ -366,7 +216,7 @@ export default class PropertyAvailability extends React.Component{
     };
 
 
-    changeMonth = (offset)=>{
+    changeMonth = offset => {
 
         if(
             this.state.isLoading ||
@@ -386,9 +236,12 @@ export default class PropertyAvailability extends React.Component{
 
 
         this.setState({
+
             year: nextMonth.getFullYear(),
+
             month: nextMonth.getMonth()
-        }, ()=>{
+
+        }, () => {
 
             if(!this.isCreateMode()){
 
@@ -401,19 +254,19 @@ export default class PropertyAvailability extends React.Component{
     };
 
 
-    handleDateClick = (date)=>{
+    handleDateClick = date => {
 
         if(
             this.state.isLoading ||
             this.state.savingDate ||
-            this.state.reservedDates[date] ||
             this.isPastDate(date)
         ){
 
             return;
 
         };
-        
+
+
         if(this.isCreateMode()){
 
             const blockedDates =
@@ -422,9 +275,11 @@ export default class PropertyAvailability extends React.Component{
 
             const nextBlockedDates =
                 blockedDates.includes(date)
+
                     ? blockedDates.filter(
                         blockedDate => blockedDate !== date
                     )
+
                     : [
                         ...blockedDates,
                         date
@@ -445,45 +300,31 @@ export default class PropertyAvailability extends React.Component{
         };
 
 
+        const currentMonth = this.getCurrentMonth();
+
+
+        if(
+            !currentMonth ||
+            currentMonth.status !== "ready" ||
+            currentMonth.reservedDates[date]
+        ){
+
+            return;
+
+        };
+
+
         const existingAvailability =
-            this.state.availabilityByDate[date];
+            currentMonth.availabilityByDate[date];
 
 
-        const isBlocked =
+        const isBlocked = !!(
             existingAvailability &&
-            existingAvailability.is_available === false;
+            existingAvailability.is_available === false
+        );
 
 
         const propertyId = this.props.propertyId;
-
-        const cacheKey = this.getCacheKey();
-
-
-        const request = isBlocked
-            ? PropertyAvailabilityRequest
-                .deleteAvailabilityByDate(
-                    propertyId,
-                    date
-                )
-            : existingAvailability
-                ? PropertyAvailabilityRequest
-                    .updateAvailabilityByDate(
-                        propertyId,
-                        date,
-                        {
-                            is_available: false
-                        }
-                    )
-                : PropertyAvailabilityRequest
-                    .createAvailability(
-                        propertyId,
-                        {
-                            date,
-                            is_available: false
-                        }
-                    );
-                    
-        
 
 
         this.setState({
@@ -493,8 +334,22 @@ export default class PropertyAvailability extends React.Component{
         });
 
 
+        const request = isBlocked
+
+            ? this.context.unblockDate(
+                propertyId,
+                date
+            )
+
+            : this.context.blockDate(
+                propertyId,
+                date,
+                existingAvailability
+            );
+
+
         request
-            .then( response => {
+            .then(() => {
 
                 if(
                     !this.componentIsMounted ||
@@ -506,49 +361,16 @@ export default class PropertyAvailability extends React.Component{
                 };
 
 
-                this.setState( previousState => {
-
-                    const availabilityByDate = {
-                        ...previousState.availabilityByDate
-                    };
-
-
-                    if(isBlocked){
-
-                        delete availabilityByDate[date];
-
-                    }else{
-
-                        availabilityByDate[date] = {
-                            ...existingAvailability,
-                            ...response.availability,
-                            date,
-                            is_available: false
-                        };
-
-                    };
-
-
-                    this.monthCache[cacheKey] = {
-                        availabilityByDate,
-                        reservedDates:
-                            previousState.reservedDates
-                    };
-
-
-                    return {
-                        availabilityByDate,
-                        savingDate: "",
-                        error: "",
-                        success: isBlocked
-                            ? `${date} is available by default.`
-                            : `${date} was blocked.`
-                    };
-
+                this.setState({
+                    savingDate: "",
+                    error: "",
+                    success: isBlocked
+                        ? `${date} is available by default.`
+                        : `${date} was blocked.`
                 });
 
             })
-            .catch( error => {
+            .catch(error => {
 
                 if(
                     !this.componentIsMounted ||
@@ -579,10 +401,27 @@ export default class PropertyAvailability extends React.Component{
         const {
             year,
             month,
-            availabilityByDate,
-            reservedDates,
-            savingDate
+            savingDate,
+            isLoading
         } = this.state;
+
+
+        const currentMonth = this.getCurrentMonth();
+
+        const monthReady = !!(
+            currentMonth &&
+            currentMonth.status === "ready"
+        );
+
+
+        const availabilityByDate = monthReady
+            ? currentMonth.availabilityByDate
+            : {};
+
+
+        const reservedDates = monthReady
+            ? currentMonth.reservedDates
+            : {};
 
 
         const firstWeekday = new Date(
@@ -602,20 +441,30 @@ export default class PropertyAvailability extends React.Component{
         const cells = [];
 
 
-        for(let index = 0; index < firstWeekday; index++){
+        for(
+            let index = 0;
+            index < firstWeekday;
+            index++
+        ){
 
             cells.push(
+
                 <span
                     key={`empty-${index}`}
                     className="property-availability__empty"
                     aria-hidden="true"
                 />
+
             );
 
         };
 
 
-        for(let day = 1; day <= numberOfDays; day++){
+        for(
+            let day = 1;
+            day <= numberOfDays;
+            day++
+        ){
 
             const date = this.formatDate(
                 year,
@@ -625,33 +474,43 @@ export default class PropertyAvailability extends React.Component{
 
 
             const availability = this.isCreateMode()
+
                 ? (
                     (this.props.blockedDates || []).includes(date)
+
                         ? {
                             date,
                             is_available: false
                         }
+
                         : null
                 )
+
                 : availabilityByDate[date];
 
 
             const isReserved =
                 reservedDates[date] === true;
-                
+
+
             const isPast = this.isPastDate(date);
 
 
-            const isBlocked =
+            const isBlocked = !!(
                 !isReserved &&
                 availability &&
-                availability.is_available === false;
+                availability.is_available === false
+            );
 
 
             const status = isReserved
+
                 ? "Reserved"
+
                 : isBlocked
+
                     ? "Blocked"
+
                     : "Available";
 
 
@@ -659,55 +518,89 @@ export default class PropertyAvailability extends React.Component{
                 savingDate === date;
 
 
+            const isDisabled = !!(
+                isReserved ||
+                savingDate ||
+                isLoading ||
+                (
+                    !this.isCreateMode() &&
+                    !monthReady
+                )
+            );
+
+
             cells.push(
+
                 <button
+
                     key={date}
+
                     type="button"
+
                     className={
                         `property-availability__day ` +
                         `property-availability__day--${status.toLowerCase()}`
                     }
+
                     onClick={
-                        ()=>this.handleDateClick(date)
+                        () => this.handleDateClick(date)
                     }
-                    disabled={
-                        isReserved ||
-                        !!savingDate ||
-                        this.state.isLoading
-                    }
+
+                    disabled={isDisabled}
+
                     data-past={isPast}
+
                     aria-label={
                         `${date}: ${status}` +
                         (
                             isPast
+
                                 ? ". Past date."
+
                                 : isReserved
+
                                     ? ""
+
                                     : isBlocked
+
                                         ? ". Click to unblock."
+
                                         : ". Click to block."
                         )
                     }
+
                     title={
                         isReserved
+
                             ? "Reserved"
+
                             : isBlocked
+
                                 ? "Unblock date"
+
                                 : "Block date"
                     }
+
                 >
+
                     <strong>
                         {day}
                     </strong>
 
                     <span>
+
                         {
                             isSaving
+
                                 ? "Saving..."
+
                                 : status
                         }
+
                     </span>
+
                 </button>
+
             );
 
         };
@@ -730,6 +623,9 @@ export default class PropertyAvailability extends React.Component{
         } = this.state;
 
 
+        const currentMonth = this.getCurrentMonth();
+
+
         const monthLabel = new Intl.DateTimeFormat(
             "en-US",
             {
@@ -742,6 +638,7 @@ export default class PropertyAvailability extends React.Component{
 
 
         return (
+
             <section
                 className="property-availability"
                 aria-label="Property availability"
@@ -756,12 +653,16 @@ export default class PropertyAvailability extends React.Component{
                         </h4>
 
                         <p>
-                        {
-                            this.isCreateMode()
-                                ? "Select dates to block before creating the property. Your selections will be saved when you click Create Property."
-                                : "Select an available date to block it. Select a blocked date to unblock it. Reserved nights cannot be changed here."
-                        }
-                    </p>
+
+                            {
+                                this.isCreateMode()
+
+                                    ? "Select dates to block before creating the property. Your selections will be saved when you click Create Property."
+
+                                    : "Select an available date to block it. Select a blocked date to unblock it. Reserved nights cannot be changed here."
+                            }
+
+                        </p>
 
                     </div>
 
@@ -773,7 +674,7 @@ export default class PropertyAvailability extends React.Component{
                     <button
                         type="button"
                         onClick={
-                            ()=>this.changeMonth(-1)
+                            () => this.changeMonth(-1)
                         }
                         disabled={
                             isLoading ||
@@ -793,7 +694,7 @@ export default class PropertyAvailability extends React.Component{
                     <button
                         type="button"
                         onClick={
-                            ()=>this.changeMonth(1)
+                            () => this.changeMonth(1)
                         }
                         disabled={
                             isLoading ||
@@ -810,18 +711,35 @@ export default class PropertyAvailability extends React.Component{
                 <div className="property-availability__legend">
 
                     <span>
-                        <i className="property-availability__key property-availability__key--available" />
+
+                        <i
+                            className="property-availability__key property-availability__key--available"
+                        />
+
                         Available
+
                     </span>
 
+
                     <span>
-                        <i className="property-availability__key property-availability__key--blocked" />
+
+                        <i
+                            className="property-availability__key property-availability__key--blocked"
+                        />
+
                         Blocked
+
                     </span>
 
+
                     <span>
-                        <i className="property-availability__key property-availability__key--reserved" />
+
+                        <i
+                            className="property-availability__key property-availability__key--reserved"
+                        />
+
                         Reserved
+
                     </span>
 
                 </div>
@@ -829,6 +747,7 @@ export default class PropertyAvailability extends React.Component{
 
                 {
                     error &&
+
                     <p
                         className="property-availability__error"
                         role="alert"
@@ -840,6 +759,7 @@ export default class PropertyAvailability extends React.Component{
 
                 {
                     success &&
+
                     <p
                         className="property-availability__success"
                         role="status"
@@ -851,15 +771,20 @@ export default class PropertyAvailability extends React.Component{
 
                 {
                     isLoading
+
                         ? (
+
                             <p
                                 className="property-availability__loading"
                                 role="status"
                             >
                                 Loading availability...
                             </p>
+
                         )
+
                         : (
+
                             <>
 
                                 <div className="property-availability__weekdays">
@@ -873,12 +798,14 @@ export default class PropertyAvailability extends React.Component{
                                             "Thu",
                                             "Fri",
                                             "Sat"
-                                        ].map( weekday => {
+                                        ].map(weekday => {
 
                                             return (
+
                                                 <span key={weekday}>
                                                     {weekday}
                                                 </span>
+
                                             );
 
                                         })
@@ -889,21 +816,42 @@ export default class PropertyAvailability extends React.Component{
 
                                 <div className="property-availability__calendar">
 
-                                    {this.renderDays()}
+                                    {
+                                        this.renderDays()
+                                    }
 
                                 </div>
 
                             </>
+
                         )
                 }
 
 
+                {
+                    !this.isCreateMode() &&
+                    !isLoading &&
+                    currentMonth?.status !== "ready" &&
+                    !error &&
+
+                    <p
+                        className="property-availability__error"
+                        role="status"
+                    >
+                        Availability has not been loaded.
+                    </p>
+                }
+
+
                 <p className="property-availability__note">
+
                     Reservation checkout dates are not
                     counted as occupied nights.
+
                 </p>
 
             </section>
+
         );
 
     };

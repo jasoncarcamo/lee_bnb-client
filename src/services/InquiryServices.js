@@ -166,6 +166,38 @@ const InquiryRequest = {
 
             });
 
+    },
+    getReservationQuote(request){
+
+        return fetch(`${url}/api/inquiries/quote`, {
+
+            method: "POST",
+
+            headers: {
+
+                "content-type": "application/json",
+
+                "authorization":
+                    `Bearer ${AdminTokenService.getToken()}`
+
+            },
+
+            body: JSON.stringify(request)
+
+        })
+            .then( res => {
+
+                if(!res.ok){
+
+                    return res.json()
+                        .then( e => Promise.reject(e));
+
+                };
+
+                return res.json();
+
+            });
+
     }
 
 };
