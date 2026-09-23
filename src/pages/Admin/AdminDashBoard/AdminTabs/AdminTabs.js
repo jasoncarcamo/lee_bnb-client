@@ -15,24 +15,17 @@ export default class AdminTabs extends React.Component{
             label: "Properties"
         },
         {
-            id: "amenities",
-            label: "Amenities"
-        },
-        {
-            id: "availability",
-            label: "Availability"
-        },
-        {
-            id: "pricing",
-            label: "Pricing"
-        },
-        {
             id: "guests",
             label: "Guests"
         },
         {
             id: "reservations",
             label: "Reservations"
+        },
+        
+        {
+            id: "inquiries",
+            label: "Inquiries"
         },
         {
             id: "payments",
@@ -45,10 +38,6 @@ export default class AdminTabs extends React.Component{
         {
             id: "conversations",
             label: "Conversations"
-        },
-        {
-            id: "inquiries",
-            label: "Inquiries"
         },
         {
             id: "reviews",

@@ -917,7 +917,6 @@ export default class AdminInquiries extends React.Component{
 
         const isBusy =
             busyInquiryId === inquiry.id;
-        console.log(inquiry)
 
         return (
             <div className="admin-inquiries__overlay">

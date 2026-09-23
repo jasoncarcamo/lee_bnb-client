@@ -17,10 +17,6 @@ export default class AdminProperties extends React.Component{
     };
     
     openEditProperty = (propertyId)=>{
-        console.log(
-        "Selected property:",
-        propertyId
-    );
         this.setState({
             selectedPropertyId: propertyId
         });

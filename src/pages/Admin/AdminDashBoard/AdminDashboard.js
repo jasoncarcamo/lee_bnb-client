@@ -47,33 +47,6 @@ export default class AdminDashboard extends React.Component{
                 return (<AdminProperties/>);
 
 
-            case "amenities":
-
-                return (
-                    <h2>
-                        Amenities
-                    </h2>
-                );
-
-
-            case "availability":
-
-                return (
-                    <h2>
-                        Availability
-                    </h2>
-                );
-
-
-            case "pricing":
-
-                return (
-                    <h2>
-                        Pricing
-                    </h2>
-                );
-
-
             case "guests":
 
                 return (
@@ -81,7 +54,6 @@ export default class AdminDashboard extends React.Component{
                         Guests
                     </h2>
                 );
-
 
             case "reservations":
 

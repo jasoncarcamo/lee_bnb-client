@@ -31,7 +31,6 @@ const AuthRequest = {
 
 
     logInAdmin(admin){
-        console.log(url)
         return fetch(`${url}/api/login`, {
             method: "POST",
 
