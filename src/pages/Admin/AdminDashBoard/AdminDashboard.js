@@ -5,7 +5,7 @@ import AdminTabs from "./AdminTabs/AdminTabs";
 import AdminProperties from "./AdminProperties/AdminProperties";
 import AdminInquiries from "./AdminInquiries/AdminInquiries";
 import "./AdminDashboard.css";
-
+import AdminReservations from "./AdminReservations/AdminReservations";
 
 export default class AdminDashboard extends React.Component{
 
@@ -58,9 +58,7 @@ export default class AdminDashboard extends React.Component{
             case "reservations":
 
                 return (
-                    <h2>
-                        Reservations
-                    </h2>
+                    <AdminReservations/>
                 );
 
 

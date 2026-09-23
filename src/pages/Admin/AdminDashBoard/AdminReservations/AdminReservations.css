@@ -1,0 +1,400 @@
+.admin-reservations {
+    width: 100%;
+    min-width: 0;
+}
+
+.admin-reservations * {
+    box-sizing: border-box;
+}
+
+.admin-reservations__header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.admin-reservations__header h2 {
+    margin: 0 0 0.4rem;
+}
+
+.admin-reservations__guest {
+    margin: 0.5rem 0;
+    color: #0f172a;
+    font-weight: 600;
+    overflow-wrap: anywhere;
+}
+
+.admin-reservations__header p,
+.admin-reservations__code,
+.admin-reservations__date {
+    margin: 0.3rem 0;
+    color: #64748b;
+}
+
+.admin-reservations button,
+.admin-reservations input {
+    font: inherit;
+}
+
+.admin-reservations button {
+    cursor: pointer;
+}
+
+.admin-reservations__toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1.25rem;
+}
+
+.admin-reservations__filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.admin-reservations__filter {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    border: 1px solid #dbe2ea;
+    border-radius: 999px;
+    padding: 0.55rem 0.8rem;
+    background: #fff;
+    color: #334155;
+}
+
+.admin-reservations__filter span {
+    font-size: 0.8rem;
+    font-weight: 700;
+}
+
+.admin-reservations__filter--active {
+    border-color: #172554;
+    background: #172554;
+    color: #fff;
+}
+
+.admin-reservations__search {
+    flex: 1 1 220px;
+    max-width: 320px;
+}
+
+.admin-reservations__search input {
+    width: 100%;
+    border: 1px solid #cbd5e1;
+    border-radius: 0.65rem;
+    padding: 0.75rem 0.9rem;
+    background: #fff;
+    color: #0f172a;
+}
+
+.admin-reservations__list {
+    display: grid;
+    gap: 1rem;
+}
+
+.admin-reservations__card {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    min-width: 0;
+    border: 1px solid #e2e8f0;
+    border-radius: 0.9rem;
+    padding: 1.2rem;
+    background: #fff;
+}
+
+.admin-reservations__card-main {
+    flex: 1 1 280px;
+    min-width: 0;
+}
+
+.admin-reservations__card-top {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.4rem;
+}
+
+.admin-reservations__card-top h3 {
+    margin: 0;
+    overflow-wrap: anywhere;
+}
+
+.admin-reservations__code,
+.admin-reservations__date {
+    overflow-wrap: anywhere;
+}
+
+.admin-reservations__total {
+    margin: 0.75rem 0 0;
+    color: #0f172a;
+    font-weight: 700;
+}
+
+.admin-reservations__card-actions button,
+.admin-reservations__dialog-actions button {
+    border: 1px solid #cbd5e1;
+    border-radius: 0.65rem;
+    padding: 0.75rem 1rem;
+    background: #fff;
+    color: #0f172a;
+    font-weight: 600;
+}
+
+/* RESERVATION AND PAYMENT BADGES */
+
+.admin-reservations__badges {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.5rem;
+}
+
+.admin-reservations__status {
+    display: inline-flex;
+    align-items: center;
+    border-radius: 999px;
+    padding: 0.35rem 0.7rem;
+    background: #f1f5f9;
+    color: #334155;
+    font-size: 0.78rem;
+    font-weight: 700;
+}
+
+.admin-reservations__status--pending {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.admin-reservations__status--confirmed,
+.admin-reservations__status--completed {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.admin-reservations__status--cancelled,
+.admin-reservations__status--expired {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+/* PAYMENT INDICATORS */
+
+.admin-reservations__payment {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 999px;
+    padding: 0.4rem 0.75rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    line-height: 1.3;
+    white-space: nowrap;
+}
+
+.admin-reservations__payment--paid {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.admin-reservations__payment--pending,
+.admin-reservations__payment--unpaid {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.admin-reservations__payment--failed,
+.admin-reservations__payment--cancelled {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.admin-reservations__payment--refunded,
+.admin-reservations__payment--partially_refunded {
+    background: #dbeafe;
+    color: #1e40af;
+}
+
+.admin-reservations__payment--checking,
+.admin-reservations__payment--unknown {
+    background: #f1f5f9;
+    color: #475569;
+}
+
+/* RESERVATION DETAILS MODAL */
+
+.admin-reservations__overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    overflow-y: auto;
+    background: rgba(15, 23, 42, 0.7);
+}
+
+.admin-reservations__dialog {
+    width: min(100%, 640px);
+    max-height: calc(100vh - 2rem);
+    overflow-y: auto;
+    border-radius: 1rem;
+    padding: 1.5rem;
+    background: #fff;
+    color: #0f172a;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+}
+
+.admin-reservations__dialog-header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.admin-reservations__dialog-header h3 {
+    margin: 0;
+}
+
+.admin-reservations__dialog-header p {
+    margin: 0.4rem 0 0;
+    color: #64748b;
+}
+
+.admin-reservations__close {
+    border: 0;
+    background: transparent;
+    color: #475569;
+    font-size: 1.75rem !important;
+    line-height: 1;
+}
+
+.admin-reservations__details {
+    display: grid;
+    gap: 1rem;
+    margin: 1.5rem 0;
+}
+
+.admin-reservations__details div {
+    display: grid;
+    grid-template-columns: minmax(100px, 1fr) 2fr;
+    gap: 0.75rem;
+}
+
+.admin-reservations__details dt {
+    color: #64748b;
+}
+
+.admin-reservations__details dd {
+    min-width: 0;
+    margin: 0;
+    overflow-wrap: anywhere;
+}
+
+.admin-reservations__message-block {
+    border-top: 1px solid #e2e8f0;
+    padding-top: 1rem;
+}
+
+.admin-reservations__message-block h4 {
+    margin: 0 0 0.5rem;
+}
+
+.admin-reservations__message-block p {
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
+
+.admin-reservations__dialog-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.65rem;
+    margin-top: 1.5rem;
+}
+
+/* ERROR, EMPTY, AND LOADING STATES */
+
+.admin-reservations__error,
+.admin-reservations__empty,
+.admin-reservations__loading {
+    border-radius: 0.7rem;
+    padding: 1rem;
+    margin-bottom: 1rem;
+}
+
+.admin-reservations__error {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.admin-reservations__empty,
+.admin-reservations__loading {
+    border: 1px solid #e2e8f0;
+    background: #fff;
+    text-align: center;
+}
+
+.admin-reservations__visually-hidden {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+}
+
+/* MOBILE */
+
+@media (max-width: 600px) {
+
+    .admin-reservations__badges {
+        justify-content: flex-start;
+    }
+
+    .admin-reservations__search {
+        width: 100%;
+        max-width: none;
+    }
+
+    .admin-reservations__card-actions,
+    .admin-reservations__card-actions button {
+        width: 100%;
+    }
+
+    .admin-reservations__dialog {
+        padding: 1rem;
+    }
+
+    .admin-reservations__details div {
+        grid-template-columns: 1fr;
+        gap: 0.2rem;
+    }
+
+}
+
+/* ACCESSIBILITY */
+
+@media (prefers-reduced-motion: reduce) {
+
+    .admin-reservations *,
+    .admin-reservations *::before,
+    .admin-reservations *::after {
+        scroll-behavior: auto;
+        animation: none;
+        transition: none;
+    }
+
+}

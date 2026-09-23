@@ -7,7 +7,11 @@ const AppContext = React.createContext({
 
     amenityContext: {},
 
-    inquiryContext: {}
+    inquiryContext: {},
+    propertyAvailabilityContext: {},
+    reservationContext: {},
+    adminGuestContext: {},
+    adminPaymentContext: {}
 
 });
 
@@ -28,8 +32,11 @@ export class AppContextProvider extends React.Component{
                 this.props.amenityContext,
 
             inquiryContext:
-                this.props.inquiryContext
-
+                this.props.inquiryContext,
+            propertyAvailabilityContext: this.propertyAvailabilityContext,
+            reservationContext: this.props.reservationContext,
+            adminGuestContext: this.props.adminGuestContext,
+            adminPaymentContext: this.props.adminPaymentContext
         };
 
 
