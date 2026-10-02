@@ -4,6 +4,7 @@ import React from "react";
 import AppContext from "../../../../contexts/AppContext/AppContext";
 import InquiryStayCalendar from "./InquiryStayCalendar/InquiryStayCalendar";
 import "./AdminInquiries.css";
+import { cancelInquiry } from "../../../../services/InquiryServices";
 
 
 const EMPTY_FORM = {
@@ -40,6 +41,7 @@ export default class AdminInquiries extends React.Component{
         isSubmitting: false,
         busyInquiryId: null,
         deleteInquiryId: null,
+        cancelInquiryId: null,
         error: "",
         success: ""
     };
@@ -701,6 +703,84 @@ export default class AdminInquiries extends React.Component{
 
     };
 
+    openCancelConfirmation = (id)=>{
+
+        this.setState({
+            cancelInquiryId: id,
+            error: "",
+            success: ""
+        });
+
+    };
+
+
+    closeCancelConfirmation = ()=>{
+
+        if(this.state.busyInquiryId){
+
+            return;
+
+        };
+
+
+        this.setState({
+            cancelInquiryId: null
+        });
+
+    };
+
+
+    handleCancel = ()=>{
+
+        const id = this.state.cancelInquiryId;
+
+
+        if(!id || this.state.busyInquiryId){
+
+            return;
+
+        };
+
+
+        this.setState({
+            busyInquiryId: id,
+            error: "",
+            success: ""
+        });
+
+
+        this.context.inquiryContext
+            .cancelInquiry(id)
+            .then(()=>{
+
+                this.setState({
+                    busyInquiryId: null,
+                    cancelInquiryId: null,
+
+                    success: "Inquiry canceled successfully.",
+                    error: ""
+                });
+
+
+                this.showSuccess(
+                    "Inquiry canceled successfully."
+                );
+
+            })
+            .catch( error => {
+
+                this.setState({
+                    busyInquiryId: null,
+
+                    error: this.getErrorMessage(
+                        error,
+                        "Unable to cancel inquiry."
+                    )
+                });
+
+            });
+
+    };
 
     renderStatusFilters(){
 
@@ -917,6 +997,12 @@ export default class AdminInquiries extends React.Component{
 
         const isBusy =
             busyInquiryId === inquiry.id;
+            
+        const canCancel =
+            inquiry.status !== "canceled";
+
+        const canEdit =
+            inquiry.status !== "canceled";
 
         return (
             <div className="admin-inquiries__overlay">
@@ -1162,15 +1248,18 @@ export default class AdminInquiries extends React.Component{
 
                     <footer className="admin-inquiries__dialog-actions">
 
-                        <button
-                            type="button"
-                            onClick={
-                                ()=>this.openEditForm(inquiry)
-                            }
-                            disabled={isBusy}
-                        >
-                            Edit
-                        </button>
+                        {
+                            canEdit &&
+                            <button
+                                type="button"
+                                onClick={
+                                    ()=>this.openEditForm(inquiry)
+                                }
+                                disabled={isBusy}
+                            >
+                                Edit
+                            </button>
+                        }
 
 
                         {
@@ -1194,18 +1283,21 @@ export default class AdminInquiries extends React.Component{
                         }
 
 
-                        <button
-                            type="button"
-                            className="admin-inquiries__danger"
-                            onClick={
-                                ()=>this.openDeleteConfirmation(
-                                    inquiry.id
-                                )
-                            }
-                            disabled={isBusy}
-                        >
-                            Delete
-                        </button>
+                        {
+                            canCancel &&
+                            <button
+                                type="button"
+                                className="admin-inquiries__danger"
+                                onClick={
+                                    ()=>this.openCancelConfirmation(
+                                        inquiry.id
+                                    )
+                                }
+                                disabled={isBusy}
+                            >
+                                Cancel inquiry
+                            </button>
+                        }
 
                     </footer>
 
@@ -1506,6 +1598,77 @@ export default class AdminInquiries extends React.Component{
 
     };
 
+    renderCancelConfirmation(){
+
+        const {
+            cancelInquiryId,
+            busyInquiryId
+        } = this.state;
+
+
+        if(!cancelInquiryId){
+
+            return null;
+
+        };
+
+
+        return (
+            <div className="admin-inquiries__overlay">
+
+                <section
+                    className="admin-inquiries__dialog admin-inquiries__dialog--small"
+                    role="alertdialog"
+                    aria-modal="true"
+                    aria-labelledby="cancel-inquiry-title"
+                >
+
+                    <header className="admin-inquiries__dialog-header">
+
+                        <h3 id="cancel-inquiry-title">
+                            Cancel inquiry?
+                        </h3>
+
+                    </header>
+
+
+                    <p>
+                        This will cancel the inquiry.
+                        The inquiry will remain in your records.
+                    </p>
+
+
+                    <footer className="admin-inquiries__dialog-actions">
+
+                        <button
+                            type="button"
+                            onClick={this.closeCancelConfirmation}
+                            disabled={!!busyInquiryId}
+                        >
+                            Keep inquiry
+                        </button>
+
+
+                        <button
+                            type="button"
+                            className="admin-inquiries__danger"
+                            onClick={this.handleCancel}
+                            disabled={!!busyInquiryId}
+                        >
+                            {
+                                busyInquiryId
+                                    ? "Canceling..."
+                                    : "Cancel inquiry"
+                            }
+                        </button>
+
+                    </footer>
+
+                </section>
+            </div>
+        );
+
+    };
 
     render(){
 
@@ -1606,7 +1769,7 @@ export default class AdminInquiries extends React.Component{
 
                 {this.renderForm()}
 
-                {this.renderDeleteConfirmation()}
+                {this.renderCancelConfirmation()}
 
             </section>
         );

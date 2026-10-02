@@ -1,6 +1,6 @@
 import React from "react";
 
-import InquiryRequest from "../../services/InquiryServices";
+import InquiryRequest, { cancelInquiry } from "../../services/InquiryServices";
 
 
 const InquiryContext = React.createContext({
@@ -9,14 +9,13 @@ const InquiryContext = React.createContext({
     inquiryIds: [],
     isLoading: false,
     error: "",
-
     getInquiries: ()=>{},
     getInquiryById: ()=>{},
     createInquiry: ()=>{},
     updateInquiry: ()=>{},
     sendInquiry: ()=>{},
-    deleteInquiry: ()=>{}
-
+    deleteInquiry: ()=>{},
+    cancelInquiry: ()=>{}
 });
 
 
@@ -296,6 +295,22 @@ export class InquiryContextProvider extends React.Component{
             });
 
     };
+    
+    cancelInquiry = (id)=>{
+
+        return InquiryRequest.cancelInquiry(id)
+            .then( response => {
+
+                this.setInquiry(
+                    response.inquiry
+                );
+
+
+                return response.inquiry;
+
+            });
+
+    };
 
 
     render(){
@@ -321,8 +336,8 @@ export class InquiryContextProvider extends React.Component{
             sendInquiry: this.sendInquiry,
 
             deleteInquiry: this.deleteInquiry,
-            getReservationQuote: this.getReservationQuote
-
+            getReservationQuote: this.getReservationQuote,
+            cancelInquiry: this.cancelInquiry
         };
 
 

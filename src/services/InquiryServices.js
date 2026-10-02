@@ -198,6 +198,31 @@ const InquiryRequest = {
 
             });
 
+    },
+    cancelInquiry(id){
+
+        return fetch(`${url}/api/inquiries/${id}/cancel`, {
+
+            method: "POST",
+
+            headers: {
+                "authorization": `Bearer ${AdminTokenService.getToken()}`
+            }
+
+        })
+            .then( res => {
+
+                if(!res.ok){
+
+                    return res.json()
+                        .then( e => Promise.reject(e));
+
+                };
+
+                return res.json();
+
+            });
+
     }
 
 };
