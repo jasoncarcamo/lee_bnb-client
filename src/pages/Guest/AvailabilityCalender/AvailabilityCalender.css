@@ -1,0 +1,105 @@
+.availability-calendar {
+    width: 100%;
+    max-width: 560px;
+}
+
+.availability-calendar__header {
+    display: grid;
+    grid-template-columns: 44px 1fr 44px;
+    align-items: center;
+
+    margin-bottom: 20px;
+}
+
+.availability-calendar__header h3 {
+    margin: 0;
+
+    text-align: center;
+    font-size: 1.1rem;
+}
+
+.availability-calendar__navigation {
+    width: 44px;
+    height: 44px;
+
+    border: 1px solid #dddddd;
+    border-radius: 50%;
+
+    background: #ffffff;
+    color: #111111;
+
+    font: inherit;
+    font-size: 1.1rem;
+
+    cursor: pointer;
+}
+
+.availability-calendar__navigation:hover {
+    background: #f5f5f5;
+}
+
+.availability-calendar__navigation:focus-visible {
+    outline: 2px solid #111111;
+    outline-offset: 2px;
+}
+
+.availability-calendar__weekdays,
+.availability-calendar__days {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+}
+
+.availability-calendar__weekdays {
+    margin-bottom: 8px;
+
+    color: #666666;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-align: center;
+}
+
+.availability-calendar__day,
+.availability-calendar__empty-day {
+    aspect-ratio: 1;
+}
+
+.availability-calendar__day {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    min-width: 0;
+
+    border-radius: 50%;
+
+    font-size: 0.9rem;
+}
+
+.availability-calendar__day--unavailable {
+    color: #aaaaaa;
+
+    text-decoration: line-through;
+}
+
+.availability-calendar__message {
+    padding: 32px 0;
+
+    text-align: center;
+}
+
+.availability-calendar__message--error {
+    color: #a00000;
+}
+
+
+@media (min-width: 500px) {
+
+    .availability-calendar__weekdays {
+        font-size: 0.85rem;
+    }
+
+    .availability-calendar__day {
+        font-size: 1rem;
+    }
+
+}

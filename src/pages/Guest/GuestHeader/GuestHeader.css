@@ -1,0 +1,26 @@
+.guest-header {
+    width: 100%;
+    border-bottom: 1px solid #e5e5e5;
+    background: #ffffff;
+}
+
+.guest-header__container {
+    width: min(100% - 32px, 1200px);
+    min-height: 72px;
+    margin: 0 auto;
+
+    display: flex;
+    align-items: center;
+}
+
+.guest-header__brand {
+    color: #111111;
+    font-size: 1.35rem;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.guest-header__brand:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 4px;
+}
