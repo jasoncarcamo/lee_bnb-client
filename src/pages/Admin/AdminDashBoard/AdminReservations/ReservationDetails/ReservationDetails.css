@@ -1,0 +1,669 @@
+.reservation-details__overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 1rem;
+
+    overflow-y: auto;
+
+    background: rgba(15, 23, 42, 0.7);
+}
+
+.reservation-details {
+    width: min(100%, 680px);
+    max-height: calc(100vh - 2rem);
+
+    overflow-y: auto;
+
+    border-radius: 1rem;
+    padding: 1.5rem;
+
+    background: #fff;
+    color: #0f172a;
+
+    box-shadow:
+        0 20px 60px
+        rgba(0, 0, 0, 0.2);
+}
+
+.reservation-details * {
+    box-sizing: border-box;
+}
+
+.reservation-details button {
+    font: inherit;
+    cursor: pointer;
+}
+
+.reservation-details__header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+
+    gap: 1rem;
+
+    margin-bottom: 1.25rem;
+}
+
+.reservation-details__header h3 {
+    margin: 0;
+}
+
+.reservation-details__header p {
+    margin: 0.4rem 0 0;
+
+    color: #64748b;
+
+    overflow-wrap: anywhere;
+}
+
+.reservation-details__close {
+    flex: 0 0 auto;
+
+    border: 0;
+
+    padding: 0.25rem;
+
+    background: transparent;
+    color: #475569;
+
+    font-size: 1.75rem;
+    line-height: 1;
+}
+
+.reservation-details__close:hover {
+    color: #0f172a;
+}
+
+.reservation-details__close:focus-visible {
+    outline: 3px solid #93c5fd;
+    outline-offset: 3px;
+    border-radius: 0.3rem;
+}
+
+.reservation-details__badges {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+
+    gap: 0.5rem;
+
+    margin-bottom: 1.5rem;
+}
+
+.reservation-details__status,
+.reservation-details__payment {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 999px;
+
+    font-size: 0.78rem;
+    font-weight: 700;
+    line-height: 1.3;
+}
+
+.reservation-details__status {
+    padding: 0.35rem 0.7rem;
+
+    background: #f1f5f9;
+    color: #334155;
+}
+
+.reservation-details__status--pending {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.reservation-details__status--confirmed,
+.reservation-details__status--completed {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.reservation-details__status--cancelled,
+.reservation-details__status--expired {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.reservation-details__payment {
+    padding: 0.4rem 0.75rem;
+    white-space: nowrap;
+}
+
+.reservation-details__payment--paid {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.reservation-details__payment--pending,
+.reservation-details__payment--unpaid {
+    background: #fef3c7;
+    color: #92400e;
+}
+
+.reservation-details__payment--failed,
+.reservation-details__payment--cancelled {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.reservation-details__payment--refunded,
+.reservation-details__payment--partially_refunded {
+    background: #dbeafe;
+    color: #1e40af;
+}
+
+.reservation-details__payment--checking,
+.reservation-details__payment--unknown {
+    background: #f1f5f9;
+    color: #475569;
+}
+
+.reservation-details__fields {
+    display: grid;
+
+    gap: 0;
+
+    margin: 0;
+}
+
+.reservation-details__field {
+    display: grid;
+    grid-template-columns:
+        minmax(130px, 1fr)
+        minmax(0, 2fr);
+
+    gap: 1rem;
+
+    border-bottom: 1px solid #e2e8f0;
+
+    padding: 0.85rem 0;
+}
+
+.reservation-details__field:first-child {
+    border-top: 1px solid #e2e8f0;
+}
+
+.reservation-details__field dt {
+    color: #64748b;
+    font-weight: 500;
+}
+
+.reservation-details__field dd {
+    min-width: 0;
+
+    margin: 0;
+
+    color: #0f172a;
+    font-weight: 500;
+
+    overflow-wrap: anywhere;
+}
+
+.reservation-details__message {
+    margin-top: 1.25rem;
+
+    border: 1px solid #e2e8f0;
+    border-radius: 0.75rem;
+
+    padding: 1rem;
+
+    background: #f8fafc;
+}
+
+.reservation-details__message h4 {
+    margin: 0 0 0.5rem;
+}
+
+.reservation-details__message p {
+    margin: 0;
+
+    color: #334155;
+
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
+
+.reservation-details__actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+
+    gap: 0.65rem;
+
+    margin-top: 1.5rem;
+}
+
+.reservation-details__actions button {
+    border: 1px solid #cbd5e1;
+    border-radius: 0.65rem;
+
+    padding: 0.75rem 1rem;
+
+    background: #fff;
+    color: #0f172a;
+
+    font-weight: 600;
+}
+
+.reservation-details__actions button:hover {
+    background: #f8fafc;
+}
+
+.reservation-details__actions button:focus-visible {
+    outline: 3px solid #93c5fd;
+    outline-offset: 2px;
+}
+
+.reservation-details__refund-summary {
+    margin-top: 1.5rem;
+
+    border: 1px solid #e2e8f0;
+    border-radius: 0.75rem;
+
+    padding: 1rem;
+
+    background: #f8fafc;
+}
+
+.reservation-details__refund-summary h4 {
+    margin: 0 0 1rem;
+
+    color: #0f172a;
+}
+
+.reservation-details__refund-summary dl {
+    display: grid;
+
+    gap: 0.75rem;
+
+    margin: 0;
+}
+
+.reservation-details__refund-summary dl > div {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 1rem;
+}
+
+.reservation-details__refund-summary dt {
+    color: #64748b;
+}
+
+.reservation-details__refund-summary dd {
+    margin: 0;
+
+    color: #0f172a;
+
+    font-weight: 700;
+}
+
+.reservation-details__refund-actions {
+    display: flex;
+    justify-content: flex-end;
+
+    margin-top: 1rem;
+}
+
+.reservation-details__refund-actions button,
+.reservation-details__refund-form-actions button {
+    border: 1px solid #cbd5e1;
+    border-radius: 0.65rem;
+
+    padding: 0.7rem 1rem;
+
+    background: #fff;
+    color: #0f172a;
+
+    font-weight: 600;
+}
+
+.reservation-details__refund-actions button:hover,
+.reservation-details__refund-form-actions button:hover {
+    background: #f1f5f9;
+}
+
+.reservation-details__refund-form {
+    margin-top: 1rem;
+
+    border-top: 1px solid #e2e8f0;
+
+    padding-top: 1rem;
+}
+
+.reservation-details__refund-form h5 {
+    margin: 0 0 1rem;
+
+    font-size: 1rem;
+}
+
+.reservation-details__refund-control {
+    display: grid;
+
+    gap: 0.4rem;
+
+    margin-bottom: 1rem;
+}
+
+.reservation-details__refund-control label {
+    color: #334155;
+
+    font-weight: 600;
+}
+
+.reservation-details__refund-control input,
+.reservation-details__refund-control textarea {
+    width: 100%;
+
+    border: 1px solid #cbd5e1;
+    border-radius: 0.6rem;
+
+    padding: 0.7rem;
+
+    background: #fff;
+    color: #0f172a;
+
+    font: inherit;
+}
+
+.reservation-details__refund-control textarea {
+    resize: vertical;
+}
+
+.reservation-details__refund-control input:focus,
+.reservation-details__refund-control textarea:focus {
+    outline: 3px solid #bfdbfe;
+    outline-offset: 1px;
+
+    border-color: #3b82f6;
+}
+
+.reservation-details__refund-available {
+    margin: -0.4rem 0 1rem;
+
+    color: #64748b;
+
+    font-size: 0.9rem;
+}
+
+.reservation-details__refund-error {
+    margin: 0 0 1rem;
+
+    color: #991b1b;
+
+    font-weight: 600;
+}
+
+.reservation-details__refund-form-actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+
+    gap: 0.5rem;
+}
+
+.reservation-details__refund-confirmation-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 10;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 1rem;
+
+    border-radius: 1rem;
+
+    background: rgba(15, 23, 42, 0.55);
+}
+
+.reservation-details__refund-confirmation {
+    width: min(100%, 430px);
+
+    border-radius: 0.85rem;
+
+    padding: 1.25rem;
+
+    background: #fff;
+    color: #0f172a;
+
+    box-shadow:
+        0 20px 50px
+        rgba(0, 0, 0, 0.25);
+}
+
+.reservation-details__refund-confirmation h4 {
+    margin: 0 0 1rem;
+
+    font-size: 1.15rem;
+}
+
+.reservation-details__refund-confirmation p {
+    margin: 0 0 0.85rem;
+
+    color: #334155;
+}
+
+.reservation-details__refund-confirmation-actions {
+    display: flex;
+    justify-content: flex-end;
+
+    gap: 0.65rem;
+
+    margin-top: 1.25rem;
+}
+
+.reservation-details__refund-confirmation-actions button {
+    border: 1px solid #cbd5e1;
+    border-radius: 0.65rem;
+
+    padding: 0.75rem 1rem;
+
+    background: #fff;
+    color: #0f172a;
+
+    font-weight: 600;
+
+    cursor: pointer;
+}
+
+.reservation-details__refund-confirmation-actions button:hover {
+    background: #f8fafc;
+}
+
+.reservation-details__refund-confirmation-actions button:focus-visible {
+    outline: 3px solid #93c5fd;
+    outline-offset: 2px;
+}
+
+.reservation-details__refund-confirmation-actions
+.reservation-details__refund-confirm {
+    border-color: #0f172a;
+
+    background: #0f172a;
+    color: #fff;
+}
+
+.reservation-details__refund-confirmation-actions
+.reservation-details__refund-confirm:hover {
+    background: #1e293b;
+}
+
+.reservation-details__refund-confirm {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 0.5rem;
+}
+
+.reservation-details__refund-confirm:disabled {
+    cursor: wait;
+    opacity: 0.75;
+}
+
+.reservation-details__spinner {
+    width: 1rem;
+    height: 1rem;
+
+    flex: 0 0 auto;
+
+    border: 2px solid
+        rgba(255, 255, 255, 0.4);
+
+    border-top-color: #fff;
+
+    border-radius: 50%;
+
+    animation:
+        reservation-refund-spin
+        0.7s
+        linear
+        infinite;
+}
+
+.reservation-details__refund-processing {
+    margin: 1rem 0;
+
+    color: #475569;
+
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+.reservation-details__cancel-reservation,
+.reservation-details__cancel-confirm {
+    border-color: #dc2626 !important;
+
+    color: #b91c1c !important;
+}
+
+.reservation-details__cancel-confirm {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 0.5rem;
+
+    background: #b91c1c !important;
+    color: #fff !important;
+}
+
+.reservation-details__cancel-confirm:hover {
+    background: #991b1b !important;
+}
+
+.reservation-details__cancel-confirm:disabled {
+    cursor: wait;
+
+    opacity: 0.7;
+}
+
+@keyframes reservation-refund-spin {
+
+    to {
+        transform: rotate(360deg);
+    }
+
+}
+
+@media (max-width: 600px) {
+
+    .reservation-details__overlay {
+        align-items: flex-start;
+
+        padding: 0.75rem;
+    }
+
+    .reservation-details {
+        max-height:
+            calc(100vh - 1.5rem);
+
+        padding: 1rem;
+    }
+
+    .reservation-details__field {
+        grid-template-columns: 1fr;
+
+        gap: 0.25rem;
+    }
+
+    .reservation-details__actions,
+    .reservation-details__actions button {
+        width: 100%;
+    }
+    
+    .reservation-details__overlay {
+        align-items: flex-start;
+
+        padding: 0.75rem;
+    }
+
+    .reservation-details {
+        max-height:
+            calc(100vh - 1.5rem);
+
+        padding: 1rem;
+    }
+
+    .reservation-details__field {
+        grid-template-columns: 1fr;
+
+        gap: 0.25rem;
+    }
+
+    .reservation-details__actions,
+    .reservation-details__actions button {
+        width: 100%;
+    }
+
+
+    /* REFUND */
+
+    .reservation-details__refund-actions,
+    .reservation-details__refund-actions button {
+        width: 100%;
+    }
+
+    .reservation-details__refund-form-actions {
+        width: 100%;
+    }
+
+    .reservation-details__refund-form-actions button {
+        flex: 1;
+    }
+
+    .reservation-details__refund-confirmation-actions {
+        flex-direction: column-reverse;
+
+        width: 100%;
+    }
+
+    .reservation-details__refund-confirmation-actions button {
+        width: 100%;
+    }
+
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+    .reservation-details *,
+    .reservation-details *::before,
+    .reservation-details *::after {
+        scroll-behavior: auto;
+        animation: none;
+        transition: none;
+    }
+
+}

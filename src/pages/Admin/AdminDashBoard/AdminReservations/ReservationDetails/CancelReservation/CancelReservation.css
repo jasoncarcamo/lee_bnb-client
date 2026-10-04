@@ -1,0 +1,225 @@
+.cancel-reservation__overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 10;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 1rem;
+
+    border-radius: 1rem;
+
+    background: rgba(15, 23, 42, 0.55);
+}
+
+
+.cancel-reservation {
+    width: min(100%, 430px);
+
+    border-radius: 0.85rem;
+
+    padding: 1.25rem;
+
+    background: #fff;
+    color: #0f172a;
+
+    box-shadow:
+        0 20px 50px
+        rgba(0, 0, 0, 0.25);
+}
+
+
+.cancel-reservation h4 {
+    margin: 0 0 1rem;
+
+    font-size: 1.15rem;
+}
+
+
+.cancel-reservation p {
+    margin: 0 0 0.85rem;
+
+    color: #334155;
+}
+
+
+.cancel-reservation__control {
+    display: grid;
+
+    gap: 0.4rem;
+
+    margin-bottom: 1rem;
+}
+
+
+.cancel-reservation__control label {
+    color: #334155;
+
+    font-weight: 600;
+}
+
+
+.cancel-reservation__control textarea {
+    width: 100%;
+
+    border: 1px solid #cbd5e1;
+    border-radius: 0.6rem;
+
+    padding: 0.7rem;
+
+    background: #fff;
+    color: #0f172a;
+
+    font: inherit;
+
+    resize: vertical;
+}
+
+
+.cancel-reservation__control textarea:focus {
+    outline: 3px solid #bfdbfe;
+    outline-offset: 1px;
+
+    border-color: #3b82f6;
+}
+
+
+.cancel-reservation__error {
+    margin: 0 0 1rem;
+
+    color: #991b1b !important;
+
+    font-weight: 600;
+}
+
+
+.cancel-reservation__processing {
+    margin: 1rem 0;
+
+    color: #475569 !important;
+
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+
+.cancel-reservation__actions {
+    display: flex;
+    justify-content: flex-end;
+
+    gap: 0.65rem;
+
+    margin-top: 1.25rem;
+}
+
+
+.cancel-reservation__actions button {
+    border: 1px solid #cbd5e1;
+    border-radius: 0.65rem;
+
+    padding: 0.75rem 1rem;
+
+    background: #fff;
+    color: #0f172a;
+
+    font-weight: 600;
+
+    cursor: pointer;
+}
+
+
+.cancel-reservation__actions button:hover {
+    background: #f8fafc;
+}
+
+
+.cancel-reservation__actions button:focus-visible {
+    outline: 3px solid #93c5fd;
+    outline-offset: 2px;
+}
+
+
+.cancel-reservation__confirm {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    gap: 0.5rem;
+
+    border-color: #dc2626 !important;
+
+    background: #b91c1c !important;
+    color: #fff !important;
+}
+
+
+.cancel-reservation__confirm:hover {
+    background: #991b1b !important;
+}
+
+
+.cancel-reservation__confirm:disabled {
+    cursor: wait;
+
+    opacity: 0.7;
+}
+
+
+.cancel-reservation__spinner {
+    width: 1rem;
+    height: 1rem;
+
+    flex: 0 0 auto;
+
+    border: 2px solid
+        rgba(255, 255, 255, 0.4);
+
+    border-top-color: #fff;
+
+    border-radius: 50%;
+
+    animation:
+        cancel-reservation-spin
+        0.7s
+        linear
+        infinite;
+}
+
+
+@keyframes cancel-reservation-spin {
+
+    to {
+        transform: rotate(360deg);
+    }
+
+}
+
+
+@media (max-width: 600px) {
+
+    .cancel-reservation__actions {
+        flex-direction: column-reverse;
+
+        width: 100%;
+    }
+
+
+    .cancel-reservation__actions button {
+        width: 100%;
+    }
+
+}
+
+
+@media (prefers-reduced-motion: reduce) {
+
+    .cancel-reservation *,
+    .cancel-reservation *::before,
+    .cancel-reservation *::after {
+        animation: none;
+        transition: none;
+    }
+
+}

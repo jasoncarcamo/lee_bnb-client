@@ -2,6 +2,8 @@ import React from "react";
 
 import AppContext from "../../../../contexts/AppContext/AppContext";
 
+import ReservationDetails from "./ReservationDetails/ReservationDetails";
+
 import "./AdminReservations.css";
 
 
@@ -14,13 +16,22 @@ const STATUS_LABELS = {
 };
 
 
+const TAB_LABELS = {
+    all: "All",
+    active: "Active",
+    upcoming: "Upcoming",
+    past: "Past",
+    cancelled: "Cancelled"
+};
+
+
 export default class AdminReservations extends React.Component{
 
     static contextType = AppContext;
 
 
     state = {
-        activeTab: "active",
+        activeTab: "all",
         search: "",
         selectedReservationId: null,
         error: ""
@@ -31,9 +42,51 @@ export default class AdminReservations extends React.Component{
 
         this.loadReservations();
         this.loadGuests();
-        this.loadPayments()
+        this.loadPayments();
+
     };
-    
+
+
+    loadReservations = ()=>{
+
+        this.context.reservationContext
+            .getReservations()
+            .catch(error => {
+
+                console.error(
+                    "Unable to load reservations:",
+                    error
+                );
+
+
+                this.setState({
+                    error: this.getErrorMessage(
+                        error,
+                        "Unable to load reservations."
+                    )
+                });
+
+            });
+
+    };
+
+
+    loadGuests = ()=>{
+
+        this.context.adminGuestContext
+            .getGuests()
+            .catch(error => {
+
+                console.error(
+                    "Unable to load guests:",
+                    error
+                );
+
+            });
+
+    };
+
+
     loadPayments = ()=>{
 
         this.context.adminPaymentContext
@@ -48,7 +101,50 @@ export default class AdminReservations extends React.Component{
             });
 
     };
-    
+
+
+    getErrorMessage = (error, fallback)=>{
+
+        if(typeof error === "string"){
+
+            return error;
+
+        };
+
+
+        return error?.error ||
+            error?.message ||
+            fallback;
+
+    };
+
+
+    getGuest = (guestId)=>{
+
+        return this.context.adminGuestContext
+            .guests[guestId] || null;
+
+    };
+
+
+    getPropertyName = (propertyId)=>{
+
+        const {
+            properties
+        } = this.context.propertyContext;
+
+
+        const property =
+            properties[propertyId];
+
+
+        return property
+            ? property.name
+            : "Property unavailable";
+
+    };
+
+
     getReservationPayments = (reservationId)=>{
 
         const {
@@ -96,9 +192,10 @@ export default class AdminReservations extends React.Component{
         };
 
 
-        const payments = this.getReservationPayments(
-            reservationId
-        );
+        const payments =
+            this.getReservationPayments(
+                reservationId
+            );
 
 
         if(!payments.length){
@@ -111,9 +208,11 @@ export default class AdminReservations extends React.Component{
         };
 
 
-        const paidPayment = payments.find(
-            payment => payment.status === "paid"
-        );
+        const paidPayment =
+            payments.find(
+                payment =>
+                    payment.status === "paid"
+            );
 
 
         if(paidPayment){
@@ -126,9 +225,12 @@ export default class AdminReservations extends React.Component{
         };
 
 
-        const partiallyRefundedPayment = payments.find(
-            payment => payment.status === "partially_refunded"
-        );
+        const partiallyRefundedPayment =
+            payments.find(
+                payment =>
+                    payment.status ===
+                    "partially_refunded"
+            );
 
 
         if(partiallyRefundedPayment){
@@ -141,9 +243,11 @@ export default class AdminReservations extends React.Component{
         };
 
 
-        const refundedPayment = payments.find(
-            payment => payment.status === "refunded"
-        );
+        const refundedPayment =
+            payments.find(
+                payment =>
+                    payment.status === "refunded"
+            );
 
 
         if(refundedPayment){
@@ -156,9 +260,11 @@ export default class AdminReservations extends React.Component{
         };
 
 
-        const pendingPayment = payments.find(
-            payment => payment.status === "pending"
-        );
+        const pendingPayment =
+            payments.find(
+                payment =>
+                    payment.status === "pending"
+            );
 
 
         if(pendingPayment){
@@ -171,46 +277,52 @@ export default class AdminReservations extends React.Component{
         };
 
 
-        const latestPayment = payments[0];
+        const latestPayment =
+            payments[0];
 
 
         const labels = {
-
             failed: "Payment failed",
-
             cancelled: "Payment cancelled"
-
         };
 
 
         return {
-
             label:
                 labels[latestPayment.status] ||
                 latestPayment.status ||
                 "Payment unavailable",
 
-            type: latestPayment.status || "unknown"
-
+            type:
+                latestPayment.status ||
+                "unknown"
         };
 
     };
-    
+
+
     getReservationPaymentStatus = (reservation)=>{
 
-        const paymentStatus = this.getPaymentStatus(
-            reservation.id
-        );
+        const paymentStatus =
+            this.getPaymentStatus(
+                reservation.id
+            );
 
 
-        if(reservation.status !== "cancelled"){
+        if(
+            reservation.status !==
+            "cancelled"
+        ){
 
             return paymentStatus;
 
         };
 
 
-        if(paymentStatus.type === "unpaid"){
+        if(
+            paymentStatus.type ===
+            "unpaid"
+        ){
 
             return {
                 label: "Not paid",
@@ -223,189 +335,16 @@ export default class AdminReservations extends React.Component{
         return paymentStatus;
 
     };
-    
-    loadGuests = ()=>{
 
-        this.context.adminGuestContext
-            .getGuests()
-            .catch(error => {
 
-                console.error(
-                    "Unable to load guests:",
-                    error
-                );
-
-            });
-
-    };
-    
-    getGuest = (guestId)=>{
-
-        return this.context.adminGuestContext
-            .guests[guestId] || null;
-
-    };
-
-    loadReservations = ()=>{
-
-        const {
-            reservationContext
-        } = this.context;
-
-
-        reservationContext
-            .getReservations()
-            .catch( error => {
-
-                console.error(
-                    "Unable to load reservations:",
-                    error
-                );
-
-                this.setState({
-                    error: this.getErrorMessage(
-                        error,
-                        "Unable to load reservations."
-                    )
-                });
-
-            });
-
-    };
-
-
-    getErrorMessage = (error, fallback)=>{
-
-        if(typeof error === "string"){
-
-            return error;
-
-        };
-
-
-        return error?.error ||
-            error?.message ||
-            fallback;
-
-    };
-
-
-    formatStayDate = (value)=>{
-
-        if(!value){
-
-            return "—";
-
-        };
-
-
-        const datePart = String(value).slice(0, 10);
-
-        const date = new Date(
-            `${datePart}T12:00:00`
-        );
-
-
-        if(Number.isNaN(date.getTime())){
-
-            return datePart;
-
-        };
-
-
-        return date.toLocaleDateString(undefined, {
-            month: "short",
-            day: "numeric",
-            year: "numeric"
-        });
-
-    };
-
-
-    formatDateTime = (value)=>{
-
-        if(!value){
-
-            return "—";
-
-        };
-
-
-        const date = new Date(value);
-
-
-        if(Number.isNaN(date.getTime())){
-
-            return String(value);
-
-        };
-
-
-        return date.toLocaleString(undefined, {
-            dateStyle: "medium",
-            timeStyle: "short"
-        });
-
-    };
-
-
-    formatCurrency = (amount, currency = "USD")=>{
-
-        if(amount === null || amount === undefined){
-
-            return "—";
-
-        };
-
-
-        return new Intl.NumberFormat("en-US", {
-            style: "currency",
-            currency: currency || "USD"
-        }).format(Number(amount));
-
-    };
-
-
-    getPropertyName = (propertyId)=>{
-
-        const {
-            properties
-        } = this.context.propertyContext;
-
-
-        const property = properties[propertyId];
-
-
-        return property
-            ? property.name
-            : "Property unavailable";
-
-    };
-
-
-    isPastReservation = (reservation)=>{
+    getReservationCategory = (reservation)=>{
 
         if(
-            reservation.status === "cancelled" ||
-            reservation.status === "completed" ||
-            reservation.status === "expired"
+            reservation.status ===
+            "cancelled"
         ){
 
-            return true;
-
-        };
-
-
-        if(reservation.status === "pending"){
-
-            return false;
-
-        };
-
-
-        if(!reservation.check_out){
-
-            return false;
+            return "cancelled";
 
         };
 
@@ -414,13 +353,64 @@ export default class AdminReservations extends React.Component{
 
         const localToday = [
             today.getFullYear(),
-            String(today.getMonth() + 1).padStart(2, "0"),
-            String(today.getDate()).padStart(2, "0")
+            String(
+                today.getMonth() + 1
+            ).padStart(2, "0"),
+            String(
+                today.getDate()
+            ).padStart(2, "0")
         ].join("-");
 
 
-        return String(reservation.check_out).slice(0, 10) <
-            localToday;
+        const checkIn =
+            reservation.check_in
+                ? String(
+                    reservation.check_in
+                ).slice(0, 10)
+                : null;
+
+
+        const checkOut =
+            reservation.check_out
+                ? String(
+                    reservation.check_out
+                ).slice(0, 10)
+                : null;
+
+
+        if(
+            checkIn &&
+            checkIn > localToday
+        ){
+
+            return "upcoming";
+
+        };
+
+
+        if(
+            checkIn &&
+            checkOut &&
+            checkIn <= localToday &&
+            checkOut > localToday
+        ){
+
+            return "active";
+
+        };
+
+
+        if(
+            checkOut &&
+            checkOut <= localToday
+        ){
+
+            return "past";
+
+        };
+
+
+        return "active";
 
     };
 
@@ -439,26 +429,39 @@ export default class AdminReservations extends React.Component{
         } = this.state;
 
 
-        const searchValue = search.trim().toLowerCase();
+        const searchValue =
+            search.trim().toLowerCase();
 
-        const searchDigits = searchValue.replace(/\D/g, "");
+
+        const searchDigits =
+            searchValue.replace(
+                /\D/g,
+                ""
+            );
 
 
         return reservationIds
 
-            .map(id => reservations[id])
+            .map(
+                id => reservations[id]
+            )
 
             .filter(Boolean)
 
             .filter(reservation => {
 
-                const isPast =
-                    this.isPastReservation(reservation);
+                if(activeTab === "all"){
+
+                    return true;
+
+                };
 
 
-                return activeTab === "past"
-                    ? isPast
-                    : !isPast;
+                return (
+                    this.getReservationCategory(
+                        reservation
+                    ) === activeTab
+                );
 
             })
 
@@ -471,19 +474,21 @@ export default class AdminReservations extends React.Component{
                 };
 
 
-                const guest = this.getGuest(
-                    reservation.guest_id
-                );
+                const guest =
+                    this.getGuest(
+                        reservation.guest_id
+                    );
 
 
-                const fullName = guest
-                    ? [
-                        guest.first_name,
-                        guest.last_name
-                    ]
-                        .filter(Boolean)
-                        .join(" ")
-                    : "";
+                const fullName =
+                    guest
+                        ? [
+                            guest.first_name,
+                            guest.last_name
+                        ]
+                            .filter(Boolean)
+                            .join(" ")
+                        : "";
 
 
                 const searchableText = [
@@ -512,30 +517,45 @@ export default class AdminReservations extends React.Component{
                     .toLowerCase();
 
 
-                const phoneDigits = String(
-                    guest?.phone || ""
-                ).replace(/\D/g, "");
+                const phoneDigits =
+                    String(
+                        guest?.phone || ""
+                    ).replace(
+                        /\D/g,
+                        ""
+                    );
 
 
                 const matchesText =
-                    searchableText.includes(searchValue);
+                    searchableText.includes(
+                        searchValue
+                    );
 
 
                 const matchesPhone =
-
                     searchDigits.length >= 3 &&
+                    phoneDigits.includes(
+                        searchDigits
+                    );
 
-                    phoneDigits.includes(searchDigits);
 
-
-                return matchesText || matchesPhone;
+                return (
+                    matchesText ||
+                    matchesPhone
+                );
 
             })
 
             .sort((a, b) => {
 
-                return new Date(b.check_in).getTime() -
-                    new Date(a.check_in).getTime();
+                return (
+                    new Date(
+                        b.check_in
+                    ).getTime() -
+                    new Date(
+                        a.check_in
+                    ).getTime()
+                );
 
             });
 
@@ -550,27 +570,113 @@ export default class AdminReservations extends React.Component{
         } = this.context.reservationContext;
 
 
-        return reservationIds.filter( id => {
+        if(tab === "all"){
 
-            const reservation = reservations[id];
+            return reservationIds
+                .filter(
+                    id => !!reservations[id]
+                )
+                .length;
 
-
-            if(!reservation){
-
-                return false;
-
-            };
-
-
-            const isPast =
-                this.isPastReservation(reservation);
+        };
 
 
-            return tab === "past"
-                ? isPast
-                : !isPast;
+        return reservationIds
+            .filter(id => {
 
-        }).length;
+                const reservation =
+                    reservations[id];
+
+
+                if(!reservation){
+
+                    return false;
+
+                };
+
+
+                return (
+                    this.getReservationCategory(
+                        reservation
+                    ) === tab
+                );
+
+            })
+            .length;
+
+    };
+
+
+    formatStayDate = (value)=>{
+
+        if(!value){
+
+            return "—";
+
+        };
+
+
+        const datePart =
+            String(value).slice(
+                0,
+                10
+            );
+
+
+        const date =
+            new Date(
+                `${datePart}T12:00:00`
+            );
+
+
+        if(
+            Number.isNaN(
+                date.getTime()
+            )
+        ){
+
+            return datePart;
+
+        };
+
+
+        return date.toLocaleDateString(
+            undefined,
+            {
+                month: "short",
+                day: "numeric",
+                year: "numeric"
+            }
+        );
+
+    };
+
+
+    formatCurrency = (
+        amount,
+        currency = "USD"
+    )=>{
+
+        if(
+            amount === null ||
+            amount === undefined
+        ){
+
+            return "—";
+
+        };
+
+
+        return new Intl.NumberFormat(
+            "en-US",
+            {
+                style: "currency",
+                currency:
+                    currency || "USD"
+            }
+        ).format(
+            Number(amount)
+        );
 
     };
 
@@ -596,8 +702,11 @@ export default class AdminReservations extends React.Component{
     renderTabs(){
 
         const tabs = [
+            ["all", "All"],
             ["active", "Active"],
-            ["past", "Past"]
+            ["upcoming", "Upcoming"],
+            ["past", "Past"],
+            ["cancelled", "Cancelled"]
         ];
 
 
@@ -610,35 +719,41 @@ export default class AdminReservations extends React.Component{
             >
 
                 {
-                    tabs.map( ([tab, label]) => (
+                    tabs.map(
+                        ([tab, label]) => (
 
-                        <button
-                            key={tab}
-                            type="button"
-                            className={
-                                this.state.activeTab === tab
-                                    ? "admin-reservations__filter admin-reservations__filter--active"
-                                    : "admin-reservations__filter"
-                            }
-                            aria-pressed={
-                                this.state.activeTab === tab
-                            }
-                            onClick={
-                                ()=>this.setState({
-                                    activeTab: tab
-                                })
-                            }
-                        >
+                            <button
+                                key={tab}
+                                type="button"
+                                className={
+                                    this.state.activeTab === tab
+                                        ? "admin-reservations__filter admin-reservations__filter--active"
+                                        : "admin-reservations__filter"
+                                }
+                                aria-pressed={
+                                    this.state.activeTab === tab
+                                }
+                                onClick={
+                                    ()=>this.setState({
+                                        activeTab: tab
+                                    })
+                                }
+                            >
 
-                            {label}
+                                {label}
 
-                            <span>
-                                {this.getTabCount(tab)}
-                            </span>
+                                <span>
+                                    {
+                                        this.getTabCount(
+                                            tab
+                                        )
+                                    }
+                                </span>
 
-                        </button>
+                            </button>
 
-                    ))
+                        )
+                    )
                 }
 
             </div>
@@ -650,7 +765,8 @@ export default class AdminReservations extends React.Component{
 
     renderReservations(){
 
-        const reservations = this.getReservations();
+        const reservations =
+            this.getReservations();
 
 
         if(!reservations.length){
@@ -659,7 +775,9 @@ export default class AdminReservations extends React.Component{
 
                 <div className="admin-reservations__empty">
 
-                    <h3>No reservations found</h3>
+                    <h3>
+                        No reservations found
+                    </h3>
 
                     <p>
                         Try another search or switch tabs.
@@ -677,408 +795,165 @@ export default class AdminReservations extends React.Component{
             <div className="admin-reservations__list">
 
                 {
-                    reservations.map( reservation => (
+                    reservations.map(
+                        reservation => {
 
-                        <article
-                            className="admin-reservations__card"
-                            key={reservation.id}
-                        >
+                            const guest =
+                                this.getGuest(
+                                    reservation.guest_id
+                                );
 
-                            <div className="admin-reservations__card-main">
 
-                                <div className="admin-reservations__card-top">
+                            const guestName =
+                                guest
+                                    ? [
+                                        guest.first_name,
+                                        guest.last_name
+                                    ]
+                                        .filter(Boolean)
+                                        .join(" ")
+                                    : "Guest unavailable";
 
-                                    <h3>
-                                        {
-                                            this.getPropertyName(
-                                                reservation.property_id
-                                            )
-                                        }
-                                    </h3>
 
-                                    <div className="admin-reservations__badges">
+                            const paymentStatus =
+                                this.getReservationPaymentStatus(
+                                    reservation
+                                );
 
-                                        <span
-                                            className={
-                                                `admin-reservations__status admin-reservations__status--${reservation.status}`
+
+                            return (
+
+                                <article
+                                    className="admin-reservations__card"
+                                    key={reservation.id}
+                                >
+
+                                    <div className="admin-reservations__card-main">
+
+                                        <div className="admin-reservations__card-top">
+
+                                            <h3>
+                                                {
+                                                    this.getPropertyName(
+                                                        reservation.property_id
+                                                    )
+                                                }
+                                            </h3>
+
+
+                                            <div className="admin-reservations__badges">
+
+                                                <span
+                                                    className={
+                                                        `admin-reservations__status admin-reservations__status--${reservation.status}`
+                                                    }
+                                                >
+                                                    {
+                                                        STATUS_LABELS[
+                                                            reservation.status
+                                                        ] ||
+                                                        reservation.status
+                                                    }
+                                                </span>
+
+
+                                                <span
+                                                    className={
+                                                        `admin-reservations__payment admin-reservations__payment--${paymentStatus.type}`
+                                                    }
+                                                >
+                                                    {
+                                                        paymentStatus.label
+                                                    }
+                                                </span>
+
+                                            </div>
+
+                                        </div>
+
+
+                                        <p className="admin-reservations__guest">
+                                            {guestName}
+                                        </p>
+
+
+                                        <p className="admin-reservations__code">
+                                            {
+                                                reservation.confirmation_code
                                             }
-                                        >
+                                        </p>
+
+
+                                        <p className="admin-reservations__date">
 
                                             {
-                                                STATUS_LABELS[
-                                                    reservation.status
-                                                ] || reservation.status
+                                                this.formatStayDate(
+                                                    reservation.check_in
+                                                )
                                             }
 
-                                        </span>
-
-
-                                        <span
-                                            className={
-                                                `admin-reservations__payment admin-reservations__payment--${this.getReservationPaymentStatus(reservation).type}`
-                                            }
-                                        >
+                                            {" — "}
 
                                             {
-                                                this.getReservationPaymentStatus(
-                                                    reservation
-                                                ).label
+                                                this.formatStayDate(
+                                                    reservation.check_out
+                                                )
                                             }
 
-                                        </span>
+                                        </p>
+
+
+                                        <p className="admin-reservations__date">
+
+                                            {
+                                                reservation.guests_count
+                                            } guests
+
+                                            {" · "}
+
+                                            {
+                                                reservation.nights
+                                            } nights
+
+                                        </p>
+
+
+                                        <p className="admin-reservations__total">
+
+                                            {
+                                                this.formatCurrency(
+                                                    reservation.total_price,
+                                                    reservation.currency
+                                                )
+                                            }
+
+                                        </p>
 
                                     </div>
 
-                                </div>
-                                
-                                <p className="admin-reservations__guest">
 
-                                    {
-                                        (()=>{
+                                    <div className="admin-reservations__card-actions">
 
-                                            const guest = this.getGuest(
-                                                reservation.guest_id
-                                            );
+                                        <button
+                                            type="button"
+                                            onClick={
+                                                ()=>this.openReservation(
+                                                    reservation.id
+                                                )
+                                            }
+                                        >
+                                            View details
+                                        </button>
 
+                                    </div>
 
-                                            if(!guest){
+                                </article>
 
-                                                return "Guest unavailable";
+                            );
 
-                                            };
-
-
-                                            return [
-
-                                                guest.first_name,
-
-                                                guest.last_name
-
-                                            ]
-                                                .filter(Boolean)
-                                                .join(" ");
-
-                                        })()
-                                    }
-
-                                </p>
-
-                                <p className="admin-reservations__code">
-                                    {reservation.confirmation_code}
-                                </p>
-
-                                <p className="admin-reservations__date">
-                                    {
-                                        this.formatStayDate(
-                                            reservation.check_in
-                                        )
-                                    }
-                                    {" — "}
-                                    {
-                                        this.formatStayDate(
-                                            reservation.check_out
-                                        )
-                                    }
-                                </p>
-
-                                <p className="admin-reservations__date">
-                                    {reservation.guests_count} guests
-                                    {" · "}
-                                    {reservation.nights} nights
-                                </p>
-
-                                <p className="admin-reservations__total">
-                                    {
-                                        this.formatCurrency(
-                                            reservation.total_price,
-                                            reservation.currency
-                                        )
-                                    }
-                                </p>
-
-                            </div>
-
-                            <div className="admin-reservations__card-actions">
-
-                                <button
-                                    type="button"
-                                    onClick={
-                                        ()=>this.openReservation(
-                                            reservation.id
-                                        )
-                                    }
-                                >
-                                    View details
-                                </button>
-
-                            </div>
-
-                        </article>
-
-                    ))
+                        }
+                    )
                 }
-
-            </div>
-
-        );
-
-    };
-
-
-    renderReservationDetails(){
-
-        const {
-            selectedReservationId
-        } = this.state;
-
-
-        if(!selectedReservationId){
-
-            return null;
-
-        };
-
-
-        const reservation =
-            this.context.reservationContext
-                .reservations[selectedReservationId];
-
-
-        if(!reservation){
-
-            return null;
-
-        };
-
-        const guest = this.getGuest(reservation.guest_id);
-
-        const fields = [
-            [
-                "Payment status",
-
-                this.getReservationPaymentStatus(
-                    reservation
-                ).label
-            ],
-            [
-                "Guest name",
-
-                guest
-                    ? [
-                        guest.first_name,
-                        guest.last_name
-                    ]
-                        .filter(Boolean)
-                        .join(" ")
-                    : "Guest unavailable"
-            ],
-
-            [
-                "Email",
-                guest?.email || "—"
-            ],
-
-            [
-                "Phone",
-                guest?.phone || "—"
-            ],
-            [
-                "Confirmation code",
-                reservation.confirmation_code
-            ],
-            [
-                "Property",
-                this.getPropertyName(
-                    reservation.property_id
-                )
-            ],
-            [
-                "Guest ID",
-                reservation.guest_id
-            ],
-            [
-                "Check-in",
-                this.formatStayDate(
-                    reservation.check_in
-                )
-            ],
-            [
-                "Check-out",
-                this.formatStayDate(
-                    reservation.check_out
-                )
-            ],
-            [
-                "Guests",
-                reservation.guests_count
-            ],
-            [
-                "Nights",
-                reservation.nights
-            ],
-            [
-                "Nightly subtotal",
-                this.formatCurrency(
-                    reservation.nightly_subtotal,
-                    reservation.currency
-                )
-            ],
-            [
-                "Cleaning fee",
-                this.formatCurrency(
-                    reservation.cleaning_fee,
-                    reservation.currency
-                )
-            ],
-            [
-                "Service fee",
-                this.formatCurrency(
-                    reservation.service_fee,
-                    reservation.currency
-                )
-            ],
-            [
-                "Taxes",
-                this.formatCurrency(
-                    reservation.taxes,
-                    reservation.currency
-                )
-            ],
-            [
-                "Discount",
-                this.formatCurrency(
-                    reservation.discount,
-                    reservation.currency
-                )
-            ],
-            [
-                "Total price",
-                this.formatCurrency(
-                    reservation.total_price,
-                    reservation.currency
-                )
-            ],
-            [
-                "Created",
-                this.formatDateTime(
-                    reservation.created_at
-                )
-            ],
-            [
-                "Cancelled",
-                this.formatDateTime(
-                    reservation.cancelled_at
-                )
-            ]
-        ];
-
-
-        return (
-
-            <div className="admin-reservations__overlay">
-
-                <section
-                    className="admin-reservations__dialog"
-                    role="dialog"
-                    aria-modal="true"
-                    aria-labelledby="reservation-details-title"
-                >
-
-                    <header className="admin-reservations__dialog-header">
-
-                        <div>
-
-                            <h3 id="reservation-details-title">
-                                Reservation details
-                            </h3>
-
-                            <p>
-                                {reservation.confirmation_code}
-                            </p>
-
-                        </div>
-
-                        <button
-                            type="button"
-                            className="admin-reservations__close"
-                            onClick={this.closeReservation}
-                            aria-label="Close reservation details"
-                        >
-                            ×
-                        </button>
-
-                    </header>
-
-                    <span
-                        className={
-                            `admin-reservations__status admin-reservations__status--${reservation.status}`
-                        }
-                    >
-                        {
-                            STATUS_LABELS[
-                                reservation.status
-                            ] || reservation.status
-                        }
-                    </span>
-
-                    <dl className="admin-reservations__details">
-
-                        {
-                            fields.map( ([label, value]) => (
-
-                                <div key={label}>
-
-                                    <dt>{label}</dt>
-
-                                    <dd>
-                                        {value ?? "—"}
-                                    </dd>
-
-                                </div>
-
-                            ))
-                        }
-
-                    </dl>
-
-                    {
-                        reservation.special_requests &&
-                        <div className="admin-reservations__message-block">
-
-                            <h4>Special requests</h4>
-
-                            <p>
-                                {reservation.special_requests}
-                            </p>
-
-                        </div>
-                    }
-
-                    {
-                        reservation.cancellation_reason &&
-                        <div className="admin-reservations__message-block">
-
-                            <h4>Cancellation reason</h4>
-
-                            <p>
-                                {reservation.cancellation_reason}
-                            </p>
-
-                        </div>
-                    }
-
-                    <footer className="admin-reservations__dialog-actions">
-
-                        <button
-                            type="button"
-                            onClick={this.closeReservation}
-                        >
-                            Close
-                        </button>
-
-                    </footer>
-
-                </section>
 
             </div>
 
@@ -1103,29 +978,38 @@ export default class AdminReservations extends React.Component{
 
                     <div>
 
-                        <h2>Reservations</h2>
+                        <h2>
+                            Reservations
+                        </h2>
 
                         <p>
-                            Manage active and past bookings.
+                            Manage active, upcoming, past and cancelled bookings.
                         </p>
 
                     </div>
 
                 </header>
 
+
                 {
                     (this.state.error || error) &&
+
                     <p
                         className="admin-reservations__error"
                         role="alert"
                     >
-                        {this.state.error || error}
+                        {
+                            this.state.error ||
+                            error
+                        }
                     </p>
                 }
+
 
                 <div className="admin-reservations__toolbar">
 
                     {this.renderTabs()}
+
 
                     <label className="admin-reservations__search">
 
@@ -1135,21 +1019,23 @@ export default class AdminReservations extends React.Component{
 
                         <input
                             type="search"
-
                             placeholder="Search name, email, phone or confirmation..."
-
-                            value={this.state.search}
-
+                            value={
+                                this.state.search
+                            }
                             onChange={
-                                event => this.setState({
-                                    search: event.target.value
-                                })
+                                event =>
+                                    this.setState({
+                                        search:
+                                            event.target.value
+                                    })
                             }
                         />
 
                     </label>
 
                 </div>
+
 
                 {
                     isLoading
@@ -1164,7 +1050,15 @@ export default class AdminReservations extends React.Component{
                         : this.renderReservations()
                 }
 
-                {this.renderReservationDetails()}
+
+                <ReservationDetails
+                    reservationId={
+                        this.state.selectedReservationId
+                    }
+                    onClose={
+                        this.closeReservation
+                    }
+                />
 
             </section>
 

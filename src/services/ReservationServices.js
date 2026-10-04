@@ -204,8 +204,50 @@ const ReservationRequest = {
         )
             .then(this.handleResponse);
 
-    }
+    },
+    cancelReservationAndRefund(
+        id,
+        cancellation_reason
+    ){
 
+        return fetch(
+            `${url}/api/reservations/${id}/cancel-and-refund`,
+            {
+                method: "POST",
+
+                headers: {
+                    "authorization":
+                        `Bearer ${AdminTokenService.getToken()}`,
+
+                    "content-type":
+                        "application/json"
+                },
+
+                body: JSON.stringify({
+                    cancellation_reason
+                })
+            }
+        )
+            .then(res => {
+
+                return res.json()
+                    .then(response => {
+
+                        if(!res.ok){
+
+                            return Promise.reject(
+                                response
+                            );
+
+                        };
+
+                        return response;
+
+                    });
+
+            });
+
+    }
 };
 
 

@@ -54,11 +54,8 @@ export class AdminPaymentContextProvider extends React.Component{
         return AdminPaymentRequest
             .getAllPayments()
             .then(({payments}) => {
-
                 const normalizedPayments = {};
-
                 const paymentIds = [];
-
                 const paymentIdsByReservationId = {};
 
 

@@ -15,8 +15,8 @@ const ReservationContext = React.createContext({
     createReservation: ()=>{},
     updateReservation: ()=>{},
     cancelReservation: ()=>{},
-    setReservation: ()=>{}
-
+    setReservation: ()=>{},
+    cancelReservationAndRefund: ()=>{},
 });
 
 
@@ -250,44 +250,55 @@ export class ReservationContextProvider extends React.Component{
             });
 
     };
+    
+    cancelReservationAndRefund = (
+        id,
+        cancellation_reason
+    )=>{
 
+        return ReservationRequest
+            .cancelReservationAndRefund(
+                id,
+                cancellation_reason
+            )
+            .then(response => {
+
+                this.setReservation(
+                    response.reservation
+                );
+
+                return response;
+
+            });
+
+    };
 
     render(){
-
         const value = {
-
             reservations:
                 this.state.reservations,
-
             reservationIds:
                 this.state.reservationIds,
-
             isLoading:
                 this.state.isLoading,
-
             error:
                 this.state.error,
-
             getReservations:
                 this.getReservations,
-
             getReservationById:
                 this.getReservationById,
-
             setReservation:
                 this.setReservation,
-
             createReservation:
                 this.createReservation,
-
             updateReservation:
                 this.updateReservation,
-
             cancelReservation:
-                this.cancelReservation
+                this.cancelReservation,
+            cancelReservationAndRefund:
+                this.cancelReservationAndRefund
 
         };
-
 
         return (
 

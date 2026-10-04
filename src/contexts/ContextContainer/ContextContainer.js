@@ -31,6 +31,9 @@ import AdminGuestContext, {
 import AdminPaymentContext, {
     AdminPaymentContextProvider
 } from "../AppContext/AdminPaymentContext";
+import AdminRefundContext, {
+    AdminRefundContextProvider
+} from "../AppContext/AdminRefundContext";
 
 import {
     AppContextProvider
@@ -58,98 +61,91 @@ export default class ContextContainer extends React.Component{
                                     <PropertyAvailabilityProvider>
 
                                         <ReservationContextProvider>
+                                            
+                                            <AdminRefundContextProvider>
 
-                                            <PropertyContext.Consumer>
+                                                <PropertyContext.Consumer>
 
-                                                {propertyContext => (
+                                                    {propertyContext => (
 
-                                                    <AmenityContext.Consumer>
+                                                        <AmenityContext.Consumer>
 
-                                                        {amenityContext => (
+                                                            {amenityContext => (
 
-                                                            <InquiryContext.Consumer>
+                                                                <InquiryContext.Consumer>
 
-                                                                {inquiryContext => (
+                                                                    {inquiryContext => (
 
-                                                                    <PropertyAvailabilityContext.Consumer>
+                                                                        <PropertyAvailabilityContext.Consumer>
 
-                                                                        {propertyAvailabilityContext => (
+                                                                            {propertyAvailabilityContext => (
 
-                                                                            <ReservationContext.Consumer>
+                                                                                <ReservationContext.Consumer>
 
-                                                                                {reservationContext => (
+                                                                                    {reservationContext => (
 
-                                                                                    <AdminGuestContext.Consumer>
+                                                                                        <AdminGuestContext.Consumer>
 
-                                                                                        {adminGuestContext => (
+                                                                                            {adminGuestContext => (
 
-                                                                                            <AdminPaymentContext.Consumer>
+                                                                                                <AdminPaymentContext.Consumer>
 
-                                                                                                {adminPaymentContext => (
+                                                                                                    {adminPaymentContext => (
+                                                                                                        
+                                                                                                        <AdminRefundContext.Consumer>
+                                                                                                            
+                                                                                                            
 
-                                                                                                    <AppContextProvider
+                                                                                                            {adminRefundContext => (
 
-                                                                                                        propertyContext={
-                                                                                                            propertyContext
-                                                                                                        }
+                                                                                                                <AppContextProvider
+                                                                                                                    propertyContext={propertyContext}
+                                                                                                                    amenityContext={amenityContext}
+                                                                                                                    inquiryContext={inquiryContext}
+                                                                                                                    propertyAvailabilityContext={propertyAvailabilityContext}
+                                                                                                                    reservationContext={reservationContext}
+                                                                                                                    adminGuestContext={adminGuestContext}
+                                                                                                                    adminPaymentContext={adminPaymentContext}
+                                                                                                                    adminRefundContext={adminRefundContext}
+                                                                                                                >
 
-                                                                                                        amenityContext={
-                                                                                                            amenityContext
-                                                                                                        }
+                                                                                                                    {this.props.children}
 
-                                                                                                        inquiryContext={
-                                                                                                            inquiryContext
-                                                                                                        }
+                                                                                                                </AppContextProvider>
 
-                                                                                                        propertyAvailabilityContext={
-                                                                                                            propertyAvailabilityContext
-                                                                                                        }
+                                                                                                            )}
+                                                                                                        
+                                                                                                        </AdminRefundContext.Consumer>
 
-                                                                                                        reservationContext={
-                                                                                                            reservationContext
-                                                                                                        }
+                                                                                                    )}
 
-                                                                                                        adminGuestContext={
-                                                                                                            adminGuestContext
-                                                                                                        }
+                                                                                                </AdminPaymentContext.Consumer>
 
-                                                                                                        adminPaymentContext={
-                                                                                                            adminPaymentContext
-                                                                                                        }
+                                                                                            )}
 
-                                                                                                    >
+                                                                                        </AdminGuestContext.Consumer>
 
-                                                                                                        {this.props.children}
+                                                                                    )}
 
-                                                                                                    </AppContextProvider>
+                                                                                </ReservationContext.Consumer>
 
-                                                                                                )}
+                                                                            )}
 
-                                                                                            </AdminPaymentContext.Consumer>
+                                                                        </PropertyAvailabilityContext.Consumer>
 
-                                                                                        )}
+                                                                    )}
 
-                                                                                    </AdminGuestContext.Consumer>
+                                                                </InquiryContext.Consumer>
 
-                                                                                )}
+                                                            )}
 
-                                                                            </ReservationContext.Consumer>
+                                                        </AmenityContext.Consumer>
 
-                                                                        )}
+                                                    )}
 
-                                                                    </PropertyAvailabilityContext.Consumer>
-
-                                                                )}
-
-                                                            </InquiryContext.Consumer>
-
-                                                        )}
-
-                                                    </AmenityContext.Consumer>
-
-                                                )}
-
-                                            </PropertyContext.Consumer>
+                                                </PropertyContext.Consumer>
+                                                
+                                            </AdminRefundContextProvider>
 
                                         </ReservationContextProvider>
 
