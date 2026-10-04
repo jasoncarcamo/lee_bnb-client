@@ -1136,7 +1136,25 @@ export default class ReservationDetails extends React.Component{
             });
 
     };
+    
+    formatPhoneNumber = (phone)=>{
 
+        if(!phone){
+            return "—";
+        };
+
+        const digits =
+            String(phone).replace(/\D/g, "");
+
+        if(digits.length === 10){
+
+            return `(${digits.slice(0, 3)}) ${digits.slice(3, 6)}-${digits.slice(6)}`;
+
+        };
+
+        return phone;
+
+    };
 
     render(){
 
@@ -1227,20 +1245,35 @@ export default class ReservationDetails extends React.Component{
 
             [
                 "Email",
-                guest?.email || "—"
+                guest?.email
+                    ? (
+                        <a
+                            href={`mailto:${guest.email}`}
+                            className="reservation-details__contact-link"
+                        >
+                            {guest.email}
+                        </a>
+                    )
+                    : "—"
             ],
-
             [
                 "Phone",
-                guest?.phone || "—"
+                guest?.phone
+                    ? (
+                        <a
+                            href={`tel:${guest.phone}`}
+                            className="reservation-details__contact-link"
+                        >
+                            {this.formatPhoneNumber(guest.phone)}
+                        </a>
+                    )
+                    : "—"
             ],
-
             [
                 "Confirmation code",
                 reservation
                     .confirmation_code
             ],
-
             [
                 "Property",
                 this.getPropertyName(
