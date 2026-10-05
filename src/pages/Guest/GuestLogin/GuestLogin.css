@@ -1,0 +1,196 @@
+.guest-login {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f7f7f7;
+    padding: 32px 16px;
+}
+
+.guest-login__container {
+    width: 100%;
+    max-width: 480px;
+}
+
+.guest-login__header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+.guest-login__logo {
+    width: 52px;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    background: #111111;
+    color: #ffffff;
+    font-size: 24px;
+    font-weight: 700;
+}
+
+.guest-login__brand {
+    margin: 10px 0 0;
+    color: #111111;
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.guest-login__card {
+    background: #ffffff;
+    border: 1px solid #e2e2e2;
+    border-radius: 16px;
+    padding: 32px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
+}
+
+.guest-login__welcome {
+    margin-bottom: 28px;
+}
+
+.guest-login__eyebrow {
+    margin: 0 0 8px;
+    color: #666666;
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
+.guest-login__welcome h1 {
+    margin: 0 0 8px;
+    color: #111111;
+    font-size: 28px;
+    line-height: 1.2;
+}
+
+.guest-login__welcome p:last-child {
+    margin: 0;
+    color: #666666;
+    line-height: 1.5;
+}
+
+.guest-login__form {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.guest-login__field {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.guest-login__field label {
+    color: #222222;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.guest-login__field input {
+    width: 100%;
+    min-height: 46px;
+    box-sizing: border-box;
+    border: 1px solid #cccccc;
+    border-radius: 8px;
+    background: #ffffff;
+    color: #111111;
+    font: inherit;
+    padding: 10px 12px;
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.guest-login__field input:focus {
+    outline: none;
+    border-color: #111111;
+    box-shadow: 0 0 0 3px rgba(17, 17, 17, 0.1);
+}
+
+.guest-login__field input:disabled {
+    background: #f2f2f2;
+    cursor: not-allowed;
+}
+
+.guest-login__error {
+    margin: 0;
+    padding: 10px 12px;
+    border: 1px solid #f0b8b8;
+    border-radius: 8px;
+    background: #fff1f1;
+    color: #a40000;
+    font-size: 14px;
+}
+
+.guest-login__submit {
+    width: 100%;
+    min-height: 48px;
+    border: 0;
+    border-radius: 8px;
+    background: #111111;
+    color: #ffffff;
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+    transition:
+        background 0.2s ease,
+        transform 0.2s ease;
+}
+
+.guest-login__submit:hover:not(:disabled) {
+    background: #333333;
+}
+
+.guest-login__submit:active:not(:disabled) {
+    transform: translateY(1px);
+}
+
+.guest-login__submit:focus-visible {
+    outline: 3px solid rgba(17, 17, 17, 0.25);
+    outline-offset: 3px;
+}
+
+.guest-login__submit:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.guest-login__register {
+    margin: 24px 0 0;
+    color: #666666;
+    text-align: center;
+    font-size: 14px;
+}
+
+.guest-login__register a {
+    color: #111111;
+    font-weight: 700;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+.guest-login__register a:hover {
+    text-decoration-thickness: 2px;
+}
+
+@media (max-width: 480px) {
+
+    .guest-login {
+        padding: 24px 16px;
+        align-items: flex-start;
+    }
+
+    .guest-login__card {
+        padding: 24px 20px;
+    }
+
+    .guest-login__welcome h1 {
+        font-size: 24px;
+    }
+
+}

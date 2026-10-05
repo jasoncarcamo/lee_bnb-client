@@ -8,7 +8,10 @@ import {
 
 import Admin from "./pages/Admin/Admin";
 import AdminRegister from "./pages/Admin/AdminRegister/AdminRegister";
+
 import Guest from "./pages/Guest/Guest";
+import GuestLogin from "./pages/Guest/GuestLogin/GuestLogin";
+import GuestRegister from "./pages/Guest/GuestRegister/GuestRegister";
 
 import "./App.css";
 
@@ -38,6 +41,16 @@ export default class App extends React.Component{
 
 
                 <Route
+                    path="/guest/login"
+                    element={<GuestLogin/>}
+                />
+
+                <Route
+                    path="/guest/register"
+                    element={<GuestRegister/>}
+                />
+
+                <Route
                     path="/admin"
                     element={<Admin/>}
                 />
@@ -63,4 +76,5 @@ export default class App extends React.Component{
         );
 
     };
+
 };

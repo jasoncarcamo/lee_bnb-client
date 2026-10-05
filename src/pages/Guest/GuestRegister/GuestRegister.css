@@ -1,0 +1,220 @@
+.guest-register {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f7f7f7;
+    padding: 32px 16px;
+}
+
+.guest-register__container {
+    width: 100%;
+    max-width: 520px;
+}
+
+.guest-register__header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+.guest-register__logo {
+    width: 52px;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 12px;
+    background: #111111;
+    color: #ffffff;
+    font-size: 24px;
+    font-weight: 700;
+}
+
+.guest-register__brand {
+    margin: 10px 0 0;
+    color: #111111;
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.guest-register__card {
+    background: #ffffff;
+    border: 1px solid #e2e2e2;
+    border-radius: 16px;
+    padding: 32px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
+}
+
+.guest-register__welcome {
+    margin-bottom: 28px;
+}
+
+.guest-register__eyebrow {
+    margin: 0 0 8px;
+    color: #666666;
+    font-size: 13px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
+.guest-register__welcome h1 {
+    margin: 0 0 8px;
+    color: #111111;
+    font-size: 28px;
+    line-height: 1.2;
+}
+
+.guest-register__welcome p:last-child {
+    margin: 0;
+    color: #666666;
+    line-height: 1.5;
+}
+
+.guest-register__form {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.guest-register__name-fields {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 18px;
+}
+
+.guest-register__field {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.guest-register__field label {
+    color: #222222;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.guest-register__field input {
+    width: 100%;
+    min-height: 46px;
+    box-sizing: border-box;
+    border: 1px solid #cccccc;
+    border-radius: 8px;
+    background: #ffffff;
+    color: #111111;
+    font: inherit;
+    padding: 10px 12px;
+    transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.guest-register__field input:focus {
+    outline: none;
+    border-color: #111111;
+    box-shadow: 0 0 0 3px rgba(17, 17, 17, 0.1);
+}
+
+.guest-register__field input:disabled {
+    background: #f2f2f2;
+    cursor: not-allowed;
+}
+
+.guest-register__message {
+    margin: 0;
+    padding: 10px 12px;
+    border-radius: 8px;
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+.guest-register__message--error {
+    background: #fff1f1;
+    color: #a40000;
+    border: 1px solid #f0b8b8;
+}
+
+.guest-register__message--success {
+    background: #eef9f0;
+    color: #176b2c;
+    border: 1px solid #b9dfc2;
+}
+
+.guest-register__submit {
+    width: 100%;
+    min-height: 48px;
+    border: 0;
+    border-radius: 8px;
+    background: #111111;
+    color: #ffffff;
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+    transition:
+        background 0.2s ease,
+        transform 0.2s ease;
+}
+
+.guest-register__submit:hover:not(:disabled) {
+    background: #333333;
+}
+
+.guest-register__submit:active:not(:disabled) {
+    transform: translateY(1px);
+}
+
+.guest-register__submit:focus-visible {
+    outline: 3px solid rgba(17, 17, 17, 0.25);
+    outline-offset: 3px;
+}
+
+.guest-register__submit:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.guest-register__login {
+    margin: 24px 0 0;
+    color: #666666;
+    text-align: center;
+    font-size: 14px;
+}
+
+.guest-register__login a {
+    color: #111111;
+    font-weight: 700;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+}
+
+.guest-register__login a:hover {
+    text-decoration-thickness: 2px;
+}
+
+@media (min-width: 600px) {
+
+    .guest-register__name-fields {
+        grid-template-columns: 1fr 1fr;
+    }
+
+}
+
+@media (max-width: 480px) {
+
+    .guest-register {
+        padding: 24px 16px;
+        align-items: flex-start;
+    }
+
+    .guest-register__card {
+        padding: 24px 20px;
+    }
+
+    .guest-register__welcome h1 {
+        font-size: 24px;
+    }
+
+}

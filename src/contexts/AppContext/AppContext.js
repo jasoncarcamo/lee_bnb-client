@@ -8,11 +8,19 @@ const AppContext = React.createContext({
     amenityContext: {},
 
     inquiryContext: {},
+
     propertyAvailabilityContext: {},
+
     reservationContext: {},
+
     adminGuestContext: {},
+
     adminPaymentContext: {},
-    adminRefundContext: {}
+
+    adminRefundContext: {},
+
+    guestAuthContext: {}
+
 });
 
 
@@ -25,14 +33,33 @@ export class AppContextProvider extends React.Component{
 
         const value = {
 
-            propertyContext: this.props.propertyContext,
-            amenityContext: this.props.amenityContext,
-            inquiryContext: this.props.inquiryContext,
-            propertyAvailabilityContext: this.props.propertyAvailabilityContext,
-            reservationContext: this.props.reservationContext,
-            adminGuestContext: this.props.adminGuestContext,
-            adminPaymentContext: this.props.adminPaymentContext,
-            adminRefundContext: this.props.adminRefundContext
+            propertyContext:
+                this.props.propertyContext,
+
+            amenityContext:
+                this.props.amenityContext,
+
+            inquiryContext:
+                this.props.inquiryContext,
+
+            propertyAvailabilityContext:
+                this.props.propertyAvailabilityContext,
+
+            reservationContext:
+                this.props.reservationContext,
+
+            adminGuestContext:
+                this.props.adminGuestContext,
+
+            adminPaymentContext:
+                this.props.adminPaymentContext,
+
+            adminRefundContext:
+                this.props.adminRefundContext,
+
+            guestAuthContext:
+                this.props.guestAuthContext
+
         };
 
 

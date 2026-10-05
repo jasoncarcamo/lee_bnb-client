@@ -618,6 +618,91 @@ export default class AdminInquiries extends React.Component{
 
     };
 
+    handleCreateReservation = (inquiry)=>{
+        console.log(inquiry)
+        if(this.state.busyInquiryId){
+
+            return;
+
+        };
+
+
+        if(
+            inquiry.created_by !== "guest" ||
+            inquiry.status !== "new"
+        ){
+
+            return;
+
+        };
+
+
+        if(
+            !inquiry.property_id ||
+            !inquiry.check_in ||
+            !inquiry.check_out ||
+            !inquiry.guests_count ||
+            !inquiry.quote
+        ){
+
+            this.setState({
+                error:
+                    "This inquiry does not contain enough information to create a reservation."
+            });
+
+            return;
+
+        };
+
+
+        const newReservation = {
+            ...inquiry.quote,
+            inquiry_id: inquiry.id
+        };
+
+
+        this.setState({
+            busyInquiryId: inquiry.id,
+            error: "",
+            success: ""
+        });
+
+
+        this.context.reservationContext
+            .createReservation(
+                newReservation
+            )
+            .then(()=>{
+
+                return this.context.inquiryContext
+                    .getInquiries();
+
+            })
+            .then(()=>{
+
+                this.setState({
+                    busyInquiryId: null,
+                    success:
+                        "Reservation created successfully.",
+                    error: ""
+                });
+
+            })
+            .catch(error => {
+
+                this.setState({
+                    busyInquiryId: null,
+
+                    error:
+                        this.getErrorMessage(
+                            error,
+                            "Unable to create reservation."
+                        )
+                });
+
+            });
+
+    };
 
     openDeleteConfirmation = (id)=>{
 
@@ -990,9 +1075,21 @@ export default class AdminInquiries extends React.Component{
         };
 
 
+        const isGuestInquiry =
+            inquiry.created_by === "guest";
+
+
         const canSend =
-            inquiry.status === "new" ||
-            inquiry.status === "pending_confirmation";
+            !isGuestInquiry &&
+            (
+                inquiry.status === "new" ||
+                inquiry.status === "pending_confirmation"
+            );
+
+
+        const canCreateReservation =
+            isGuestInquiry &&
+            inquiry.status === "new";
 
 
         const isBusy =
@@ -1282,6 +1379,25 @@ export default class AdminInquiries extends React.Component{
                             </button>
                         }
 
+                        {
+                            canCreateReservation &&
+                            <button
+                                type="button"
+                                className="admin-inquiries__primary"
+                                onClick={
+                                    ()=>this.handleCreateReservation(
+                                        inquiry
+                                    )
+                                }
+                                disabled={isBusy}
+                            >
+                                {
+                                    isBusy
+                                        ? "Creating..."
+                                        : "Confirm & Create Reservation"
+                                }
+                            </button>
+                        }
 
                         {
                             canCancel &&
