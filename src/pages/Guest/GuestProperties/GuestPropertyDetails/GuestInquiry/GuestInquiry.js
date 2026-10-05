@@ -3,6 +3,12 @@ import React from "react";
 import InquiryRequest
     from "../../../../../services/InquiryServices";
 import "./GuestInquiry.css";
+import GuestTokenService
+    from "../../../../../storage/GuestTokenService";
+
+import GuestInquiryAuth
+    from "../GuestinquiryAuth/GuestInquiryAuth";
+import AppContext from "../../../../../contexts/AppContext/AppContext";
 
 export default class GuestInquiry extends React.Component{
 
@@ -13,12 +19,14 @@ export default class GuestInquiry extends React.Component{
         phone: "",
         guestsCount: 1,
         message: "",
-
         isSubmitting: false,
+        showAuth: false,
         error: "",
-        success: false
+        success: false,
+        pendingInquiry: null,
     };
 
+    static contextType = AppContext;
 
     handleChange = (event)=>{
 
@@ -138,20 +146,37 @@ export default class GuestInquiry extends React.Component{
                 checkOut,
 
             guests_count:
-                guestCount
+                guestCount,
+           
+
+        };
+        
+        if(!GuestTokenService.hasToken()){
+
+            this.setState({
+                pendingInquiry: newInquiry,
+                showAuth: true,
+                error: ""
+            });
+
+            return;
 
         };
 
+        this.submitInquiry(newInquiry);
 
+    };
+    
+    submitInquiry = (inquiry)=>{
         this.setState({
             isSubmitting: true,
+            showAuth: false,
             error: ""
         });
-
-
+    
         InquiryRequest
             .createGuestInquiry(
-                newInquiry
+                inquiry
             )
             .then(()=>{
 
@@ -163,6 +188,7 @@ export default class GuestInquiry extends React.Component{
                     guestsCount: 1,
                     message: "",
 
+                    pendingInquiry: null,
                     isSubmitting: false,
                     success: true,
                     error: ""
@@ -175,6 +201,7 @@ export default class GuestInquiry extends React.Component{
                     isSubmitting: false,
                     error:
                         error.error ||
+                        error.message ||
                         "Unable to submit your reservation request."
                 });
 
@@ -183,9 +210,56 @@ export default class GuestInquiry extends React.Component{
     };
     
     closeSuccess = ()=>{
+        window.location.assign(
+            "/guest"
+        );
+
+    };
+    
+    closeAuth = ()=>{
+
         this.setState({
-            success: false
+            showAuth: false
         });
+
+    };
+
+
+    handleAuthenticated = (guest)=>{
+        const {
+            pendingInquiry
+        } = this.state;
+
+        if(!pendingInquiry){
+
+            this.setState({
+                showAuth: false
+            });
+
+            return;
+
+        };
+
+        const newInquiry = {
+            ...pendingInquiry,
+            guest_id: guest.id
+        }
+        
+        newInquiry.first_name = guest.first_name;
+
+        newInquiry.last_name = guest.last_name;
+
+        newInquiry.email = guest.email;
+
+        newInquiry.phone = guest.phone;
+        
+        this.setState({
+            pendingInquiry: newInquiry,
+        })
+
+        this.submitInquiry(
+            newInquiry
+        );
 
     };
 
@@ -209,6 +283,37 @@ export default class GuestInquiry extends React.Component{
             error,
             success
         } = this.state;
+        
+        if(isSubmitting){
+
+            return (
+                <section
+                    className="guest-inquiry guest-inquiry--loading"
+                    aria-live="polite"
+                    aria-busy="true"
+                >
+
+                    <div className="guest-inquiry__loading">
+
+                        <div
+                            className="guest-inquiry__spinner"
+                            aria-hidden="true"
+                        />
+
+                        <h2>
+                            Sending your request...
+                        </h2>
+
+                        <p>
+                            Please wait while we submit your reservation request.
+                        </p>
+
+                    </div>
+
+                </section>
+            );
+
+        };
 
         return (
             <section
@@ -494,6 +599,19 @@ export default class GuestInquiry extends React.Component{
                             </div>
 
                         </div>
+                    )
+                }
+                
+                {
+                    this.state.showAuth &&
+                    (
+                        <GuestInquiryAuth
+                            handleChange={this.handleChange}
+                            handleClose={this.closeAuth}
+                            onAuthenticated={
+                                this.handleAuthenticated
+                            }
+                        />
                     )
                 }
             </section>

@@ -2,7 +2,6 @@ const {url} = require("../config");
 
 
 const AuthRequest = {
-
     registerAdmin(newAdmin){
 
         return fetch(`${url}/api/register`, {
@@ -24,12 +23,8 @@ const AuthRequest = {
                 };
 
                 return res.json();
-
             });
-
     },
-
-
     logInAdmin(admin){
         return fetch(`${url}/api/login`, {
             method: "POST",

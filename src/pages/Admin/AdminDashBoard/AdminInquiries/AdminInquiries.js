@@ -619,7 +619,7 @@ export default class AdminInquiries extends React.Component{
     };
 
     handleCreateReservation = (inquiry)=>{
-        console.log(inquiry)
+        
         if(this.state.busyInquiryId){
 
             return;
@@ -654,12 +654,11 @@ export default class AdminInquiries extends React.Component{
 
         };
 
-
         const newReservation = {
             ...inquiry.quote,
-            inquiry_id: inquiry.id
+            inquiry_id: inquiry.id,
+            guest_id: inquiry.guest_id,
         };
-
 
         this.setState({
             busyInquiryId: inquiry.id,

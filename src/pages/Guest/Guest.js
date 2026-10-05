@@ -5,6 +5,7 @@ import GuestProperties from "./GuestProperties/GuestProperties";
 import PropertyDetails from "./GuestProperties/GuestPropertyDetails/GuestPropertyDetails";
 
 import "./Guest.css";
+import GuestTokenService from "../../storage/GuestTokenService";
 
 
 export default class Guest extends React.Component{
@@ -15,6 +16,20 @@ export default class Guest extends React.Component{
 
 
     selectProperty = (propertyId)=>{
+        
+        const isRoot = window.location.pathname === "/";
+
+        const hasGuestToken = GuestTokenService.hasToken();
+
+        if(isRoot && hasGuestToken){
+
+            window.history.pushState(
+                {},
+                "",
+                "/guest"
+            );
+
+        };
 
         this.setState({
             selectedPropertyId: propertyId

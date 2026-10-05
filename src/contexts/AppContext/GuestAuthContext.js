@@ -17,7 +17,9 @@ const GuestAuthContext = React.createContext({
 
     logInGuest: () => {},
 
-    logOutGuest: () => {}
+    logOutGuest: () => {},
+    setGuest: () => {},
+    deleteGuest: () => {}
 
 });
 
@@ -47,38 +49,24 @@ export class GuestAuthProvider extends Component {
 
         };
 
+    };
+    
+    setGuest = (guest)=>{
 
-        GuestAuthRequest
-            .getCurrentGuest()
-            .then(response => {
+        this.setState({
+            guest,
+            isLoggedIn: !!guest
+        });
 
-                this.setState({
+    };
 
-                    guest:
-                        response.guest,
 
-                    isLoggedIn: true,
+    deleteGuest = ()=>{
 
-                    loading: false
-
-                });
-
-            })
-            .catch(() => {
-
-                GuestTokenService.deleteToken();
-
-                this.setState({
-
-                    guest: null,
-
-                    isLoggedIn: false,
-
-                    loading: false
-
-                });
-
-            });
+        this.setState({
+            guest: null,
+            isLoggedIn: false
+        });
 
     };
 
@@ -116,12 +104,10 @@ export class GuestAuthProvider extends Component {
         return GuestAuthRequest
             .logInGuest(guest)
             .then(response => {
-
                 GuestTokenService.setToken(
                     response.token
                 );
-
-
+                
                 this.setState({
 
                     guest:
@@ -138,7 +124,6 @@ export class GuestAuthProvider extends Component {
 
     };
 
-
     logOutGuest = () => {
 
         GuestTokenService.deleteToken();
@@ -151,6 +136,8 @@ export class GuestAuthProvider extends Component {
             isLoggedIn: false
 
         });
+        
+        this.deleteGuest();
 
     };
 
@@ -169,10 +156,11 @@ export class GuestAuthProvider extends Component {
             logInGuest:
                 this.logInGuest,
             logOutGuest:
-                this.logOutGuest
+                this.logOutGuest,
+                setGuest: this.setGuest,
+                deleteGuest: this.deleteGuest
         };
-
-
+        
         return (
 
             <GuestAuthContext.Provider

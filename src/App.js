@@ -6,12 +6,14 @@ import {
     Navigate
 } from "react-router-dom";
 
-import Admin from "./pages/Admin/Admin";
-import AdminRegister from "./pages/Admin/AdminRegister/AdminRegister";
+import LandingPage from "./pages/LandingPage/LandingPage";
 
 import Guest from "./pages/Guest/Guest";
 import GuestLogin from "./pages/Guest/GuestLogin/GuestLogin";
 import GuestRegister from "./pages/Guest/GuestRegister/GuestRegister";
+
+import Admin from "./pages/Admin/Admin";
+import AdminRegister from "./pages/Admin/AdminRegister/AdminRegister";
 
 import "./App.css";
 
@@ -25,18 +27,7 @@ export default class App extends React.Component{
 
                 <Route
                     path="/"
-                    element={
-                        <Navigate
-                            to="/guest"
-                            replace
-                        />
-                    }
-                />
-
-
-                <Route
-                    path="/guest"
-                    element={<Guest/>}
+                    element={<LandingPage/>}
                 />
 
 
@@ -45,10 +36,18 @@ export default class App extends React.Component{
                     element={<GuestLogin/>}
                 />
 
+
                 <Route
                     path="/guest/register"
                     element={<GuestRegister/>}
                 />
+
+
+                <Route
+                    path="/guest"
+                    element={<Guest/>}
+                />
+
 
                 <Route
                     path="/admin"
@@ -66,7 +65,7 @@ export default class App extends React.Component{
                     path="*"
                     element={
                         <Navigate
-                            to="/guest"
+                            to="/"
                             replace
                         />
                     }
@@ -76,5 +75,4 @@ export default class App extends React.Component{
         );
 
     };
-
 };
